@@ -18,6 +18,7 @@ int main(void)
         
         EndDrawing();
         DrawTexture(Intro, screenWidth / 2 - Intro.width / 2, screenHeight / 2 - Intro.height / 2, WHITE);
+        DrawText("Marc Jimenez\n\nRuben Mateo\n\nSauc Pellejero", 950, 550, 35, WHITE);
     }
     CloseWindow();
     return 0;

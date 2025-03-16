@@ -1,6 +1,4 @@
-﻿
-
-#include "raylib.h"
+﻿#include "raylib.h"
 #include "raymath.h"
 #include <vector>
 #include <algorithm> 
@@ -8,15 +6,15 @@
 
 using namespace std;
 
-// 📌 ENUM para los estados del juego
+// ENUM para los estados del juego
 enum class GameScreen { LOGO, TITLE, GAMEPLAY, ENDING };
 
-// 📌 Constantes
-constexpr int GRAVITY = 400;
+// Constantes
+constexpr int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
-constexpr float PLAYER_HOR_SPD = 200.0f;
+constexpr float PLAYER_HOR_SPD = 250.0f;
 
-// 📌 Estructuras de juego
+// Estructuras de juego
 struct Mario {
     Vector2 position;
     float speed;
@@ -25,17 +23,17 @@ struct Mario {
     Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
 };
 
+// Estructura para los objetos del entorno
 struct EnvElement {
     Rectangle rect;
     bool blocking;
     Color color;
 
     EnvElement(float x, float y, float width, float height, bool block, Color col)
-        : rect{ x, y, width, height }, blocking(block), color(col) {
-    }
+        : rect{ x, y, width, height }, blocking(block), color(col) {}
 };
 
-// 📌 Clase Principal del Juego
+// Clase Principal del Juego
 class Game {
 private:
     constexpr static int screenWidth = 1280;
@@ -43,12 +41,10 @@ private:
 
     GameScreen currentScreen;
     int framesCounter;
-    Mario player;
+    Mario player;  // Usando el nuevo jugador tipo Mario
     std::vector<EnvElement> envElements;
     Camera2D camera;
-    AutomationEventList aelist;
-    bool eventRecording;
-    bool eventPlaying;
+    Texture2D logoTexture;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
     unsigned int currentPlayFrame;
@@ -56,10 +52,10 @@ private:
 public:
     Game()
         : currentScreen(GameScreen::LOGO), framesCounter(0), player(400, 280),
-        eventRecording(false), eventPlaying(false), frameCounter(0), playFrameCounter(0), currentPlayFrame(0) {
-
+        frameCounter(0), playFrameCounter(0), currentPlayFrame(0) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
+        logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
 
         envElements = {
             {0, 0, 1000, 400, false, BLACK},
@@ -73,12 +69,10 @@ public:
         camera.offset = { screenWidth / 2.0f, screenHeight / 2.0f };
         camera.rotation = 0.0f;
         camera.zoom = 1.0f;
-
-        aelist = LoadAutomationEventList(0);
-        SetAutomationEventList(&aelist);
     }
 
     ~Game() {
+        UnloadTexture(logoTexture);
         CloseWindow();
     }
 
@@ -98,19 +92,16 @@ private:
                 currentScreen = GameScreen::TITLE;
             }
             break;
-
         case GameScreen::TITLE:
-            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
+            if (IsKeyPressed(KEY_ENTER)) {
                 currentScreen = GameScreen::GAMEPLAY;
             }
             break;
-
         case GameScreen::GAMEPLAY:
             UpdateGameplay();
             break;
-
         case GameScreen::ENDING:
-            if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
+            if (IsKeyPressed(KEY_ENTER)) {
                 currentScreen = GameScreen::TITLE;
             }
             break;
@@ -154,42 +145,16 @@ private:
             camera.target = player.position;
             camera.zoom = 1.0f;
         }
-
-        if (IsKeyPressed(KEY_S)) {
-            if (!eventPlaying) {
-                if (eventRecording) {
-                    StopAutomationEventRecording();
-                    eventRecording = false;
-                    ExportAutomationEventList(aelist, "automation.rae");
-                }
-                else {
-                    SetAutomationEventBaseFrame(180);
-                    StartAutomationEventRecording();
-                    eventRecording = true;
-                }
-            }
-        }
-        else if (IsKeyPressed(KEY_A) && !eventRecording && aelist.count > 0) {
-            eventPlaying = true;
-            playFrameCounter = 0;
-            currentPlayFrame = 0;
-            player = Mario(400, 280);
-            camera.target = player.position;
-            camera.zoom = 1.0f;
-        }
-
-        if (eventRecording || eventPlaying) frameCounter++;
-        else frameCounter = 0;
     }
 
     void Draw() {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(WHITE);
 
         switch (currentScreen) {
         case GameScreen::LOGO:
-            DrawText("LOGO SCREEN", 20, 20, 40, LIGHTGRAY);
-            DrawText("WAIT for 2 SECONDS...", 290, 220, 20, GRAY);
+            DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width) / 4.0f, (screenHeight - logoTexture.height) / 3.0f }, 0.0f, 1.3f, WHITE);
+            DrawText("LOADING...", 520, 500, 50, GRAY);
             break;
 
         case GameScreen::TITLE:
@@ -226,11 +191,6 @@ private:
         DrawText("- LEFT | RIGHT: Move", 30, 40, 10, DARKGRAY);
         DrawText("- SPACE: Jump", 30, 60, 10, DARKGRAY);
         DrawText("- R: Reset", 30, 80, 10, DARKGRAY);
-        DrawText("- S: Start/Stop Recording", 30, 110, 10, BLACK);
-        DrawText("- A: Replay Events", 30, 130, 10, BLACK);
-
-        if (eventRecording) DrawText("RECORDING...", 50, 170, 10, RED);
-        else if (eventPlaying) DrawText("PLAYING...", 50, 170, 10, GREEN);
     }
 };
 

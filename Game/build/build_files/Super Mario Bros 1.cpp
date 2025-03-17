@@ -38,7 +38,7 @@ struct EnvElement {
 class Game {
 private:
     constexpr static int screenWidth = 1280;
-    constexpr static int screenHeight = 720;
+    constexpr static int screenHeight = 1200;
 
     GameScreen currentScreen;
     int framesCounter;
@@ -46,6 +46,7 @@ private:
     std::vector<EnvElement> envElements;
     Camera2D camera;
     Texture2D logoTexture;
+    Texture2D UI;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
     unsigned int currentPlayFrame;
@@ -57,6 +58,7 @@ public:
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
+        UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
 
         envElements = {
             {0, 0, 1000, 400, false, BLACK},
@@ -74,6 +76,8 @@ public:
 
     ~Game() {
         UnloadTexture(logoTexture);
+        UnloadTexture(UI);
+
         CloseWindow();
     }
 
@@ -169,13 +173,13 @@ private:
         switch (currentScreen) {
         case GameScreen::LOGO:
             DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width) / 4.0f, (screenHeight - logoTexture.height) / 3.0f }, 0.0f, 1.3f, WHITE);
-            DrawText("LOADING...", 520, 500, 50, GRAY);
+            DrawText("Proyecte 1 - GDD - CITM", 470, 450, 25, GRAY);
+            DrawText("   Members\n \nSauc Pellejero\nMarc Jimenez\nRuben Mateo", 520, 500, 25, GRAY);
             break;
 
         case GameScreen::TITLE:
-            DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
-            DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
-            DrawText("PRESS ENTER or TAP to START", 120, 220, 20, DARKGREEN);
+            
+            DrawTextureEx(UI, { (screenWidth - UI.width) / 4.7f, (screenHeight - UI.height) / 3.2f }, 0.0f, 2.0f, WHITE);
             break;
 
         case GameScreen::GAMEPLAY:

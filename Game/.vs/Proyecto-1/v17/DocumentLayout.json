@@ -1,9 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\User\\Documents\\GitHub\\Proyecto-1\\Game\\",
+  "WorkspaceRootPath": "C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\User\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\Super Mario Bros 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -19,12 +23,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp",
+              "RelativeDocumentMoniker": "build\\build_files\\main.cpp",
+              "ToolTip": "C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp",
+              "RelativeToolTip": "build\\build_files\\main.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-17T07:25:40.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Super Mario Bros 1.cpp",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
+              "DocumentMoniker": "C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
               "RelativeDocumentMoniker": "build\\build_files\\Super Mario Bros 1.cpp",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
+              "ToolTip": "C:\\Users\\rubenmg9\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
               "RelativeToolTip": "build\\build_files\\Super Mario Bros 1.cpp",
-              "ViewState": "AgIAAL0AAAAAAAAAAAAkwMYAAAAPAAAAAAAAAA==",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAAAFoAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-03-16T12:49:39.355Z",
               "EditorCaption": ""

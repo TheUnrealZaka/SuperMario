@@ -17,5 +17,6 @@
     <ClCompile Include="Super Mario Bros 1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>

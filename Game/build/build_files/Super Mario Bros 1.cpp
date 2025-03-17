@@ -13,6 +13,7 @@ enum class GameScreen { LOGO, TITLE, GAMEPLAY, ENDING };
 constexpr int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
+constexpr float PLAYER_RUN_SPD = 250.0f;
 
 // Estructuras de juego
 struct Mario {
@@ -111,8 +112,22 @@ private:
     void UpdateGameplay() {
         float deltaTime = GetFrameTime();
 
-        if (IsKeyDown(KEY_LEFT)) player.position.x -= PLAYER_HOR_SPD * deltaTime;
-        if (IsKeyDown(KEY_RIGHT)) player.position.x += PLAYER_HOR_SPD * deltaTime;
+        if (IsKeyDown(KEY_LEFT))
+        {
+            if (IsKeyDown(KEY_LEFT_SHIFT))
+            {
+                player.position.x -= PLAYER_RUN_SPD * deltaTime;
+            }
+            player.position.x -= PLAYER_HOR_SPD * deltaTime;
+        }
+        if (IsKeyDown(KEY_RIGHT)) 
+        {
+            if (IsKeyDown(KEY_LEFT_SHIFT))
+            {
+                player.position.x += PLAYER_RUN_SPD * deltaTime;
+            }
+            player.position.x += PLAYER_HOR_SPD * deltaTime;
+        }
         if (IsKeyDown(KEY_SPACE) && player.canJump) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;

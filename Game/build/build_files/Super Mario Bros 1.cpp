@@ -38,7 +38,7 @@ struct EnvElement {
 class Game {
 private:
     constexpr static int screenWidth = 1280;
-    constexpr static int screenHeight = 1200;
+    constexpr static int screenHeight = 950;
 
     GameScreen currentScreen;
     int framesCounter;
@@ -179,7 +179,7 @@ private:
 
         case GameScreen::TITLE:
             
-            DrawTextureEx(UI, { (screenWidth - UI.width) / 4.7f, (screenHeight - UI.height) / 3.2f }, 0.0f, 2.0f, WHITE);
+            DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 10.0f, (screenHeight - UI.height - UI.height) / 10.0f }, 0.0f, 2.0f, WHITE);
             break;
 
         case GameScreen::GAMEPLAY:

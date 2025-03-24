@@ -137,6 +137,8 @@ private:
             player.canJump = false;
         }
 
+        camera.target = player.position;
+
         bool hitObstacle = false;
         for (auto& element : envElements) {
             if (element.blocking &&

@@ -119,15 +119,8 @@ private:
     void UpdateGameplay() {
         float deltaTime = GetFrameTime();
 
-        if (IsKeyDown(KEY_LEFT))
-        {
-            if (IsKeyDown(KEY_LEFT_SHIFT))
-            {
-                player.position.x -= PLAYER_RUN_SPD * deltaTime;
-            }
-            player.position.x -= PLAYER_HOR_SPD * deltaTime;
-        }
-        if (IsKeyDown(KEY_RIGHT)) 
+
+        if (IsKeyDown(KEY_RIGHT))
         {
             if (IsKeyDown(KEY_LEFT_SHIFT))
             {
@@ -135,12 +128,29 @@ private:
             }
             player.position.x += PLAYER_HOR_SPD * deltaTime;
         }
-        if (IsKeyDown(KEY_SPACE) && player.canJump) {
+        if (IsKeyDown(KEY_SPACE) && player.canJump)
+        {
+            if (IsKeyPressed(KEY_SPACE) && player.canJump)
+            {
+                player.speed = -PLAYER_JUMP_SPD * 2;
+                player.canJump = false;
+            }
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
         }
 
-        camera.target = player.position;
+        if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f)
+        {
+            if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f)
+            {
+                player.position.x -= PLAYER_RUN_SPD * deltaTime;
+            }
+            player.position.x -= PLAYER_HOR_SPD * deltaTime;
+        }
+        if (player.position.x > camera.target.x)
+        {
+            camera.target.x = player.position.x;
+        }
 
         bool hitObstacle = false;
         for (auto& element : envElements) {

@@ -47,6 +47,7 @@ private:
     Camera2D camera;
     Texture2D logoTexture;
     Texture2D UI;
+    Texture2D mario;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
     unsigned int currentPlayFrame;
@@ -59,6 +60,8 @@ public:
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
+        mario = LoadTexture("Images/Player/Mario.png");
+
 
         envElements = {
             {0, 0, 1000, 400, false, BLACK},
@@ -206,6 +209,7 @@ private:
         }
 
         DrawRectangleRec({ player.position.x - 20, player.position.y - 40, 40, 40 }, RED);
+        DrawTextureEx(mario, {player.position.x - 20, player.position.y - 62}, 0, 4, WHITE);
         EndMode2D();
 
         DrawText("Controls:", 20, 20, 10, BLACK);

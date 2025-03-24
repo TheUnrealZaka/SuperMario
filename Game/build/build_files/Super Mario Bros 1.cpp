@@ -10,8 +10,8 @@ using namespace std;
 enum class GameScreen { LOGO, TITLE, GAMEPLAY, ENDING };
 
 // Constantes
-constexpr int GRAVITY = 500;
-constexpr float PLAYER_JUMP_SPD = 350.0f;
+int GRAVITY = 600;
+constexpr float PLAYER_JUMP_SPD = 300.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
 
@@ -20,6 +20,8 @@ struct Mario {
     Vector2 position;
     float speed;
     bool canJump;
+    bool canJump2;
+    float jumpTime;
 
     Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
 };
@@ -128,16 +130,6 @@ private:
             }
             player.position.x += PLAYER_HOR_SPD * deltaTime;
         }
-        if (IsKeyDown(KEY_SPACE) && player.canJump)
-        {
-            if (IsKeyPressed(KEY_SPACE) && player.canJump)
-            {
-                player.speed = -PLAYER_JUMP_SPD * 2;
-                player.canJump = false;
-            }
-            player.speed = -PLAYER_JUMP_SPD;
-            player.canJump = false;
-        }
 
         if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f)
         {
@@ -150,6 +142,25 @@ private:
         if (player.position.x > camera.target.x)
         {
             camera.target.x = player.position.x;
+        }
+
+        static constexpr float MAX_JUMP_TIME = 0.3f;  // Tiempo máximo que puede durar el salto
+        static constexpr float JUMP_HOLD_FORCE = 500.0f;  // Fuerza extra si se mantiene presionado
+
+        if (IsKeyPressed(KEY_SPACE) && player.canJump) {
+            player.speed = -PLAYER_JUMP_SPD;
+            player.canJump = false;
+            player.canJump2 = true;  // Permitir extensión del salto
+            player.jumpTime = 0.0f;  // Reiniciar el tiempo de salto
+        }
+
+        if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME) {
+            player.speed -= JUMP_HOLD_FORCE * deltaTime;
+            player.jumpTime += deltaTime;
+        }
+
+        if (IsKeyReleased(KEY_SPACE)) {
+            player.canJump2 = false;  // Cortar el salto al soltar la tecla
         }
 
         bool hitObstacle = false;
@@ -169,6 +180,7 @@ private:
             player.position.y += player.speed * deltaTime;
             player.speed += GRAVITY * deltaTime;
             player.canJump = false;
+            player.canJump2 = true;
         }
         else {
             player.canJump = true;
@@ -193,7 +205,7 @@ private:
             break;
 
         case GameScreen::TITLE:
-            
+
             DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 10.0f, (screenHeight - UI.height - UI.height) / 10.0f }, 0.0f, 2.0f, WHITE);
             break;
 
@@ -219,7 +231,7 @@ private:
         }
 
         DrawRectangleRec({ player.position.x - 20, player.position.y - 40, 40, 40 }, RED);
-        DrawTextureEx(mario, {player.position.x - 20, player.position.y - 62}, 0, 4, WHITE);
+        DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
         EndMode2D();
 
         DrawText("Controls:", 20, 20, 10, BLACK);

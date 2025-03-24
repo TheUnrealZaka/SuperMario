@@ -10,10 +10,14 @@ using namespace std;
 enum class GameScreen { LOGO, TITLE, GAMEPLAY, ENDING };
 
 // Constantes
-int GRAVITY = 600;
-constexpr float PLAYER_JUMP_SPD = 300.0f;
+int GRAVITY = 500;
+constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
+int Timer = 400;
+int Score = 000000;
+int Money = 00;
+float elapsedTime = 0.0f;
 
 // Estructuras de juego
 struct Mario {
@@ -22,6 +26,8 @@ struct Mario {
     bool canJump;
     bool canJump2;
     float jumpTime;
+    int alive = 1; // If alive = 0 --> Mario is death
+    int lifes = 3;
 
     Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
 };
@@ -50,6 +56,7 @@ private:
     Texture2D logoTexture;
     Texture2D UI;
     Texture2D mario;
+    Font marioFont;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
     unsigned int currentPlayFrame;
@@ -63,7 +70,7 @@ public:
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
         mario = LoadTexture("Images/Player/Mario.png");
-
+        marioFont = LoadFont("Fonts/MarioFont.ttf");
 
         envElements = {
             {0, 0, 1000, 400, false, BLACK},
@@ -120,7 +127,7 @@ private:
 
     void UpdateGameplay() {
         float deltaTime = GetFrameTime();
-
+        elapsedTime += deltaTime * 2.5;
 
         if (IsKeyDown(KEY_RIGHT))
         {
@@ -161,6 +168,7 @@ private:
 
         if (IsKeyReleased(KEY_SPACE)) {
             player.canJump2 = false;  // Cortar el salto al soltar la tecla
+            player.speed += JUMP_HOLD_FORCE - 300 ;
         }
 
         bool hitObstacle = false;
@@ -178,7 +186,14 @@ private:
 
         if (!hitObstacle) {
             player.position.y += player.speed * deltaTime;
-            player.speed += GRAVITY * deltaTime;
+            if (player.speed > 0) 
+            {
+                player.speed += GRAVITY * 3.0f * deltaTime; // Aumentar la gravedad en caída
+            }
+            else 
+            {
+                player.speed += GRAVITY * deltaTime; // Gravedad normal al subir
+            }
             player.canJump = false;
             player.canJump2 = true;
         }
@@ -190,6 +205,21 @@ private:
             player = Mario(400, 280);
             camera.target = player.position;
             camera.zoom = 1.0f;
+        }
+
+        if (IsKeyPressed(KEY_P)) {
+            player.alive = 0;
+        }
+        if (IsKeyPressed(KEY_L)) {
+            Score += 100;
+        }
+        if (IsKeyPressed(KEY_O)) {
+            Money++;
+        }
+
+        if (elapsedTime >= 1.0f && Timer > 0 && player.alive == 1) {
+            Timer--;
+            elapsedTime = 0.0f;  // Reiniciar el contador de tiempo
         }
     }
 
@@ -234,10 +264,18 @@ private:
         DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
         EndMode2D();
 
+        DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 200, 220 }, 30, 1, RED);
+        DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 450, 220 }, 30, 1, RED);
+        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 700, 220 }, 30, 1, RED);
+        DrawTextEx(marioFont, TextFormat("TIME\n %d", Timer), { 1000, 220 }, 30, 1, RED);
         DrawText("Controls:", 20, 20, 10, BLACK);
         DrawText("- LEFT | RIGHT: Move", 30, 40, 10, DARKGRAY);
         DrawText("- SPACE: Jump", 30, 60, 10, DARKGRAY);
         DrawText("- R: Reset", 30, 80, 10, DARKGRAY);
+        DrawText("- SHIFT: Run", 30, 100, 10, DARKGRAY);
+        DrawText("- P: Muerte", 30, 120, 10, DARKGRAY);
+        DrawText("- L: Sumar 100 puntuacion", 30, 140, 10, DARKGRAY);
+        DrawText("- O: Sumar 1 moneda", 30, 160, 10, DARKGRAY);
     }
 };
 

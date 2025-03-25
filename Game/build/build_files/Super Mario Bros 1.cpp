@@ -211,7 +211,10 @@ private:
             player.alive = 0;
         }
         if (IsKeyPressed(KEY_L)) {
-            Score += 100;
+            Score += 50;
+        }
+        if (IsKeyPressed(KEY_I)) {
+            Score += 10000;
         }
         if (IsKeyPressed(KEY_O)) {
             Money++;
@@ -263,9 +266,35 @@ private:
         DrawRectangleRec({ player.position.x - 20, player.position.y - 40, 40, 40 }, RED);
         DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
         EndMode2D();
+        
+        if (Score < 50){
+            DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 200, 220 }, 30, 1, RED);
+        }
+        if (Score >= 50 && Score < 100) {
+            DrawTextEx(marioFont, TextFormat("MARIO\n0000%d", Score), { 200, 220 }, 30, 1, RED);
+        }
+        if (Score >= 100 && Score < 1000) {
+            DrawTextEx(marioFont, TextFormat("MARIO\n000%d", Score), { 200, 220 }, 30, 1, RED);
+        }
+        if (Score >= 1000 && Score < 10000) {
+            DrawTextEx(marioFont, TextFormat("MARIO\n00%d", Score), { 200, 220 }, 30, 1, RED);
+        }
+        if (Score >= 10000 && Score < 100000) {
+            DrawTextEx(marioFont, TextFormat("MARIO\n0%d", Score), { 200, 220 }, 30, 1, RED);
+        }
+        if (Score > 100000) {
+            DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 200, 220 }, 30, 1, RED);
+        }
 
-        DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 200, 220 }, 30, 1, RED);
-        DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 450, 220 }, 30, 1, RED);
+        if (Money < 10) {
+            DrawTextEx(marioFont, TextFormat("\n x0%d", Money), { 450, 220 }, 30, 1, RED);
+        }
+        if (Money >= 10 && Money < 100) {
+            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 450, 220 }, 30, 1, RED);
+        }
+        if (Money == 100) {
+            Money = 0;
+        }
         DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 700, 220 }, 30, 1, RED);
         DrawTextEx(marioFont, TextFormat("TIME\n %d", Timer), { 1000, 220 }, 30, 1, RED);
         DrawText("Controls:", 20, 20, 10, BLACK);
@@ -274,8 +303,9 @@ private:
         DrawText("- R: Reset", 30, 80, 10, DARKGRAY);
         DrawText("- SHIFT: Run", 30, 100, 10, DARKGRAY);
         DrawText("- P: Muerte", 30, 120, 10, DARKGRAY);
-        DrawText("- L: Sumar 100 puntuacion", 30, 140, 10, DARKGRAY);
-        DrawText("- O: Sumar 1 moneda", 30, 160, 10, DARKGRAY);
+        DrawText("- L: Sumar 50 puntuacion", 30, 140, 10, DARKGRAY);
+        DrawText("- I: Sumar 10000 puntuacion", 30, 160, 10, DARKGRAY);
+        DrawText("- O: Sumar 1 moneda", 30, 180, 10, DARKGRAY);
     }
 };
 

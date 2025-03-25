@@ -230,8 +230,8 @@ private:
         switch (currentScreen) {
         case GameScreen::LOGO:
             DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width) / 4.0f, (screenHeight - logoTexture.height) / 3.0f }, 0.0f, 1.3f, WHITE);
-            DrawText("Proyecte 1 - GDD - CITM", 470, 450, 25, GRAY);
-            DrawText("   Members\n \nSauc Pellejero\nMarc Jimenez\nRuben Mateo", 520, 500, 25, GRAY);
+            DrawText("Proyecte 1 - GDD - CITM", 470, 550, 25, GRAY);
+            DrawText("   Members\n \nSauc Pellejero\nMarc Jimenez\nRuben Mateo", 520, 600, 25, GRAY);
             break;
 
         case GameScreen::TITLE:

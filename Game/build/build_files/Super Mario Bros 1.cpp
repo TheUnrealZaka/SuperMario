@@ -7,14 +7,14 @@
 using namespace std;
 
 // ENUM para los estados del juego
-enum class GameScreen { LOGO, TITLE, GAMEPLAY, ENDING };
+enum class GameScreen { LOGO, TITLE, LEVEL1, GAMEPLAY, TIMEOUT, DEATH, ENDING };
 
 // Constantes
 int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
-int Timer = 400;
+int Timer = 10;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
@@ -55,6 +55,7 @@ private:
     Camera2D camera;
     Texture2D logoTexture;
     Texture2D UI;
+    Texture2D Level1;
     Texture2D mario;
     Font marioFont;
     unsigned int frameCounter;
@@ -69,6 +70,7 @@ public:
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
+        Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
         mario = LoadTexture("Images/Player/Mario.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
@@ -89,6 +91,7 @@ public:
     ~Game() {
         UnloadTexture(logoTexture);
         UnloadTexture(UI);
+        UnloadTexture(Level1);
 
         CloseWindow();
     }
@@ -110,13 +113,46 @@ private:
             }
             break;
         case GameScreen::TITLE:
+            framesCounter = 0;
             if (IsKeyPressed(KEY_ENTER)) {
+                currentScreen = GameScreen::LEVEL1;
+            }
+            break;
+        case GameScreen::LEVEL1:
+            if (framesCounter <= 120)
+            {
+                framesCounter++;
+            }
+            if (framesCounter >= 120) {
                 currentScreen = GameScreen::GAMEPLAY;
             }
             break;
+        case GameScreen::TIMEOUT:
+            if (framesCounter <= 240)
+            {
+                framesCounter++;
+            }
+            if (framesCounter >= 240) {
+                
+                currentScreen = GameScreen::DEATH;
+            }
+            break;
+        case GameScreen::DEATH:
+            while (framesCounter <= 360)
+            {
+                framesCounter++;
+            }
+            if (framesCounter >= 360) {
+                Timer = 100;
+                currentScreen = GameScreen::GAMEPLAY;
+            }
+            break;
+            
         case GameScreen::GAMEPLAY:
+            framesCounter = 0;
             UpdateGameplay();
             break;
+
         case GameScreen::ENDING:
             if (IsKeyPressed(KEY_ENTER)) {
                 currentScreen = GameScreen::TITLE;
@@ -224,6 +260,11 @@ private:
             Timer--;
             elapsedTime = 0.0f;  // Reiniciar el contador de tiempo
         }
+
+        if (IsKeyPressed(KEY_K)) {
+            player.lifes = 0;
+            currentScreen = GameScreen::ENDING;
+        }
     }
 
     void Draw() {
@@ -242,32 +283,40 @@ private:
             DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 10.0f, (screenHeight - UI.height - UI.height) / 10.0f }, 0.0f, 2.0f, WHITE);
             break;
 
+        case GameScreen::LEVEL1 :
+
+            DrawTextureEx(Level1, { (screenWidth - Level1.width - Level1.width) / 5.0f, (screenHeight - Level1.height - Level1.height) / 5.0f }, 0.0f, 2.0f, WHITE);
+            break;
+
         case GameScreen::GAMEPLAY:
+
             DrawGameplay();
             break;
 
+        case GameScreen::TIMEOUT:
+            DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+            UItest();
+            DrawTextEx(marioFont, TextFormat("TIME UP"), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
+            break;
+
+        case GameScreen::DEATH:
+            DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+            UItest();
+            DrawTextEx(marioFont, TextFormat(" x  %d", player.lifes), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
+            break;
+
         case GameScreen::ENDING:
-            DrawRectangle(0, 0, screenWidth, screenHeight, BLUE);
-            DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-            DrawText("PRESS ENTER to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+            DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+            UItest();
+            DrawTextEx(marioFont, TextFormat("GAME OVER"), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
             break;
         }
 
         EndDrawing();
     }
 
-    void DrawGameplay() {
-        BeginMode2D(camera);
-
-        for (const auto& element : envElements) {
-            DrawRectangleRec(element.rect, element.color);
-        }
-
-        DrawRectangleRec({ player.position.x - 20, player.position.y - 40, 40, 40 }, RED);
-        DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
-        EndMode2D();
-        
-        if (Score < 50){
+    void UItest() {
+        if (Score < 50) {
             DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 200, 220 }, 30, 1, RED);
         }
         if (Score >= 50 && Score < 100) {
@@ -294,9 +343,46 @@ private:
         }
         if (Money == 100) {
             Money = 0;
+            player.lifes++;
         }
         DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 700, 220 }, 30, 1, RED);
-        DrawTextEx(marioFont, TextFormat("TIME\n %d", Timer), { 1000, 220 }, 30, 1, RED);
+        DrawTextEx(marioFont, TextFormat("TIME"), { 1000, 220 }, 30, 1, RED);
+        if (player.lifes > 0)
+        {
+            if (Timer >= 100) {
+                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 1000, 220 }, 30, 1, RED);
+            }
+            if (Timer < 100 && Timer >= 10) {
+                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 1000, 220 }, 30, 1, RED);
+            }
+            if (Timer < 10 && Timer > 0) {
+                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 1000, 220 }, 30, 1, RED);
+            }
+            if (Timer == 0) {
+                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 1000, 220 }, 30, 1, RED);
+                while (framesCounter <= 120)
+                {
+                    framesCounter++;
+                }
+                if (framesCounter >= 120) {
+                    currentScreen = GameScreen::TIMEOUT;
+                }
+            }
+        }
+    }
+
+    void DrawGameplay() {
+        BeginMode2D(camera);
+
+        for (const auto& element : envElements) {
+            DrawRectangleRec(element.rect, element.color);
+        }
+
+        DrawRectangleRec({ player.position.x - 20, player.position.y - 40, 40, 40 }, RED);
+        DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
+        EndMode2D();
+        
+        UItest();
         DrawText("Controls:", 20, 20, 10, BLACK);
         DrawText("- LEFT | RIGHT: Move", 30, 40, 10, DARKGRAY);
         DrawText("- SPACE: Jump", 30, 60, 10, DARKGRAY);

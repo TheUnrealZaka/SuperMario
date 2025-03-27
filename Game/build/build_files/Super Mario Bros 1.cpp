@@ -50,6 +50,7 @@ private:
 
     GameScreen currentScreen;
     int framesCounter;
+    int framesCounter2;
     Mario player;  // Usando el nuevo jugador tipo Mario
     std::vector<EnvElement> envElements;
     Camera2D camera;
@@ -64,7 +65,7 @@ private:
 
 public:
     Game()
-        : currentScreen(GameScreen::LOGO), framesCounter(0), player(400, 280),
+        : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 280),
         frameCounter(0), playFrameCounter(0), currentPlayFrame(0) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
@@ -92,6 +93,8 @@ public:
         UnloadTexture(logoTexture);
         UnloadTexture(UI);
         UnloadTexture(Level1);
+        UnloadTexture(mario);
+        UnloadFont(marioFont);
 
         CloseWindow();
     }
@@ -105,6 +108,9 @@ public:
 
 private:
     void Update() {
+        if (player.lifes <= 0) {
+            currentScreen = GameScreen::ENDING; // Fin del juego
+        }
         switch (currentScreen) {
         case GameScreen::LOGO:
             framesCounter++;
@@ -119,49 +125,80 @@ private:
             }
             break;
         case GameScreen::LEVEL1:
-            if (framesCounter <= 120)
-            {
-                framesCounter++;
-            }
+            framesCounter++;
             if (framesCounter >= 120) {
                 currentScreen = GameScreen::GAMEPLAY;
             }
             break;
         case GameScreen::TIMEOUT:
-            if (framesCounter <= 240)
-            {
-                framesCounter++;
+            if (framesCounter == 0) {  // Solo restar una vida al entrar en TIMEOUT
+                player.lifes--;
+                if (player.lifes <= 0) {
+                    currentScreen = GameScreen::ENDING; // Fin del juego si no hay más vidas
+                }
             }
-            if (framesCounter >= 240) {
-                
+            elapsedTime += GetFrameTime();
+
+            if (elapsedTime >= 3.0f) {  // Ejemplo: 3 segundos en pantalla de TIMEOUT
                 currentScreen = GameScreen::DEATH;
             }
             break;
+
         case GameScreen::DEATH:
-            while (framesCounter <= 360)
-            {
-                framesCounter++;
-            }
-            if (framesCounter >= 360) {
-                Timer = 100;
+            // Esperar un tiempo o presionar tecla para reiniciar
+            elapsedTime += GetFrameTime();
+
+            if (elapsedTime >= 3.0f || IsKeyPressed(KEY_ENTER)) {
                 currentScreen = GameScreen::GAMEPLAY;
+                player.position = { 400, 280 };
+                Timer = 10;  // Reiniciar el temporizador
+                player.alive = 1;
+                elapsedTime = 0.0f;  // Reiniciar tiempo de espera
             }
             break;
-            
+
         case GameScreen::GAMEPLAY:
-            framesCounter = 0;
+            if (framesCounter == 0) { // Solo reiniciar al entrar en GAMEPLAY
+                Timer = 10;
+                elapsedTime = 0.0f;
+            }
+            // No reinicies framesCounter aquí
             UpdateGameplay();
+
+            // Si el Timer llega a 0, cambia la pantalla a TIMEOUT
+            if (Timer <= 0) {
+                currentScreen = GameScreen::TIMEOUT;
+                elapsedTime = 0.0f;
+            }
             break;
+
 
         case GameScreen::ENDING:
             if (IsKeyPressed(KEY_ENTER)) {
-                currentScreen = GameScreen::TITLE;
+                player.lifes = 3; // Restablecer vidas
+                Timer = 10; // Restablecer el temporizador
+                currentScreen = GameScreen::TITLE; // Volver al menú de inicio
             }
             break;
         }
     }
 
+
     void UpdateGameplay() {
+        if (Timer == 0) {
+            player.lifes--;  // Disminuir vidas cuando se acaba el tiempo
+            if (player.lifes <= 0) {
+                currentScreen = GameScreen::ENDING; // Fin del juego si no hay más vidas
+            }
+            else {
+                // Reiniciar valores como el temporizador y otros estados
+                Timer = 10;
+                elapsedTime = 0.0f;
+                player.position = { 400, 280 }; // Restablecer la posición del jugador
+                player.alive = 1; // El jugador está vivo de nuevo
+            }
+        }
+
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
 
@@ -360,11 +397,11 @@ private:
             }
             if (Timer == 0) {
                 DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 1000, 220 }, 30, 1, RED);
-                while (framesCounter <= 120)
+                if (framesCounter2 <= 120)
                 {
-                    framesCounter++;
+                    framesCounter2++;
                 }
-                if (framesCounter >= 120) {
+                if (framesCounter2 >= 120) {
                     currentScreen = GameScreen::TIMEOUT;
                 }
             }

@@ -108,9 +108,7 @@ public:
 
 private:
     void Update() {
-        if (player.lifes <= 0) {
-            currentScreen = GameScreen::ENDING; // Fin del juego
-        }
+        
         switch (currentScreen) {
         case GameScreen::LOGO:
             framesCounter++;
@@ -131,24 +129,33 @@ private:
             }
             break;
         case GameScreen::TIMEOUT:
+        
             if (framesCounter == 0) {  // Solo restar una vida al entrar en TIMEOUT
                 player.lifes--;
+                framesCounter++;
                 if (player.lifes <= 0) {
-                    currentScreen = GameScreen::ENDING; // Fin del juego si no hay más vidas
+                    while (framesCounter < 2999999999) {
+                        framesCounter++;
+                    }
+                    if (framesCounter >= 2999999999) {
+                        currentScreen = GameScreen::ENDING; // Fin del juego si no hay más vidas
+                    }
                 }
             }
             elapsedTime += GetFrameTime();
 
             if (elapsedTime >= 3.0f) {  // Ejemplo: 3 segundos en pantalla de TIMEOUT
                 currentScreen = GameScreen::DEATH;
+                elapsedTime = 0.0f;
             }
             break;
 
         case GameScreen::DEATH:
+        
             // Esperar un tiempo o presionar tecla para reiniciar
             elapsedTime += GetFrameTime();
 
-            if (elapsedTime >= 3.0f || IsKeyPressed(KEY_ENTER)) {
+            if (elapsedTime >= 3.0f) {
                 currentScreen = GameScreen::GAMEPLAY;
                 player.position = { 400, 280 };
                 Timer = 10;  // Reiniciar el temporizador
@@ -158,10 +165,8 @@ private:
             break;
 
         case GameScreen::GAMEPLAY:
-            if (framesCounter == 0) { // Solo reiniciar al entrar en GAMEPLAY
-                Timer = 10;
-                elapsedTime = 0.0f;
-            }
+        
+            framesCounter = 0;
             // No reinicies framesCounter aquí
             UpdateGameplay();
 
@@ -174,6 +179,7 @@ private:
 
 
         case GameScreen::ENDING:
+        
             if (IsKeyPressed(KEY_ENTER)) {
                 player.lifes = 3; // Restablecer vidas
                 Timer = 10; // Restablecer el temporizador
@@ -185,19 +191,7 @@ private:
 
 
     void UpdateGameplay() {
-        if (Timer == 0) {
-            player.lifes--;  // Disminuir vidas cuando se acaba el tiempo
-            if (player.lifes <= 0) {
-                currentScreen = GameScreen::ENDING; // Fin del juego si no hay más vidas
-            }
-            else {
-                // Reiniciar valores como el temporizador y otros estados
-                Timer = 10;
-                elapsedTime = 0.0f;
-                player.position = { 400, 280 }; // Restablecer la posición del jugador
-                player.alive = 1; // El jugador está vivo de nuevo
-            }
-        }
+        
 
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
@@ -320,35 +314,35 @@ private:
             DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 10.0f, (screenHeight - UI.height - UI.height) / 10.0f }, 0.0f, 2.0f, WHITE);
             break;
 
-        case GameScreen::LEVEL1 :
+        case GameScreen::LEVEL1:
 
             DrawTextureEx(Level1, { (screenWidth - Level1.width - Level1.width) / 5.0f, (screenHeight - Level1.height - Level1.height) / 5.0f }, 0.0f, 2.0f, WHITE);
             break;
 
         case GameScreen::GAMEPLAY:
-
+        
             DrawGameplay();
             break;
-
         case GameScreen::TIMEOUT:
+        
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat("TIME UP"), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
             break;
 
         case GameScreen::DEATH:
+        
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat(" x  %d", player.lifes), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
             break;
-
         case GameScreen::ENDING:
+        
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat("GAME OVER"), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
             break;
         }
-
         EndDrawing();
     }
 
@@ -397,13 +391,13 @@ private:
             }
             if (Timer == 0) {
                 DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 1000, 220 }, 30, 1, RED);
-                if (framesCounter2 <= 120)
-                {
-                    framesCounter2++;
-                }
-                if (framesCounter2 >= 120) {
-                    currentScreen = GameScreen::TIMEOUT;
-                }
+                //if (framesCounter2 <= 120)
+                //{
+                //    framesCounter2++;
+                //}
+                //if (framesCounter2 >= 120) {
+                //    currentScreen = GameScreen::TIMEOUT;
+                //}
             }
         }
     }

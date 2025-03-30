@@ -45,8 +45,8 @@ struct EnvElement {
 // Clase Principal del Juego
 class Game {
 private:
-    constexpr static int screenWidth = 1280;
-    constexpr static int screenHeight = 950;
+    constexpr static int screenWidth = 1024;
+    constexpr static int screenHeight = 815;
 
     GameScreen currentScreen;
     int framesCounter;
@@ -158,6 +158,7 @@ private:
             if (elapsedTime >= 3.0f) {
                 currentScreen = GameScreen::GAMEPLAY;
                 player.position = { 400, 280 };
+                camera.target = player.position;
                 Timer = 10;  // Reiniciar el temporizador
                 player.alive = 1;
                 elapsedTime = 0.0f;  // Reiniciar tiempo de espera
@@ -192,7 +193,6 @@ private:
 
     void UpdateGameplay() {
         
-
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
 
@@ -311,7 +311,7 @@ private:
 
         case GameScreen::TITLE:
 
-            DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 10.0f, (screenHeight - UI.height - UI.height) / 10.0f }, 0.0f, 2.0f, WHITE);
+            DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 9.0f, (screenHeight - UI.height - UI.height + 133) / 10.0f }, 0.0f, 1.7f, WHITE);
             break;
 
         case GameScreen::LEVEL1:
@@ -409,7 +409,7 @@ private:
             DrawRectangleRec(element.rect, element.color);
         }
 
-        DrawRectangleRec({ player.position.x - 20, player.position.y - 40, 40, 40 }, RED);
+        
         DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
         EndMode2D();
         

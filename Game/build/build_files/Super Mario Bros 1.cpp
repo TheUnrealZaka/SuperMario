@@ -14,7 +14,7 @@ int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
-int Timer = 10;
+int Timer = 300;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
@@ -30,6 +30,15 @@ struct Mario {
     int lifes = 3;
 
     Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
+};
+
+struct Enemy {
+    Vector2 position;
+    float speed;
+    bool activated;
+    bool alive;
+
+    Enemy(float x, float y) : position{ x, y }, speed(10), activated(false) {}
 };
 
 // Estructura para los objetos del entorno
@@ -52,6 +61,7 @@ private:
     int framesCounter;
     int framesCounter2;
     Mario player;  // Usando el nuevo jugador tipo Mario
+    Enemy goomba;
     std::vector<EnvElement> envElements;
     Camera2D camera;
     Texture2D logoTexture;
@@ -66,7 +76,7 @@ private:
 public:
     Game()
         : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 280),
-        frameCounter(0), playFrameCounter(0), currentPlayFrame(0) {
+        frameCounter(0), playFrameCounter(0), currentPlayFrame(0), goomba(400, 280) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
@@ -76,8 +86,7 @@ public:
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
         envElements = {
-            {0, 0, 1000, 400, false, BLACK},
-            {0, 400, 1000, 200, true, GRAY},
+            {-200, 600, 10000, 200, true, GRAY},
             {300, 200, 400, 10, true, GRAY},
             {250, 300, 100, 10, true, GRAY},
             {650, 300, 100, 10, true, GRAY}
@@ -268,6 +277,14 @@ private:
             player.canJump = true;
         }
 
+
+        if (player.position.x - goomba.position.x <= -1000)
+        {
+            goomba.activated = true;
+        }
+        
+        if (goomba.activated) goomba.position.x += -goomba.speed;
+
         if (IsKeyPressed(KEY_R)) {
             player = Mario(400, 280);
             camera.target = player.position;
@@ -300,7 +317,7 @@ private:
 
     void Draw() {
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(BLUE);
 
         switch (currentScreen) {
         case GameScreen::LOGO:
@@ -411,8 +428,14 @@ private:
 
         
         DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
+
+        DrawRectangle(goomba.position.x, goomba.position.y, 80, 80, BROWN);
         EndMode2D();
+
         
+        
+
+
         UItest();
         DrawText("Controls:", 20, 20, 10, BLACK);
         DrawText("- LEFT | RIGHT: Move", 30, 40, 10, DARKGRAY);

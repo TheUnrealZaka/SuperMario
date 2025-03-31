@@ -55,7 +55,7 @@ struct EnvElement {
 class Game {
 private:
     constexpr static int screenWidth = 1024;
-    constexpr static int screenHeight = 815;
+    constexpr static int screenHeight = 792;
 
     GameScreen currentScreen;
     int framesCounter;
@@ -82,14 +82,15 @@ public:
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
         Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
-        mario = LoadTexture("Images/Player/Mario.png");
+        mario = LoadTexture("SPRITES/MARIO/Mario_RIGHT.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
         envElements = {
-            {-200, 600, 10000, 200, true, GRAY},
-            {300, 200, 400, 10, true, GRAY},
-            {250, 300, 100, 10, true, GRAY},
-            {650, 300, 100, 10, true, GRAY}
+            {-200, -300, 10000, 10000, false, BLUE},
+            {-200, 600, 10000, 200, true, BROWN},
+            {300, 200, 50, 50, true, YELLOW},
+            {250, 300, 50, 50, true, BROWN},
+            {650, 300, 50, 50, true, BROWN}
         };
 
         camera.target = player.position;
@@ -322,23 +323,26 @@ private:
 
     void Draw() {
         BeginDrawing();
-        ClearBackground(BLUE);
+        ClearBackground(WHITE);
 
         switch (currentScreen) {
         case GameScreen::LOGO:
-            DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width) / 4.0f, (screenHeight - logoTexture.height) / 3.0f }, 0.0f, 1.3f, WHITE);
-            DrawText("Proyecte 1 - GDD - CITM", 470, 550, 25, GRAY);
-            DrawText("   Members\n \nSauc Pellejero\nMarc Jimenez\nRuben Mateo", 520, 600, 25, GRAY);
+            DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width - logoTexture.width + 1000) / 9.0f, (screenHeight - logoTexture.height + 700) / 10.0f }, 0.0f, 1.2f, WHITE);
+            DrawText("Project 1 - GDD - CITM", 330, 420, 30, GRAY);
+            DrawText("   Members", 420, 500, 25, GRAY);
+            DrawText("Sauc Pellejero", 410, 550, 25, GRAY);
+            DrawText(" Marc Jimenez", 408, 600, 25, GRAY);
+            DrawText(" Ruben Mateo", 410, 650, 25, GRAY);
             break;
 
         case GameScreen::TITLE:
 
-            DrawTextureEx(UI, { (screenWidth - UI.width - UI.width) / 9.0f, (screenHeight - UI.height - UI.height + 133) / 10.0f }, 0.0f, 1.7f, WHITE);
+            DrawTextureEx(UI, { (0), (0) }, 0.0f, 1.65f, WHITE);
             break;
 
         case GameScreen::LEVEL1:
 
-            DrawTextureEx(Level1, { (screenWidth - Level1.width - Level1.width) / 5.0f, (screenHeight - Level1.height - Level1.height) / 5.0f }, 0.0f, 2.0f, WHITE);
+            DrawTextureEx(Level1, { (0), (0) }, 0.0f, 3.8f, WHITE);
             break;
 
         case GameScreen::GAMEPLAY:
@@ -370,49 +374,49 @@ private:
 
     void UItest() {
         if (Score < 50) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 200, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 100, 30 }, 30, 1, WHITE);
         }
         if (Score >= 50 && Score < 100) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n0000%d", Score), { 200, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("MARIO\n0000%d", Score), { 100, 30 }, 30, 1, WHITE);
         }
         if (Score >= 100 && Score < 1000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n000%d", Score), { 200, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("MARIO\n000%d", Score), { 100, 30 }, 30, 1, WHITE);
         }
         if (Score >= 1000 && Score < 10000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n00%d", Score), { 200, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("MARIO\n00%d", Score), { 100, 30 }, 30, 1, WHITE);
         }
         if (Score >= 10000 && Score < 100000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n0%d", Score), { 200, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("MARIO\n0%d", Score), { 100, 30 }, 30, 1, WHITE);
         }
         if (Score > 100000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 200, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 100, 30 }, 30, 1, WHITE);
         }
 
         if (Money < 10) {
-            DrawTextEx(marioFont, TextFormat("\n x0%d", Money), { 450, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("\n x0%d", Money), { 350, 30 }, 30, 1, WHITE);
         }
         if (Money >= 10 && Money < 100) {
-            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 450, 220 }, 30, 1, RED);
+            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 350, 30 }, 30, 1, WHITE);
         }
         if (Money == 100) {
             Money = 0;
             player.lifes++;
         }
-        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 700, 220 }, 30, 1, RED);
-        DrawTextEx(marioFont, TextFormat("TIME"), { 1000, 220 }, 30, 1, RED);
+        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 600, 30 }, 30, 1, WHITE);
+        DrawTextEx(marioFont, TextFormat("TIME"), { 830, 30 }, 30, 1, WHITE);
         if (player.lifes > 0)
         {
             if (Timer >= 100) {
-                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 1000, 220 }, 30, 1, RED);
+                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 830, 30 }, 30, 1, WHITE);
             }
             if (Timer < 100 && Timer >= 10) {
-                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 1000, 220 }, 30, 1, RED);
+                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 830, 30 }, 30, 1, WHITE);
             }
             if (Timer < 10 && Timer > 0) {
-                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 1000, 220 }, 30, 1, RED);
+                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 830, 30 }, 30, 1, WHITE);
             }
             if (Timer == 0) {
-                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 1000, 220 }, 30, 1, RED);
+                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 830, 30 }, 30, 1, WHITE);
                 //if (framesCounter2 <= 120)
                 //{
                 //    framesCounter2++;
@@ -431,26 +435,41 @@ private:
             DrawRectangleRec(element.rect, element.color);
         }
 
+        int frameWidth = 48; // Cada frame mide 48x48 píxeles
+        int frameHeight = 48;
+        Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
+
+        // Determinar el estado de animación
+        static float frameTime = 0.0f;
+        static int currentFrame = 0;
+        frameTime += GetFrameTime();
+        float frameSpeed = 0.1f; // Velocidad de la animación
+
+        if (IsKeyDown(KEY_RIGHT)) {
+            if (IsKeyDown(KEY_LEFT_SHIFT)) {
+                frameSpeed = 0.05f; // Aumentar la velocidad al correr
+            }
+            if (frameTime >= frameSpeed) {
+                frameTime = 0.0f;
+                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+            }
+            sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+        }
+        else {
+            currentFrame = 0; // Volver al primer frame si está quieto
+            sourceRec.x = 0;
+        }
+
+        if (!player.canJump) { // Si está en el aire (saltando o cayendo)
+            sourceRec.x = frameWidth * 2; // Suponiendo que el tercer frame es para el salto
+        }
         
-        DrawTextureEx(mario, { player.position.x - 20, player.position.y - 62 }, 0, 4, WHITE);
+        DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);
 
         DrawRectangle(goomba.position.x, goomba.position.y, 80, 80, BROWN);
         EndMode2D();
 
-        
-        
-
-
         UItest();
-        DrawText("Controls:", 20, 20, 10, BLACK);
-        DrawText("- LEFT | RIGHT: Move", 30, 40, 10, DARKGRAY);
-        DrawText("- SPACE: Jump", 30, 60, 10, DARKGRAY);
-        DrawText("- R: Reset", 30, 80, 10, DARKGRAY);
-        DrawText("- SHIFT: Run", 30, 100, 10, DARKGRAY);
-        DrawText("- P: Muerte", 30, 120, 10, DARKGRAY);
-        DrawText("- L: Sumar 50 puntuacion", 30, 140, 10, DARKGRAY);
-        DrawText("- I: Sumar 10000 puntuacion", 30, 160, 10, DARKGRAY);
-        DrawText("- O: Sumar 1 moneda", 30, 180, 10, DARKGRAY);
     }
 };
 

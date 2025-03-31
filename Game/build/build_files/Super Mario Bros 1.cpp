@@ -38,7 +38,7 @@ struct Enemy {
     bool activated;
     bool alive;
 
-    Enemy(float x, float y) : position{ x, y }, speed(10), activated(false) {}
+    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false) {}
 };
 
 // Estructura para los objetos del entorno
@@ -277,13 +277,18 @@ private:
             player.canJump = true;
         }
 
+        if (goomba.position.y <= 520) {
+            goomba.position.y += goomba.speed * 2 * deltaTime;
 
-        if (player.position.x - goomba.position.x <= -1000)
+        }
+        if (player.position.x - goomba.position.x <= -200)
         {
             goomba.activated = true;
         }
         
-        if (goomba.activated) goomba.position.x += -goomba.speed;
+        if (goomba.activated) goomba.position.x += -100 * deltaTime;
+
+       
 
         if (IsKeyPressed(KEY_R)) {
             player = Mario(400, 280);

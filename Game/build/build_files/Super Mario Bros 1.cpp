@@ -14,10 +14,11 @@ int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
-int Timer = 300;
+int Timer = 10;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
+int contmuerte = 0;
 
 // Estructuras de juego
 struct Mario {
@@ -66,8 +67,10 @@ private:
     Camera2D camera;
     Texture2D logoTexture;
     Texture2D UI;
+    Texture2D Moneda;
     Texture2D Level1;
     Texture2D mario;
+    Texture2D Goomba;
     Font marioFont;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
@@ -81,8 +84,10 @@ public:
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
+        Moneda = LoadTexture("Sprites/Items/SMBCoin.gif");
         Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
-        mario = LoadTexture("SPRITES/MARIO/Mario_RIGHT.png");
+        mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
+        Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
         envElements = {
@@ -139,7 +144,6 @@ private:
             }
             break;
         case GameScreen::TIMEOUT:
-        
             if (framesCounter == 0) {  // Solo restar una vida al entrar en TIMEOUT
                 player.lifes--;
                 framesCounter++;
@@ -154,7 +158,7 @@ private:
             }
             elapsedTime += GetFrameTime();
 
-            if (elapsedTime >= 3.0f) {  // Ejemplo: 3 segundos en pantalla de TIMEOUT
+            if (elapsedTime >= 3.0f) {  
                 currentScreen = GameScreen::DEATH;
                 elapsedTime = 0.0f;
             }
@@ -172,6 +176,8 @@ private:
                 Timer = 10;  // Reiniciar el temporizador
                 player.alive = 1;
                 elapsedTime = 0.0f;  // Reiniciar tiempo de espera
+                contmuerte = 0;
+
             }
             break;
 
@@ -183,8 +189,33 @@ private:
 
             // Si el Timer llega a 0, cambia la pantalla a TIMEOUT
             if (Timer <= 0) {
-                currentScreen = GameScreen::TIMEOUT;
-                elapsedTime = 0.0f;
+                if (contmuerte == 0)
+                {
+                    player.speed = -PLAYER_JUMP_SPD * 1.2f;
+                    player.canJump = false;
+                    player.canJump2 = true;
+                    player.jumpTime = 0.0f;
+                    contmuerte++;
+                }
+
+                elapsedTime += GetFrameTime();
+
+                // Hacer que Mario atraviese el suelo desactivando la colisión
+                if (player.position.y < 700)
+                {
+                    player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
+                    player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f ; // Gravedad más fuerte
+                }
+                else {
+                    player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
+                    player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f; // Gravedad más fuerte
+                }
+
+                // Cuando Mario desaparezca por la parte inferior de la pantalla, pasar a TIMEOUT
+                if (elapsedTime >= 10.0f) {
+                    currentScreen = GameScreen::TIMEOUT;
+                    elapsedTime = 0.0f;
+                }
             }
             break;
 
@@ -278,8 +309,8 @@ private:
             player.canJump = true;
         }
 
-        if (goomba.position.y <= 520) {
-            goomba.position.y += goomba.speed * 2 * deltaTime;
+        if (goomba.position.y < 600) {
+            goomba.position.y += GRAVITY * 2.0f * deltaTime;
 
         }
         if (player.position.x - goomba.position.x <= -200)
@@ -287,12 +318,13 @@ private:
             goomba.activated = true;
         }
         
-        if (goomba.activated) goomba.position.x += -100 * deltaTime;
+        if (goomba.activated) goomba.position.x += -150  * deltaTime;
 
        
 
         if (IsKeyPressed(KEY_R)) {
             player = Mario(400, 280);
+            Timer = 300;
             camera.target = player.position;
             camera.zoom = 1.0f;
         }
@@ -342,7 +374,7 @@ private:
 
         case GameScreen::LEVEL1:
 
-            DrawTextureEx(Level1, { (0), (0) }, 0.0f, 3.8f, WHITE);
+            DrawTextureEx(Level1, { (0), (0) }, 0.0f, 4.0f, WHITE);
             break;
 
         case GameScreen::GAMEPLAY:
@@ -373,57 +405,52 @@ private:
     }
 
     void UItest() {
+        DrawTextureEx(Moneda, { (0), (0) }, 0.0f, 4.0f, WHITE);
         if (Score < 50) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 100, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
         if (Score >= 50 && Score < 100) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n0000%d", Score), { 100, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("MARIO\n0000%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
         if (Score >= 100 && Score < 1000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n000%d", Score), { 100, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("MARIO\n000%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
         if (Score >= 1000 && Score < 10000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n00%d", Score), { 100, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("MARIO\n00%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
         if (Score >= 10000 && Score < 100000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n0%d", Score), { 100, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("MARIO\n0%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
         if (Score > 100000) {
-            DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 100, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("MARIO\n%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
 
         if (Money < 10) {
-            DrawTextEx(marioFont, TextFormat("\n x0%d", Money), { 350, 30 }, 30, 1, WHITE);
+
+            DrawTextEx(marioFont, TextFormat("\n x0%d", Money), { 350, 30 }, 32, 1, WHITE);
         }
         if (Money >= 10 && Money < 100) {
-            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 350, 30 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 350, 30 }, 32, 1, WHITE);
         }
         if (Money == 100) {
             Money = 0;
             player.lifes++;
         }
-        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 600, 30 }, 30, 1, WHITE);
-        DrawTextEx(marioFont, TextFormat("TIME"), { 830, 30 }, 30, 1, WHITE);
+        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 600, 30 }, 32, 1, WHITE);
+        DrawTextEx(marioFont, TextFormat("TIME"), { 830, 30 }, 32, 1, WHITE);
         if (player.lifes > 0)
         {
             if (Timer >= 100) {
-                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 830, 30 }, 30, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 830, 30 }, 32, 1, WHITE);
             }
             if (Timer < 100 && Timer >= 10) {
-                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 830, 30 }, 30, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 830, 30 }, 32, 1, WHITE);
             }
             if (Timer < 10 && Timer > 0) {
-                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 830, 30 }, 30, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 830, 30 }, 32, 1, WHITE);
             }
             if (Timer == 0) {
-                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 830, 30 }, 30, 1, WHITE);
-                //if (framesCounter2 <= 120)
-                //{
-                //    framesCounter2++;
-                //}
-                //if (framesCounter2 >= 120) {
-                //    currentScreen = GameScreen::TIMEOUT;
-                //}
+                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 830, 30 }, 32, 1, WHITE);
             }
         }
     }
@@ -465,8 +492,8 @@ private:
         }
         
         DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);
-
-        DrawRectangle(goomba.position.x, goomba.position.y, 80, 80, BROWN);
+        DrawTextureRec(Goomba, sourceRec, { goomba.position.x - 20, goomba.position.y - 48 }, WHITE);
+        
         EndMode2D();
 
         UItest();

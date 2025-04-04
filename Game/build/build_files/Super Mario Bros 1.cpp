@@ -49,7 +49,7 @@ struct EnvElement {
     Color color;
 
     EnvElement(float x, float y, float width, float height, bool block, Color col)
-        : rect{ x, y, width, height }, blocking(block), color(col) {}
+        : rect{ x, y, width, height }, blocking(block), color(col) {} //Esto da los datos pa los bloques del juego
 };
 
 struct Flag {
@@ -89,7 +89,7 @@ private:
 public:
     Game()
         : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 280),
-        frameCounter(0), playFrameCounter(0), currentPlayFrame(0), goomba(400, 280), flag(900, 264) {
+        frameCounter(0), playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), flag(900, 264) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
@@ -107,7 +107,7 @@ public:
             {-200, 600, 10000, 200, true, BROWN},
             {300, 200, 50, 50, true, YELLOW},
             {250, 300, 50, 50, true, BROWN},
-            {650, 300, 50, 50, true, BROWN}
+            {650, 500, 50, 50, true, BROWN}
         };
 
         camera.target = player.position;
@@ -218,7 +218,7 @@ private:
                 elapsedTime += GetFrameTime();
 
                 // Hacer que Mario atraviese el suelo desactivando la colisión
-                if (player.position.y < 700)
+                if (player.position.y > 800)
                 {
                     player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
                     player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f ; // Gravedad más fuerte
@@ -254,24 +254,24 @@ private:
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
 
-        if (IsKeyDown(KEY_RIGHT) && !flag.reached)
+        if (IsKeyDown(KEY_RIGHT) && !flag.reached && Timer > 0)
         {
-            if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached)
+            if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0)
             {
                 player.position.x += PLAYER_RUN_SPD * deltaTime;
             }
             player.position.x += PLAYER_HOR_SPD * deltaTime;
         }
 
-        if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached)
+        if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0)
         {
-            if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached)
+            if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0)
             {
                 player.position.x -= PLAYER_RUN_SPD * deltaTime;
             }
             player.position.x -= PLAYER_HOR_SPD * deltaTime;
         }
-        if (player.position.x > camera.target.x)
+        if (player.position.x > camera.target.x && camera.target.x < 1320)
         {
             camera.target.x = player.position.x;
         }
@@ -279,23 +279,26 @@ private:
         static constexpr float MAX_JUMP_TIME = 0.3f;  // Tiempo máximo que puede durar el salto
         static constexpr float JUMP_HOLD_FORCE = 500.0f;  // Fuerza extra si se mantiene presionado
 
-        if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached) {
+        if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
             player.canJump2 = true;  // Permitir extensión del salto
             player.jumpTime = 0.0f;  // Reiniciar el tiempo de salto
         }
 
-        if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached) {
+        if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0) {
             player.speed -= JUMP_HOLD_FORCE * deltaTime;
             player.jumpTime += deltaTime;
         }
 
-        if (IsKeyReleased(KEY_SPACE) && !flag.reached) {
+        if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0) {
             player.canJump2 = false;  // Cortar el salto al soltar la tecla
             player.speed += JUMP_HOLD_FORCE - 300 ;
         }
-
+        if (Timer <= 0) {
+            bool hitObstacle = false;
+            
+        }
         bool hitObstacle = false;
         for (auto& element : envElements) {
             if (element.blocking &&
@@ -352,7 +355,7 @@ private:
                     float playerMovementSpeed = 120.0f * GetFrameTime();
                     player.position.x += playerMovementSpeed;  // Mover el jugador hacia la derecha
 
-                    if (player.position.x >= flag.position.x + 500) {
+                    if (player.position.x >= flag.position.x + 800) {
                         currentScreen = GameScreen::ENDING; // Finaliza el nivel
                     }
                 }
@@ -504,6 +507,7 @@ private:
         int frameWidth = 48; // Cada frame mide 48x48 píxeles
         int frameHeight = 48;
         Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
+        Rectangle sourceRec2 = { 0, 0, (float)frameWidth, (float)frameHeight };
 
         // Determinar el estado de animación
         static float frameTime = 0.0f;
@@ -511,7 +515,7 @@ private:
         frameTime += GetFrameTime();
         float frameSpeed = 0.1f; // Velocidad de la animación
 
-        if (IsKeyDown(KEY_RIGHT) || flag.reached) {
+        if (IsKeyDown(KEY_RIGHT) && Timer > 0 || flag.reached && camera.target.x < 1320) {
             if (IsKeyDown(KEY_LEFT_SHIFT)) {
                 frameSpeed = 0.05f; // Aumentar la velocidad al correr
             }
@@ -520,6 +524,13 @@ private:
                 currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
             }
             sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+        }
+        else if (goomba.activated) {
+            if (frameTime >= frameSpeed) {
+                frameTime = 0.0f;
+                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+            }
+            sourceRec2.x = (float)(currentFrame * frameWidth); // Cambiar el frame
         }
         else {
             currentFrame = 0; // Volver al primer frame si está quieto
@@ -530,10 +541,15 @@ private:
             sourceRec.x = frameWidth * 2; // Suponiendo que el tercer frame es para el salto
         }
         
-        DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);
-        DrawTextureRec(Goomba, sourceRec, { goomba.position.x - 20, goomba.position.y - 48 }, WHITE);
+        DrawTextureRec(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48 }, WHITE);
         DrawTextureEx(flagTexture, { flag.position.x, flag.position.y - flagTexture.height }, 0, 3, WHITE);
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
+        DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);
+        if (player.position.x >= 1320) {
+            camera.target.x = 1320;
+            DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
+            UnloadTexture(mario);
+        }
 
         EndMode2D();
 

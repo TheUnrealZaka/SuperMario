@@ -107,7 +107,8 @@ public:
             {-200, 600, 10000, 200, true, BROWN},
             {300, 200, 50, 50, true, YELLOW},
             {250, 300, 50, 50, true, BROWN},
-            {650, 500, 50, 50, true, BROWN}
+            {650, 500, 50, 50, true, BROWN},
+            { 450, 550, 50, 50, true, YELLOW}
         };
 
         camera.target = player.position;
@@ -296,37 +297,38 @@ private:
             player.speed += JUMP_HOLD_FORCE - 300 ;
         }
         if (Timer <= 0) {
-            bool hitObstacle = false;
-            
+            bool hitObstacle = false; 
         }
         bool hitObstacle = false;
+        // --- Movimiento vertical (gravedad o salto) ---
+        player.speed += GRAVITY * deltaTime;
+        player.position.y += player.speed * deltaTime;
+
+        Rectangle playerRect = { player.position.x, player.position.y, 48, 0 };
+        player.canJump = false;
+
         for (auto& element : envElements) {
-            if (element.blocking &&
-                element.rect.x <= player.position.x &&
-                element.rect.x + element.rect.width >= player.position.x &&
-                element.rect.y >= player.position.y &&
-                element.rect.y <= player.position.y + player.speed * deltaTime) {
-                hitObstacle = true;
-                player.speed = 0.0f;
-                player.position.y = element.rect.y;
+            if (element.blocking && CheckCollisionRecs(playerRect, element.rect)) {
+                if (player.speed > 0) {
+                    // Mario está cayendo y choca con el suelo
+                    player.position.y = element.rect.y;
+                    player.speed = 0;
+                    player.canJump = true;  // ✅ Aquí activamos el salto correctamente
+                }
+                else if (player.speed < 0) {
+                    // Mario está saltando y choca con el techo
+                    player.position.y = element.rect.y + element.rect.height;
+                    player.speed = 0;
+                }
+
+                // Actualizamos el rectángulo tras cambiar la posición
+                playerRect.y = player.position.y;
             }
         }
 
-        if (!hitObstacle) {
-            player.position.y += player.speed * deltaTime;
-            if (player.speed > 0) 
-            {
-                player.speed += GRAVITY * 3.0f * deltaTime; // Aumentar la gravedad en caída
-            }
-            else 
-            {
-                player.speed += GRAVITY * deltaTime; // Gravedad normal al subir
-            }
+        if (IsKeyPressed(KEY_SPACE) && player.canJump) {
+            player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
-            player.canJump2 = true;
-        }
-        else {
-            player.canJump = true;
         }
 
         if (goomba.position.y < 600) {

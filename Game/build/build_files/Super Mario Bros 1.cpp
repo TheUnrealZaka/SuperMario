@@ -14,7 +14,7 @@ int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
-int Timer = 10;
+int Timer;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
@@ -108,7 +108,7 @@ public:
             {300, 200, 50, 50, true, YELLOW},
             {250, 300, 50, 50, true, BROWN},
             {650, 500, 50, 50, true, BROWN},
-            { 895, 550, 50, 50, true, YELLOW}
+            { 895, 550, 60, 50, true, YELLOW}
         };
 
         camera.target = player.position;
@@ -194,7 +194,7 @@ private:
                 currentScreen = GameScreen::GAMEPLAY;
                 player.position = { 400, 280 };
                 camera.target = player.position;
-                Timer = 10;  // Reiniciar el temporizador
+                Timer = 20;  // Reiniciar el temporizador
                 player.alive = 1;
                 elapsedTime = 0.0f;  // Reiniciar tiempo de espera
                 contmuerte = 0;
@@ -338,35 +338,42 @@ private:
             player.canJump = false;
         }
 
-        if (goomba.position.y < 600) {
+        if (goomba.position.y < 600 && goomba.activated == true) {
             goomba.position.y += GRAVITY * 2.0f * deltaTime;
 
         }
-        if (player.position.x - goomba.position.x <= -200)
+        if (player.position.x - goomba.position.x <= -200 && player.position.y + 48 != goomba.position.y)
         {
             goomba.activated = true;
         }
         
-        if (goomba.activated) goomba.position.x += -150  * deltaTime;
-
-        if (!flag.reached && player.position.x >= flag.position.x - 20) {
+        if (goomba.activated && player.position.y + 48 != goomba.position.y) {
+            goomba.position.x += -150 * deltaTime;
+            if (player.position.y + 48 == goomba.position.y) {
+                goomba.activated = false;
+                goomba.position.y += 100 * GetFrameTime(); // El goomba cae
+                if (goomba.position.y >= 1100) {
+                    
+                }
+            }
+        }
+        if (!flag.reached && player.position.x >= flag.position.x - 20) { //Colision bandera
             flag.reached = true;
             player.position.x = flag.position.x;  // Fijar a la bandera
             player.speed = 0;
         }
 
         if (flag.reached) {
-            if (!hitObstacle) {
+            if (!hitObstacle && player.position.y != 550) {
                 player.position.y += 100 * GetFrameTime(); // Mario baja por la bandera lentamente
             }
             else if (hitObstacle) {
                 if (player.position.y >= flag.position.y + 50) {
                     float playerMovementSpeed = 120.0f * GetFrameTime();
                     player.position.x += playerMovementSpeed;  // Mover el jugador hacia la derecha
-
-                    if (player.position.x >= flag.position.x + 800) {
-                        currentScreen = GameScreen::ENDING; // Finaliza el nivel
-                    }
+                }
+                if (player.position.x >= flag.position.x + 800) {
+                    currentScreen = GameScreen::ENDING; // Finaliza el nivel
                 }
             }
         }
@@ -374,7 +381,10 @@ private:
         if (IsKeyPressed(KEY_R)) {
             player.position = { 400, 280 };
             camera.target = player.position;
-            Timer = 10;  // Reiniciar el temporizador
+            Timer = 20;  // Reiniciar el temporizador
+            Money = 00;
+            Score = 000000;
+            flag.reached = false;
             player.alive = 1;
             elapsedTime = 0.0f;  // Reiniciar tiempo de espera
             contmuerte = 0;

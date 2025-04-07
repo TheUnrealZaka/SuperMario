@@ -34,12 +34,8 @@ struct Mario {
 };
 
 struct Enemy {
-    Vector2 position;
-    float speed;
-    bool activated;
-    bool alive;
-
-    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false) {}
+    Rectangle rect;
+    bool alive = true;
 };
 
 // Estructura para los objetos del entorno
@@ -72,7 +68,9 @@ private:
     Enemy goomba;
     Flag flag;
     std::vector<EnvElement> envElements;
+    std::vector<Enemy> enemies;
     Camera2D camera;
+    AutomationEventList aelist;
     Texture2D logoTexture;
     Texture2D UI;
     Texture2D Moneda;
@@ -89,7 +87,7 @@ private:
 public:
     Game()
         : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 280),
-        frameCounter(0), playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), flag(900, 264) {
+        frameCounter(0), playFrameCounter(0), currentPlayFrame(0), flag(900, 264) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
@@ -111,10 +109,14 @@ public:
             { 450, 550, 50, 50, true, YELLOW}
         };
 
+        enemies.push_back({ {500, 360, 40, 40} });
+
         camera.target = player.position;
         camera.offset = { screenWidth / 2.0f, screenHeight / 2.0f };
         camera.rotation = 0.0f;
         camera.zoom = 1.0f;
+        aelist = LoadAutomationEventList(0);
+        SetAutomationEventList(&aelist);
     }
 
     ~Game() {
@@ -326,21 +328,27 @@ private:
             }
         }
 
-        if (IsKeyPressed(KEY_SPACE) && player.canJump) {
-            player.speed = -PLAYER_JUMP_SPD;
-            player.canJump = false;
-        }
+        for (auto& enemy : enemies) {
+            if (!enemy.alive) continue;
 
-        if (goomba.position.y < 600) {
-            goomba.position.y += GRAVITY * 2.0f * deltaTime;
-
+            Rectangle playerRect = { player.position.x - 20, player.position.y - 40, 40, 40 };
+            if (CheckCollisionRecs(playerRect, enemy.rect)) {
+                float playerBottom = player.position.y;
+                float enemyTop = enemy.rect.y;
+                if (playerBottom < enemyTop + 10) {
+                    enemy.alive = false;
+                    player.speed = -PLAYER_JUMP_SPD / 1.5f;
+                }
+                else {
+                    player.position = { 400, 280 };
+                    camera.target = player.position;
+                    Timer = 10;  // Reiniciar el temporizador
+                    player.alive = 1;
+                    elapsedTime = 0.0f;  // Reiniciar tiempo de espera
+                    contmuerte = 0;
+                }
+            }
         }
-        if (player.position.x - goomba.position.x <= -200)
-        {
-            goomba.activated = true;
-        }
-        
-        if (goomba.activated) goomba.position.x += -150  * deltaTime;
 
         if (!flag.reached && player.position.x >= flag.position.x - 20) {
             flag.reached = true;
@@ -527,13 +535,7 @@ private:
             }
             sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
         }
-        else if (goomba.activated) {
-            if (frameTime >= frameSpeed) {
-                frameTime = 0.0f;
-                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
-            }
-            sourceRec2.x = (float)(currentFrame * frameWidth); // Cambiar el frame
-        }
+
         else {
             currentFrame = 0; // Volver al primer frame si está quieto
             sourceRec.x = 0;
@@ -543,7 +545,10 @@ private:
             sourceRec.x = frameWidth * 2; // Suponiendo que el tercer frame es para el salto
         }
         
-        DrawTextureRec(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48 }, WHITE);
+        for (const auto& enemy : enemies) {
+            if (enemy.alive) DrawTextureRec(Goomba, sourceRec2, { enemy.rect.x, enemy.rect.y }, WHITE);
+        }
+
         DrawTextureEx(flagTexture, { flag.position.x, flag.position.y - flagTexture.height }, 0, 3, WHITE);
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
         DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);

@@ -38,8 +38,9 @@ struct Enemy {
     float speed;
     bool activated;
     bool alive;
+    bool death;
 
-    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false) {}
+    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false), death(false){}
 };
 
 // Estructura para los objetos del entorno
@@ -88,7 +89,7 @@ private:
 
 public:
     Game()
-        : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 280),
+        : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 550),
         frameCounter(0), playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), flag(900, 264) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
@@ -192,7 +193,7 @@ private:
 
             if (elapsedTime >= 3.0f) {
                 currentScreen = GameScreen::GAMEPLAY;
-                player.position = { 400, 280 };
+                player.position = { 400, 550 };
                 camera.target = player.position;
                 Timer = 20;  // Reiniciar el temporizador
                 player.alive = 1;
@@ -338,23 +339,23 @@ private:
             player.canJump = false;
         }
 
-        if (goomba.position.y < 600 && goomba.activated == true) {
+        if (goomba.position.y < 600 && goomba.death == false) {
             goomba.position.y += GRAVITY * 2.0f * deltaTime;
 
         }
-        if (player.position.x - goomba.position.x <= -200 && player.position.y + 48 != goomba.position.y)
+        
+        if (goomba.death == true) {
+            goomba.position.y += 100 * GetFrameTime(); // El goomba cae
+        }
+        if (player.position.x - goomba.position.x <= -200 && goomba.death == false)
         {
             goomba.activated = true;
         }
         
-        if (goomba.activated && player.position.y + 48 != goomba.position.y) {
+        if (goomba.activated && goomba.death == false) {
             goomba.position.x += -150 * deltaTime;
-            if (player.position.y + 48 == goomba.position.y) {
-                goomba.activated = false;
-                goomba.position.y += 100 * GetFrameTime(); // El goomba cae
-                if (goomba.position.y >= 1100) {
-                    
-                }
+            if (player.position.y == goomba.position.y) {
+                goomba.death = true;
             }
         }
         if (!flag.reached && player.position.x >= flag.position.x - 20) { //Colision bandera
@@ -379,8 +380,8 @@ private:
         }
 
         if (IsKeyPressed(KEY_R)) {
-            player.position = { 400, 280 };
-            camera.target = player.position;
+            player.position = { 400, 550 };
+            camera.target = player.position; //cambiar a - 270
             Timer = 20;  // Reiniciar el temporizador
             Money = 00;
             Score = 000000;

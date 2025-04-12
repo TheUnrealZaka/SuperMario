@@ -6,21 +6,37 @@
 
 using namespace std;
 
-// ENUM para los estados del juego
+/*--------------------------------------------------------------------------*/
+/*                               GAMESTATES                                 */
+/*--------------------------------------------------------------------------*/
+
 enum class GameScreen { LOGO, TITLE, LEVEL1, GAMEPLAY, TIMEOUT, DEATH, ENDING };
 
-// Constantes
+/*--------------------------------------------------------------------------*/
+/*                            SPRITES AND SOUND                             */
+/*--------------------------------------------------------------------------*/
+
+
+
+/*--------------------------------------------------------------------------*/
+/*                           CONST AND VARIABLES                            */
+/*--------------------------------------------------------------------------*/
+
 int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
+
 int Timer;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
 int contmuerte = 0;
 
-// Estructuras de juego
+/*--------------------------------------------------------------------------*/
+/*                            CLASS DEFINITION                              */
+/*--------------------------------------------------------------------------*/
+
 struct Mario {
     Vector2 position;
     float speed;
@@ -61,40 +77,62 @@ struct Flag {
     Flag(float x, float y) : position{ x, y }, reached(false) {}
 };
 
-// Clase Principal del Juego
+/*--------------------------------------------------------------------------*/
+/*                             MAIN CLASS GAME                              */
+/*--------------------------------------------------------------------------*/
 class Game {
 private:
+    //Screen
     constexpr static int screenWidth = 1024;
     constexpr static int screenHeight = 792;
 
+    //Game
     GameScreen currentScreen;
     int framesCounter;
     int framesCounter2;
-    Mario player;  // Usando el nuevo jugador tipo Mario
-    Enemy goomba;
-    Flag flag;
     std::vector<EnvElement> envElements;
     Camera2D camera;
-    Texture2D logoTexture;
-    Texture2D UI;
-    Texture2D Moneda;
-    Texture2D Level1;
-    Texture2D mario;
-    Texture2D Goomba;
-    Texture2D flagTexture;
-    Texture2D castle;
-    Texture2D lifes;
-    Font marioFont;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
     unsigned int currentPlayFrame;
 
+    //Player
+    Mario player;
+    Texture2D mario;
+
+    //Enemies
+    Enemy goomba;
+    Texture2D Goomba;
+    Enemy koopa;
+
+    //Interactive Structures
+    Flag flag;
+    Texture2D flagTexture;
+    /*Falta la tuveria aqui*/
+
+    //Map
+    Texture2D castle;
+
+    //Objects
+    Texture2D Moneda;
+
+    //Other Textures
+    Texture2D logoTexture;
+    Texture2D UI;
+    Texture2D Level1;
+    Texture2D lifes;
+    
+    //Typography
+    Font marioFont;
+
 public:
-    Game()
-        : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 550),
-        frameCounter(0), playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), flag(900, 264) {
+    //Initialise the game
+    Game() : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 550), frameCounter(0),
+        playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), koopa(700, 330), flag(900, 264) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
+
+        //Initialising textures and typography
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
         Moneda = LoadTexture("Sprites/Items/Monedas.png");
@@ -106,6 +144,7 @@ public:
         lifes = LoadTexture("Images/Player/Lifes.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
+        //Blocks
         envElements = {
             {-200, -300, 10000, 10000, false, BLUE},
             {-200, 600, 10000, 200, true, BROWN},
@@ -115,6 +154,7 @@ public:
             { 895, 550, 60, 50, true, YELLOW}
         };
 
+        //Camera of the game
         camera.target = player.position;
         camera.offset = { screenWidth / 2.0f, screenHeight / 2.0f };
         camera.rotation = 0.0f;
@@ -122,6 +162,7 @@ public:
     }
 
     ~Game() {
+        //Finalize textures and typography
         UnloadTexture(logoTexture);
         UnloadTexture(UI);
         UnloadTexture(Level1);
@@ -141,6 +182,7 @@ public:
 private:
     void Update() {
 
+        //All Screens of the Game
         switch (currentScreen) {
         case GameScreen::LOGO:
             framesCounter++;
@@ -148,12 +190,14 @@ private:
                 currentScreen = GameScreen::TITLE;
             }
             break;
+
         case GameScreen::TITLE:
             framesCounter = 0;
             if (IsKeyPressed(KEY_ENTER)) {
                 currentScreen = GameScreen::LEVEL1;
             }
             break;
+
         case GameScreen::LEVEL1:
             framesCounter++;
             if (framesCounter >= 120) {
@@ -161,16 +205,17 @@ private:
                 player.position = { 400, 550 };
                 camera.target.x = player.position.x;
                 camera.target.y = 280;
-                Timer = 5;  // Reiniciar el temporizador
+                Timer = 20;
                 Score = 000000;
                 Money = 00;
                 player.alive = 1;
-                elapsedTime = 0.0f;  // Reiniciar tiempo de espera
+                elapsedTime = 0.0f;
                 contmuerte = 0;
             }
             break;
+
         case GameScreen::TIMEOUT:
-            if (framesCounter == 0) {  // Solo restar una vida al entrar en TIMEOUT
+            if (framesCounter == 0) {
                 player.lifes--;
                 framesCounter++;
                 if (player.lifes <= 0) {
@@ -178,7 +223,7 @@ private:
                         framesCounter++;
                     }
                     if (framesCounter >= 2999999999) {
-                        currentScreen = GameScreen::ENDING; // Fin del juego si no hay más vidas
+                        currentScreen = GameScreen::ENDING;
                     }
                 }
             }
@@ -191,8 +236,6 @@ private:
             break;
 
         case GameScreen::DEATH:
-
-            // Esperar un tiempo o presionar tecla para reiniciar
             elapsedTime += GetFrameTime();
 
             if (elapsedTime >= 3.0f) {
@@ -200,20 +243,17 @@ private:
                 player.position = { 400, 550 };
                 camera.target.x = player.position.x;
                 camera.target.y = 280;
-                Timer = 20;  // Reiniciar el temporizador
+                Timer = 20;
                 player.alive = 1;
-                elapsedTime = 0.0f;  // Reiniciar tiempo de espera
+                elapsedTime = 0.0f;
                 contmuerte = 0;
             }
             break;
 
         case GameScreen::GAMEPLAY:
-
             framesCounter = 0;
-            // No reinicies framesCounter aquí
             UpdateGameplay();
 
-            // Si el Timer llega a 0, cambia la pantalla a TIMEOUT
             if (Timer <= 0) {
                 if (contmuerte == 0)
                 {
@@ -225,19 +265,6 @@ private:
                 }
 
                 elapsedTime += GetFrameTime();
-
-                // Hacer que Mario atraviese el suelo desactivando la colisión
-                if (player.position.y > 800)
-                {
-                    player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
-                    player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f; // Gravedad más fuerte
-                }
-                else {
-                    player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
-                    player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f; // Gravedad más fuerte
-                }
-
-                // Cuando Mario desaparezca por la parte inferior de la pantalla, pasar a TIMEOUT
                 if (elapsedTime >= 10.0f) {
                     currentScreen = GameScreen::TIMEOUT;
                     elapsedTime = 0.0f;
@@ -245,18 +272,16 @@ private:
             }
             break;
 
-
         case GameScreen::ENDING:
 
             if (IsKeyPressed(KEY_ENTER)) {
-                player.lifes = 3; // Restablecer vidas
+                player.lifes = 3;
                 flag.reached = false;
-                currentScreen = GameScreen::TITLE; // Volver al menú de inicio
+                currentScreen = GameScreen::TITLE;
             }
             break;
         }
     }
-
 
     void UpdateGameplay() {
 
@@ -425,6 +450,15 @@ private:
         BeginDrawing();
         ClearBackground(WHITE);
 
+        int frameWidth = 16; // Cada frame mide 16x16 píxeles
+        int frameHeight = 16;
+        Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
+
+        static float frameTime = 0.0f;
+        static int currentFrame = 0;
+
+        float frameSpeed = 1.0f; //Velocidad de animación
+
         switch (currentScreen) {
         case GameScreen::LOGO:
             DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width - logoTexture.width + 1000) / 9.0f, (screenHeight - logoTexture.height + 700) / 10.0f }, 0.0f, 1.2f, WHITE);
@@ -454,6 +488,15 @@ private:
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat("TIME UP"), { screenWidth / 2 - 110, screenHeight / 2 }, 30, 1, WHITE);
+            if (currentScreen == GameScreen::GAMEPLAY || currentScreen == GameScreen::TIMEOUT || currentScreen == GameScreen::DEATH) {
+                frameTime += GetFrameTime();
+                if (frameTime >= frameSpeed) {
+                    frameTime = 0.0f;
+                    currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+                }
+                sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+                DrawTexturePro(Moneda, sourceRec, { 350, 60, sourceRec.width * 2.3f, sourceRec.height * 2.3f }, { 0, 0 }, 0, WHITE);
+            }
             break;
 
         case GameScreen::DEATH:
@@ -463,6 +506,15 @@ private:
             DrawTextEx(marioFont, TextFormat("World 1-1"), { screenWidth / 2 - 150, screenHeight / 2 - 100 }, 35, 1, WHITE);
             DrawTextureEx(lifes, { screenWidth / 2 - 120, screenHeight / 2 - 30 }, 0.0f, 1.5f, WHITE);
             DrawTextEx(marioFont, TextFormat(" x  %d", player.lifes), { screenWidth / 2 - 40, screenHeight / 2 }, 30, 1, WHITE);
+            if (currentScreen == GameScreen::DEATH) {
+                frameTime += GetFrameTime();
+                if (frameTime >= frameSpeed) {
+                    frameTime = 0.0f;
+                    currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+                }
+                sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+                DrawTexturePro(Moneda, sourceRec, { 350, 60, sourceRec.width * 2.3f, sourceRec.height * 2.3f }, { 0, 0 }, 0, WHITE);
+            }
             break;
         case GameScreen::ENDING:
 
@@ -475,7 +527,6 @@ private:
     }
 
     void UItest() {
-        DrawTextureEx(Moneda, { (340), (62) }, 0.0f, 2.3f, WHITE);
         if (Score < 50) {
             DrawTextEx(marioFont, TextFormat("MARIO\n00000%d", Score), { 100, 30 }, 32, 1, WHITE);
         }
@@ -497,30 +548,32 @@ private:
 
         if (Money < 10) {
 
-            DrawTextEx(marioFont, TextFormat("\n x0%d", Money), { 350, 30 }, 32, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n x", Money), { 360, 30 }, 32, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n  0%d", Money), { 365, 30 }, 32, 1, WHITE);
         }
         if (Money >= 10 && Money < 100) {
-            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 350, 30 }, 32, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 360, 30 }, 32, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 365, 30 }, 32, 1, WHITE);
         }
         if (Money == 100) {
             Money = 0;
             player.lifes++;
         }
-        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 600, 30 }, 32, 1, WHITE);
-        DrawTextEx(marioFont, TextFormat("TIME"), { 830, 30 }, 32, 1, WHITE);
+        DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 580, 30 }, 32, 1, WHITE);
+        DrawTextEx(marioFont, TextFormat("TIME"), { 800, 30 }, 32, 1, WHITE);
         if (player.lifes > 0)
         {
             if (Timer >= 100) {
-                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 830, 30 }, 32, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 800, 30 }, 32, 1, WHITE);
             }
             if (Timer < 100 && Timer >= 10) {
-                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 830, 30 }, 32, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n 0%d", Timer), { 800, 30 }, 32, 1, WHITE);
             }
             if (Timer < 10 && Timer > 0) {
-                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 830, 30 }, 32, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n 00%d", Timer), { 800, 30 }, 32, 1, WHITE);
             }
             if (Timer == 0) {
-                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 830, 30 }, 32, 1, WHITE);
+                DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 800, 30 }, 32, 1, WHITE);
             }
         }
     }
@@ -540,9 +593,12 @@ private:
 
         // Determinar el estado de animación
         static float frameTime = 0.0f;
+        static float frameTime2 = 0.0f;
         static int currentFrame = 0;
+        static int currentFrame2 = 0;
+        frameTime += GetFrameTime();
         float frameSpeed = 0.1f; // Velocidad de la animación
-        float frameSpeed2 = 15.0f;
+        float frameSpeed2 = 1.0f;
 
         if (IsKeyDown(KEY_RIGHT) && Timer > 0 || flag.reached && camera.target.x < 1320) {
             if (IsKeyDown(KEY_LEFT_SHIFT)) {
@@ -561,18 +617,18 @@ private:
             }
             sourceRec2.x = (float)(currentFrame * frameWidth); // Cambiar el frame
         }
-        if (currentScreen == GameScreen::GAMEPLAY) {
-            frameTime += GetFrameTime() * 0.2;
-            if (frameTime >= frameSpeed2) {
-                frameTime = 0.0f;
-                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+        if (currentScreen == GameScreen::GAMEPLAY || currentScreen == GameScreen::TIMEOUT || currentScreen == GameScreen::DEATH) {
+            frameTime2 += GetFrameTime();
+            if (frameTime2 >= frameSpeed2) {
+                frameTime2 = 0.0f;
+                currentFrame2 = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
             }
-            sourceRec3.x = (float)(currentFrame * frameWidth); // Cambiar el frame
-            DrawTexturePro(Moneda, sourceRec3, { 340, 62, sourceRec3.width * 3, sourceRec3.height * 3 }, { 0, 0 }, 0, WHITE);
-            
+            sourceRec3.x = (float)(currentFrame2 * frameWidth); // Cambiar el frame
+            DrawTexturePro(Moneda, sourceRec3, { 235, -55, sourceRec3.width * 2.3f, sourceRec3.height * 2.3f }, { 0, 0 }, 0, WHITE);  
         }
         else {
             currentFrame = 0; // Volver al primer frame si está quieto
+            currentFrame2 = 0;
             sourceRec.x = 0;
         }
 

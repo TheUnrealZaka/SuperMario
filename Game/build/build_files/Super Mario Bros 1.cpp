@@ -6,21 +6,74 @@
 
 using namespace std;
 
-// ENUM para los estados del juego
-enum class GameScreen { LOGO, TITLE, LEVEL1, GAMEPLAY, TIMEOUT, DEATH, ENDING };
+/*--------------------------------------------------------------------------*/
+// ENUM (GAMESTATES)
+/*--------------------------------------------------------------------------*/
 
-// Constantes
+enum class GameScreen { 
+    LOGO, 
+    TITLE,
+    LEVEL1, 
+    GAMEPLAY, 
+    TIMEOUT, 
+    DEATH, 
+    ENDING
+};
+
+/*--------------------------------------------------------------------------*/
+// Spites and sound
+/*--------------------------------------------------------------------------*/
+
+#define BACKGROUND "Sprites/Background/Fondo.png"
+
+//Character
+#define Mario_Normal_Derecha "Sprites/Mario/Mario_Right.png"
+#define Mario_Normal_Izquierda "Sprites/Mario/Mario_Left.png"
+#define Mario_Fuego_Derecha "Sprites/Mario/Fuego_Right.png"
+#define Mario_Fuego_Izquierda "Sprites/Mario/Fuego_Left.png"
+
+//Enemies
+#define Goomba "Sprites/Enemies/Goomba.png"
+#define Koopa "Sprites/Enemies/Koopa.png"
+
+//Blocks
+#define BloqueInt "Sprites/Bloques/Bloque_int.png"
+#define Bloques "Sprites/Bloques/Bloques.png"
+
+//Items
+#define Fire "Sprites/Items/Bolas_Fuego.png"
+#define Coins "Sprites/Items/Monedas.png"
+#define Cons_out_block "Sprites/Items/Monedas_bloq.png"
+#define Power_ups "Sprites/Items/Power-ups.png"
+
+//Tileset
+#define Castle "Sprites/Tileset/Castillo.png"
+#define Fla "Sprites/Tileset/Meta.png"
+#define Pipes "Sprites/Tileset/Tuberias.png"
+
+/*--------------------------------------------------------------------------*/
+// Const and variables
+/*--------------------------------------------------------------------------*/
+
 int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
+
+constexpr static int screenWidth = 1024;
+constexpr static int screenHeight = 792;
+
 int Timer;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
 int contmuerte = 0;
 
-// Estructuras de juego
+/*--------------------------------------------------------------------------*/
+// Class Definition
+/*--------------------------------------------------------------------------*/
+
+//ESTO SE TIENE QUE DEFINIR POR CLASES MI GENTE
 struct Mario {
     Vector2 position;
     float speed;
@@ -60,11 +113,13 @@ struct Flag {
     Flag(float x, float y) : position{ x, y }, reached(false) {}
 };
 
-// Clase Principal del Juego
+/*--------------------------------------------------------------------------*/
+//                                 GAME CLASS
+/*--------------------------------------------------------------------------*/
+
 class Game {
 private:
-    constexpr static int screenWidth = 1024;
-    constexpr static int screenHeight = 792;
+
 
     GameScreen currentScreen;
     int framesCounter;
@@ -79,7 +134,6 @@ private:
     Texture2D Moneda;
     Texture2D Level1;
     Texture2D mario;
-    Texture2D Goomba;
     Texture2D flagTexture;
     Texture2D castle;
     Font marioFont;
@@ -98,7 +152,6 @@ public:
         Moneda = LoadTexture("Sprites/Items/SMBCoin.gif");
         Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
         mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
-        Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
         flagTexture = LoadTexture("Sprites/Tileset/Flag.png");  
         castle = LoadTexture("Sprites/Tileset/Castle.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
@@ -561,7 +614,6 @@ private:
             sourceRec.x = frameWidth * 2; // Suponiendo que el tercer frame es para el salto
         }
         
-        DrawTextureRec(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48 }, WHITE);
         DrawTextureEx(flagTexture, { flag.position.x, flag.position.y - flagTexture.height }, 0, 3, WHITE);
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
         DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);

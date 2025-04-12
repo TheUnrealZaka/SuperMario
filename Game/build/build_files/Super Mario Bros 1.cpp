@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm> 
 #include <iostream>
-
 using namespace std;
 
 /*--------------------------------------------------------------------------*/
@@ -37,13 +36,30 @@ int contmuerte = 0;
 /*                            CLASS DEFINITION                              */
 /*--------------------------------------------------------------------------*/
 
+//class Mario { //Yo lo dejaba en structs y a chuparla
+//public:
+//    Mario(){}
+//    
+//    Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
+//
+//    Vector2 position;
+//    float speed;
+//    bool canJump;
+//    bool canJump2;
+//    float jumpTime;
+//    int alive = 1; //If alive = 0 --> Mario is death
+//    int lifes = 3;
+//
+//    ~Mario() {}
+//};
+
 struct Mario {
     Vector2 position;
     float speed;
     bool canJump;
     bool canJump2;
     float jumpTime;
-    int alive = 1; // If alive = 0 --> Mario is death
+    int alive = 1; //If alive = 0 --> Mario is death
     int lifes = 3;
 
     Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
@@ -56,10 +72,10 @@ struct Enemy {
     bool alive;
     bool death;
 
-    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false), death(false) {}
+    Enemy(float x, float y) : position{ x, y }, speed(0), activated(false), death(false) {}
 };
 
-// Estructura para los objetos del entorno
+//Structure for objects in the environment
 struct EnvElement {
     Rectangle rect;
     bool blocking;
@@ -114,14 +130,15 @@ private:
     Texture2D castle;
 
     //Objects
-    Texture2D Moneda;
+    Texture2D money;
 
     //Other Textures
     Texture2D logoTexture;
     Texture2D UI;
     Texture2D Level1;
-    Texture2D lifes;
-    
+    Texture2D icon_lifes;
+    Texture2D icon_money;
+
     //Typography
     Font marioFont;
 
@@ -135,13 +152,14 @@ public:
         //Initialising textures and typography
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
-        Moneda = LoadTexture("Sprites/Items/Monedas.png");
+        money = LoadTexture("Sprites/Items/Monedas.png");
         Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
         mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
         Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
         flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
         castle = LoadTexture("Sprites/Tileset/Castle.png");
-        lifes = LoadTexture("Images/Player/Lifes.png");
+        icon_lifes = LoadTexture("Images/Player/Icon_Lifes.png");
+        icon_money = LoadTexture("Images/Player/Icon_Money.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
         //Blocks
@@ -205,6 +223,7 @@ private:
                 player.position = { 400, 550 };
                 camera.target.x = player.position.x;
                 camera.target.y = 280;
+                goomba.position = { 700, 280 };
                 Timer = 20;
                 Score = 000000;
                 Money = 00;
@@ -243,6 +262,7 @@ private:
                 player.position = { 400, 550 };
                 camera.target.x = player.position.x;
                 camera.target.y = 280;
+                goomba.position = { 700, 280 };
                 Timer = 20;
                 player.alive = 1;
                 elapsedTime = 0.0f;
@@ -289,6 +309,7 @@ private:
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
 
+        //In-game controls and conditions
         if (IsKeyDown(KEY_RIGHT) && !flag.reached && Timer > 0)
         {
             if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0)
@@ -311,14 +332,14 @@ private:
             camera.target.x = player.position.x;
         }
 
-        static constexpr float MAX_JUMP_TIME = 0.3f;  // Tiempo máximo que puede durar el salto
-        static constexpr float JUMP_HOLD_FORCE = 500.0f;  // Fuerza extra si se mantiene presionado
+        static constexpr float MAX_JUMP_TIME = 0.3f;
+        static constexpr float JUMP_HOLD_FORCE = 500.0f;
 
         if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
-            player.canJump2 = true;  // Permitir extensión del salto
-            player.jumpTime = 0.0f;  // Reiniciar el tiempo de salto
+            player.canJump2 = true; 
+            player.jumpTime = 0.0f;
         }
 
         if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0) {
@@ -327,12 +348,14 @@ private:
         }
 
         if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0) {
-            player.canJump2 = false;  // Cortar el salto al soltar la tecla
+            player.canJump2 = false;  //Cut the jump when releasing the key
             player.speed += JUMP_HOLD_FORCE - 300;
         }
+
         if (Timer <= 0) {
             bool hitObstacle = false;
         }
+
         bool hitObstacle = false;
         for (auto& element : envElements) {
             if (element.blocking && Timer > 0 &&
@@ -350,11 +373,11 @@ private:
             player.position.y += player.speed * deltaTime;
             if (player.speed > 0)
             {
-                player.speed += GRAVITY * 3.0f * deltaTime; // Aumentar la gravedad en caída
+                player.speed += GRAVITY * 3.0f * deltaTime; // Increase gravity in fall
             }
             else
             {
-                player.speed += GRAVITY * deltaTime; // Gravedad normal al subir
+                player.speed += GRAVITY * deltaTime; // Normal upward gravity
             }
             player.canJump = false;
             player.canJump2 = true;
@@ -363,7 +386,6 @@ private:
             player.canJump = true;
         }
 
-
         if (IsKeyPressed(KEY_SPACE) && player.canJump) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
@@ -371,14 +393,13 @@ private:
 
         if (goomba.position.y < 600 && goomba.death == false) {
             goomba.position.y += GRAVITY * 2.0f * deltaTime;
-
         }
 
         if (goomba.death == true) {
-            goomba.position.y += 100 * GetFrameTime(); // El goomba cae
+            goomba.position.y += 100 * GetFrameTime(); //The goomba fall
         }
-        if (player.position.x - goomba.position.x <= -200 && goomba.death == false)
-        {
+
+        if (player.position.x - goomba.position.x <= -200 && goomba.death == false) {
             goomba.activated = true;
         }
 
@@ -388,23 +409,23 @@ private:
                 goomba.death = true;
             }
         }
-        if (!flag.reached && player.position.x >= flag.position.x - 20) { //Colision bandera
+        if (!flag.reached && player.position.x >= flag.position.x - 20) { //Flag collision
             flag.reached = true;
-            player.position.x = flag.position.x;  // Fijar a la bandera
+            player.position.x = flag.position.x;
             player.speed = 0;
         }
 
         if (flag.reached) {
             if (!hitObstacle && player.position.y != 550) {
-                player.position.y += 100 * GetFrameTime(); // Mario baja por la bandera lentamente
+                player.position.y += 1 * 0.01;
             }
             else if (hitObstacle) {
                 if (player.position.y >= flag.position.y + 50) {
                     float playerMovementSpeed = 120.0f * GetFrameTime();
-                    player.position.x += playerMovementSpeed;  // Mover el jugador hacia la derecha
+                    player.position.x += playerMovementSpeed; 
                 }
                 if (player.position.x >= flag.position.x + 800) {
-                    currentScreen = GameScreen::ENDING; // Finaliza el nivel
+                    currentScreen = GameScreen::ENDING;
                 }
             }
         }
@@ -412,13 +433,14 @@ private:
         if (IsKeyPressed(KEY_R)) {
             player.position = { 400, 550 };
             camera.target.x = player.position.x;
-            camera.target.y = 280; 
-            Timer = 20;  // Reiniciar el temporizador
+            camera.target.y = 280;
+            goomba.position = { 700, 280 };
+            Timer = 20;
             Money = 00;
             Score = 000000;
             flag.reached = false;
             player.alive = 1;
-            elapsedTime = 0.0f;  // Reiniciar tiempo de espera
+            elapsedTime = 0.0f;
             contmuerte = 0;
         }
 
@@ -437,7 +459,7 @@ private:
 
         if (elapsedTime >= 1.0f && Timer > 0 && player.alive == 1 && !flag.reached) {
             Timer--;
-            elapsedTime = 0.0f;  // Reiniciar el contador de tiempo
+            elapsedTime = 0.0f;
         }
 
         if (IsKeyPressed(KEY_K)) {
@@ -450,17 +472,18 @@ private:
         BeginDrawing();
         ClearBackground(WHITE);
 
-        int frameWidth = 16; // Cada frame mide 16x16 píxeles
+        int frameWidth = 16; //Each frame measures 16x16 pixels
         int frameHeight = 16;
         Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
 
         static float frameTime = 0.0f;
         static int currentFrame = 0;
+        float frameSpeed = 1.0f; //Velocity of animation
 
-        float frameSpeed = 1.0f; //Velocidad de animación
-
+        //Draw all the Screens
         switch (currentScreen) {
         case GameScreen::LOGO:
+
             DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width - logoTexture.width + 1000) / 9.0f, (screenHeight - logoTexture.height + 700) / 10.0f }, 0.0f, 1.2f, WHITE);
             DrawText("Project 1 - GDD - CITM", 330, 420, 30, GRAY);
             DrawText("   Members", 420, 500, 25, GRAY);
@@ -483,20 +506,13 @@ private:
 
             DrawGameplay();
             break;
+
         case GameScreen::TIMEOUT:
 
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat("TIME UP"), { screenWidth / 2 - 110, screenHeight / 2 }, 30, 1, WHITE);
-            if (currentScreen == GameScreen::GAMEPLAY || currentScreen == GameScreen::TIMEOUT || currentScreen == GameScreen::DEATH) {
-                frameTime += GetFrameTime();
-                if (frameTime >= frameSpeed) {
-                    frameTime = 0.0f;
-                    currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
-                }
-                sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
-                DrawTexturePro(Moneda, sourceRec, { 350, 60, sourceRec.width * 2.3f, sourceRec.height * 2.3f }, { 0, 0 }, 0, WHITE);
-            }
+            DrawTextureEx(icon_money, { 343, 50 }, 0, 1, WHITE);
             break;
 
         case GameScreen::DEATH:
@@ -504,17 +520,9 @@ private:
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat("World 1-1"), { screenWidth / 2 - 150, screenHeight / 2 - 100 }, 35, 1, WHITE);
-            DrawTextureEx(lifes, { screenWidth / 2 - 120, screenHeight / 2 - 30 }, 0.0f, 1.5f, WHITE);
+            DrawTextureEx(icon_lifes, { screenWidth / 2 - 120, screenHeight / 2 - 30 }, 0.0f, 1.5f, WHITE);
             DrawTextEx(marioFont, TextFormat(" x  %d", player.lifes), { screenWidth / 2 - 40, screenHeight / 2 }, 30, 1, WHITE);
-            if (currentScreen == GameScreen::DEATH) {
-                frameTime += GetFrameTime();
-                if (frameTime >= frameSpeed) {
-                    frameTime = 0.0f;
-                    currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
-                }
-                sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
-                DrawTexturePro(Moneda, sourceRec, { 350, 60, sourceRec.width * 2.3f, sourceRec.height * 2.3f }, { 0, 0 }, 0, WHITE);
-            }
+            DrawTextureEx(icon_money, { 343, 50 }, 0, 1, WHITE);
             break;
         case GameScreen::ENDING:
 
@@ -585,69 +593,64 @@ private:
             DrawRectangleRec(element.rect, element.color);
         }
 
-        int frameWidth = 16; // Cada frame mide 16x16 píxeles
+        int frameWidth = 16; //Each frame mesure 16x16 pixels
         int frameHeight = 16;
+
         Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
         Rectangle sourceRec2 = { 0, 0, (float)frameWidth, (float)frameHeight };
-        Rectangle sourceRec3 = { 0, 0, (float)frameWidth, (float)frameHeight };
 
-        // Determinar el estado de animación
         static float frameTime = 0.0f;
-        static float frameTime2 = 0.0f;
         static int currentFrame = 0;
-        static int currentFrame2 = 0;
         frameTime += GetFrameTime();
-        float frameSpeed = 0.1f; // Velocidad de la animación
-        float frameSpeed2 = 1.0f;
+        float frameSpeed = 0.1f; //Velocity animation
 
-        if (IsKeyDown(KEY_RIGHT) && Timer > 0 || flag.reached && camera.target.x < 1320) {
-            if (IsKeyDown(KEY_LEFT_SHIFT)) {
-                frameSpeed = 0.05f; // Aumentar la velocidad al correr
+        //Animation of Mario
+        if (IsKeyDown(KEY_RIGHT) && Timer > 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
+            if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
+                frameSpeed = 0.05f; //Increases running speed
             }
             if (frameTime >= frameSpeed) {
                 frameTime = 0.0f;
-                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+                currentFrame = (currentFrame + 1) % 3; //Cycling between the 3 walk/run frames
             }
-            sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+            sourceRec.x = (float)(currentFrame * frameWidth); //Change frame
         }
+
+        //Animation of Enemies
         if (goomba.activated) {
             if (frameTime >= frameSpeed) {
                 frameTime = 0.0f;
-                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+                currentFrame = (currentFrame + 1) % 3;
             }
-            sourceRec2.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+            sourceRec2.x = (float)(currentFrame * frameWidth);
         }
-        if (currentScreen == GameScreen::GAMEPLAY || currentScreen == GameScreen::TIMEOUT || currentScreen == GameScreen::DEATH) {
-            frameTime2 += GetFrameTime();
-            if (frameTime2 >= frameSpeed2) {
-                frameTime2 = 0.0f;
-                currentFrame2 = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
-            }
-            sourceRec3.x = (float)(currentFrame2 * frameWidth); // Cambiar el frame
-            DrawTexturePro(Moneda, sourceRec3, { 235, -55, sourceRec3.width * 2.3f, sourceRec3.height * 2.3f }, { 0, 0 }, 0, WHITE);  
-        }
+
         else {
-            currentFrame = 0; // Volver al primer frame si está quieto
-            currentFrame2 = 0;
+            currentFrame = 0; //Return to the first frame if still
             sourceRec.x = 0;
         }
 
-        if (!player.canJump) { // Si está en el aire (saltando o cayendo)
-            sourceRec.x = frameWidth * 2; // Suponiendo que el tercer frame es para el salto
+        if (!player.canJump && !flag.reached) { 
+            sourceRec.x = frameWidth * 5;
         }
 
+        if (Timer <= 0) {
+            sourceRec.x = frameWidth * 6;
+        }
+
+        //Draw all entities, structures and objetcs
         DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
         DrawTextureEx(flagTexture, { flag.position.x, flag.position.y - flagTexture.height }, 0, 3, WHITE);
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
         DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
-        if (player.position.x >= 1320) {
+       
+        if (player.position.x >= 1320) { //Mario arrived to the flag
             camera.target.x = 1320;
             DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
             UnloadTexture(mario);
         }
 
         EndMode2D();
-
         UItest();
     }
 };

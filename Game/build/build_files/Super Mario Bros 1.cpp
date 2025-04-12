@@ -6,74 +6,21 @@
 
 using namespace std;
 
-/*--------------------------------------------------------------------------*/
-// ENUM (GAMESTATES)
-/*--------------------------------------------------------------------------*/
+// ENUM para los estados del juego
+enum class GameScreen { LOGO, TITLE, LEVEL1, GAMEPLAY, TIMEOUT, DEATH, ENDING };
 
-enum class GameScreen { 
-    LOGO, 
-    TITLE,
-    LEVEL1, 
-    GAMEPLAY, 
-    TIMEOUT, 
-    DEATH, 
-    ENDING
-};
-
-/*--------------------------------------------------------------------------*/
-// Spites and sound
-/*--------------------------------------------------------------------------*/
-
-#define BACKGROUND "Sprites/Background/Fondo.png"
-
-//Character
-#define Mario_Normal_Derecha "Sprites/Mario/Mario_Right.png"
-#define Mario_Normal_Izquierda "Sprites/Mario/Mario_Left.png"
-#define Mario_Fuego_Derecha "Sprites/Mario/Fuego_Right.png"
-#define Mario_Fuego_Izquierda "Sprites/Mario/Fuego_Left.png"
-
-//Enemies
-#define Goomba "Sprites/Enemies/Goomba.png"
-#define Koopa "Sprites/Enemies/Koopa.png"
-
-//Blocks
-#define BloqueInt "Sprites/Bloques/Bloque_int.png"
-#define Bloques "Sprites/Bloques/Bloques.png"
-
-//Items
-#define Fire "Sprites/Items/Bolas_Fuego.png"
-#define Coins "Sprites/Items/Monedas.png"
-#define Cons_out_block "Sprites/Items/Monedas_bloq.png"
-#define Power_ups "Sprites/Items/Power-ups.png"
-
-//Tileset
-#define Castle "Sprites/Tileset/Castillo.png"
-#define Fla "Sprites/Tileset/Meta.png"
-#define Pipes "Sprites/Tileset/Tuberias.png"
-
-/*--------------------------------------------------------------------------*/
-// Const and variables
-/*--------------------------------------------------------------------------*/
-
+// Constantes
 int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
-
-constexpr static int screenWidth = 1024;
-constexpr static int screenHeight = 792;
-
 int Timer;
 int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
 int contmuerte = 0;
 
-/*--------------------------------------------------------------------------*/
-// Class Definition
-/*--------------------------------------------------------------------------*/
-
-//ESTO SE TIENE QUE DEFINIR POR CLASES MI GENTE
+// Estructuras de juego
 struct Mario {
     Vector2 position;
     float speed;
@@ -93,7 +40,7 @@ struct Enemy {
     bool alive;
     bool death;
 
-    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false), death(false){}
+    Enemy(float x, float y) : position{ x, y }, speed(100), activated(false), death(false) {}
 };
 
 // Estructura para los objetos del entorno
@@ -103,7 +50,8 @@ struct EnvElement {
     Color color;
 
     EnvElement(float x, float y, float width, float height, bool block, Color col)
-        : rect{ x, y, width, height }, blocking(block), color(col) {} //Esto da los datos pa los bloques del juego
+        : rect{ x, y, width, height }, blocking(block), color(col) {
+    } //Esto da los datos pa los bloques del juego
 };
 
 struct Flag {
@@ -113,13 +61,11 @@ struct Flag {
     Flag(float x, float y) : position{ x, y }, reached(false) {}
 };
 
-/*--------------------------------------------------------------------------*/
-//                                 GAME CLASS
-/*--------------------------------------------------------------------------*/
-
+// Clase Principal del Juego
 class Game {
 private:
-
+    constexpr static int screenWidth = 1024;
+    constexpr static int screenHeight = 792;
 
     GameScreen currentScreen;
     int framesCounter;
@@ -134,8 +80,10 @@ private:
     Texture2D Moneda;
     Texture2D Level1;
     Texture2D mario;
+    Texture2D Goomba;
     Texture2D flagTexture;
     Texture2D castle;
+    Texture2D lifes;
     Font marioFont;
     unsigned int frameCounter;
     unsigned int playFrameCounter;
@@ -149,11 +97,13 @@ public:
         SetTargetFPS(60);
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
-        Moneda = LoadTexture("Sprites/Items/SMBCoin.gif");
+        Moneda = LoadTexture("Sprites/Items/Monedas.png");
         Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
         mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
-        flagTexture = LoadTexture("Sprites/Tileset/Flag.png");  
+        Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
+        flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
         castle = LoadTexture("Sprites/Tileset/Castle.png");
+        lifes = LoadTexture("Images/Player/Lifes.png");
         marioFont = LoadFont("Fonts/MarioFont.ttf");
 
         envElements = {
@@ -190,7 +140,7 @@ public:
 
 private:
     void Update() {
-        
+
         switch (currentScreen) {
         case GameScreen::LOGO:
             framesCounter++;
@@ -208,9 +158,10 @@ private:
             framesCounter++;
             if (framesCounter >= 120) {
                 currentScreen = GameScreen::GAMEPLAY;
-                player.position = { 400, 280 };
-                camera.target = player.position;
-                Timer = 20;  // Reiniciar el temporizador
+                player.position = { 400, 550 };
+                camera.target.x = player.position.x;
+                camera.target.y = 280;
+                Timer = 5;  // Reiniciar el temporizador
                 Score = 000000;
                 Money = 00;
                 player.alive = 1;
@@ -233,21 +184,22 @@ private:
             }
             elapsedTime += GetFrameTime();
 
-            if (elapsedTime >= 3.0f) {  
+            if (elapsedTime >= 3.0f) {
                 currentScreen = GameScreen::DEATH;
                 elapsedTime = 0.0f;
             }
             break;
 
         case GameScreen::DEATH:
-        
+
             // Esperar un tiempo o presionar tecla para reiniciar
             elapsedTime += GetFrameTime();
 
             if (elapsedTime >= 3.0f) {
                 currentScreen = GameScreen::GAMEPLAY;
                 player.position = { 400, 550 };
-                camera.target = player.position;
+                camera.target.x = player.position.x;
+                camera.target.y = 280;
                 Timer = 20;  // Reiniciar el temporizador
                 player.alive = 1;
                 elapsedTime = 0.0f;  // Reiniciar tiempo de espera
@@ -256,7 +208,7 @@ private:
             break;
 
         case GameScreen::GAMEPLAY:
-        
+
             framesCounter = 0;
             // No reinicies framesCounter aquí
             UpdateGameplay();
@@ -278,7 +230,7 @@ private:
                 if (player.position.y > 800)
                 {
                     player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
-                    player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f ; // Gravedad más fuerte
+                    player.speed += (GRAVITY * 0.5f) * 0.2f * 2.0f * 0.2f; // Gravedad más fuerte
                 }
                 else {
                     player.position.y += player.speed * 0.2f * 0.5f * 0.2f;
@@ -295,7 +247,7 @@ private:
 
 
         case GameScreen::ENDING:
-        
+
             if (IsKeyPressed(KEY_ENTER)) {
                 player.lifes = 3; // Restablecer vidas
                 flag.reached = false;
@@ -307,7 +259,7 @@ private:
 
 
     void UpdateGameplay() {
-        
+
         mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
@@ -351,14 +303,14 @@ private:
 
         if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0) {
             player.canJump2 = false;  // Cortar el salto al soltar la tecla
-            player.speed += JUMP_HOLD_FORCE - 300 ;
+            player.speed += JUMP_HOLD_FORCE - 300;
         }
         if (Timer <= 0) {
-            bool hitObstacle = false; 
+            bool hitObstacle = false;
         }
         bool hitObstacle = false;
         for (auto& element : envElements) {
-            if (element.blocking &&
+            if (element.blocking && Timer > 0 &&
                 element.rect.x <= player.position.x &&
                 element.rect.x + element.rect.width >= player.position.x &&
                 element.rect.y >= player.position.y &&
@@ -371,11 +323,11 @@ private:
 
         if (!hitObstacle) {
             player.position.y += player.speed * deltaTime;
-            if (player.speed > 0) 
+            if (player.speed > 0)
             {
                 player.speed += GRAVITY * 3.0f * deltaTime; // Aumentar la gravedad en caída
             }
-            else 
+            else
             {
                 player.speed += GRAVITY * deltaTime; // Gravedad normal al subir
             }
@@ -396,7 +348,7 @@ private:
             goomba.position.y += GRAVITY * 2.0f * deltaTime;
 
         }
-        
+
         if (goomba.death == true) {
             goomba.position.y += 100 * GetFrameTime(); // El goomba cae
         }
@@ -404,7 +356,7 @@ private:
         {
             goomba.activated = true;
         }
-        
+
         if (goomba.activated && goomba.death == false) {
             goomba.position.x += -150 * deltaTime;
             if (player.position.y == goomba.position.y) {
@@ -434,7 +386,8 @@ private:
 
         if (IsKeyPressed(KEY_R)) {
             player.position = { 400, 550 };
-            camera.target = player.position; //cambiar a - 270
+            camera.target.x = player.position.x;
+            camera.target.y = 280; 
             Timer = 20;  // Reiniciar el temporizador
             Money = 00;
             Score = 000000;
@@ -493,24 +446,26 @@ private:
             break;
 
         case GameScreen::GAMEPLAY:
-        
+
             DrawGameplay();
             break;
         case GameScreen::TIMEOUT:
-        
+
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
-            DrawTextEx(marioFont, TextFormat("TIME UP"), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("TIME UP"), { screenWidth / 2 - 110, screenHeight / 2 }, 30, 1, WHITE);
             break;
 
         case GameScreen::DEATH:
-        
+
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
-            DrawTextEx(marioFont, TextFormat(" x  %d", player.lifes), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("World 1-1"), { screenWidth / 2 - 150, screenHeight / 2 - 100 }, 35, 1, WHITE);
+            DrawTextureEx(lifes, { screenWidth / 2 - 120, screenHeight / 2 - 30 }, 0.0f, 1.5f, WHITE);
+            DrawTextEx(marioFont, TextFormat(" x  %d", player.lifes), { screenWidth / 2 - 40, screenHeight / 2 }, 30, 1, WHITE);
             break;
         case GameScreen::ENDING:
-        
+
             DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
             UItest();
             DrawTextEx(marioFont, TextFormat("GAME OVER"), { screenWidth / 2 - 150, screenHeight / 2 }, 30, 1, WHITE);
@@ -577,16 +532,17 @@ private:
             DrawRectangleRec(element.rect, element.color);
         }
 
-        int frameWidth = 48; // Cada frame mide 48x48 píxeles
-        int frameHeight = 48;
+        int frameWidth = 16; // Cada frame mide 16x16 píxeles
+        int frameHeight = 16;
         Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
         Rectangle sourceRec2 = { 0, 0, (float)frameWidth, (float)frameHeight };
+        Rectangle sourceRec3 = { 0, 0, (float)frameWidth, (float)frameHeight };
 
         // Determinar el estado de animación
         static float frameTime = 0.0f;
         static int currentFrame = 0;
-        frameTime += GetFrameTime();
         float frameSpeed = 0.1f; // Velocidad de la animación
+        float frameSpeed2 = 15.0f;
 
         if (IsKeyDown(KEY_RIGHT) && Timer > 0 || flag.reached && camera.target.x < 1320) {
             if (IsKeyDown(KEY_LEFT_SHIFT)) {
@@ -598,12 +554,22 @@ private:
             }
             sourceRec.x = (float)(currentFrame * frameWidth); // Cambiar el frame
         }
-        else if (goomba.activated) {
+        if (goomba.activated) {
             if (frameTime >= frameSpeed) {
                 frameTime = 0.0f;
                 currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
             }
             sourceRec2.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+        }
+        if (currentScreen == GameScreen::GAMEPLAY) {
+            frameTime += GetFrameTime() * 0.2;
+            if (frameTime >= frameSpeed2) {
+                frameTime = 0.0f;
+                currentFrame = (currentFrame + 1) % 3; // Ciclar entre los 3 frames de caminar/correr
+            }
+            sourceRec3.x = (float)(currentFrame * frameWidth); // Cambiar el frame
+            DrawTexturePro(Moneda, sourceRec3, { 340, 62, sourceRec3.width * 3, sourceRec3.height * 3 }, { 0, 0 }, 0, WHITE);
+            
         }
         else {
             currentFrame = 0; // Volver al primer frame si está quieto
@@ -613,10 +579,11 @@ private:
         if (!player.canJump) { // Si está en el aire (saltando o cayendo)
             sourceRec.x = frameWidth * 2; // Suponiendo que el tercer frame es para el salto
         }
-        
+
+        DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
         DrawTextureEx(flagTexture, { flag.position.x, flag.position.y - flagTexture.height }, 0, 3, WHITE);
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
-        DrawTextureRec(mario, sourceRec, { player.position.x - 20, player.position.y - 48 }, WHITE);
+        DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
         if (player.position.x >= 1320) {
             camera.target.x = 1320;
             DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);

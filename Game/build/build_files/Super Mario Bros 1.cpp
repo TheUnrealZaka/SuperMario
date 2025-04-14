@@ -61,8 +61,9 @@ struct Mario {
     float jumpTime;
     int alive = 1; //If alive = 0 --> Mario is death
     int lifes = 3;
+    bool big;
 
-    Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
+    Mario(float x, float y) : position{ x, y }, speed(0), canJump(false), big(false) {}
 };
 
 struct Enemy {
@@ -153,7 +154,7 @@ public:
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
         money = LoadTexture("Sprites/Items/Monedas.png");
         Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
-        mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
+        mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
         Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
         flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
         castle = LoadTexture("Sprites/Tileset/Castle.png");
@@ -459,7 +460,12 @@ private:
         }
 
         if (IsKeyPressed(KEY_R)) {
-            player.position = { 400, 550 };
+            if (player.big == 0) {
+                player.position = { 400, 550 };
+            }
+            if (player.big == 1) {
+                player.position = { 400, 600 };
+            }
             camera.target.x = player.position.x;
             camera.target.y = 280;
             goomba.position = { 700, 280 };
@@ -468,6 +474,7 @@ private:
             Score = 000000;
             flag.reached = false;
             player.alive = 1;
+            player.lifes = 3;
             elapsedTime = 0.0f;
             contmuerte = 0;
         }
@@ -493,6 +500,11 @@ private:
         if (IsKeyPressed(KEY_K)) {
             player.lifes = 0;
             currentScreen = GameScreen::ENDING;
+        }
+
+        if (IsKeyPressed(KEY_B)) {
+            player.big = 1;
+
         }
     }
 
@@ -621,8 +633,17 @@ private:
             DrawRectangleRec(element.rect, element.color);
         }
 
-        int frameWidth = 16; //Each frame mesure 16x16 pixels
-        int frameHeight = 16;
+        int frameWidth;
+        int frameHeight;
+
+        if (player.big == 0) {
+            frameWidth = 16; //Each frame mesure 16x16 pixels
+            frameHeight = 16;
+        }
+        if (player.big == 1) {
+            frameWidth = 16; //Each frame mesure 16x16 pixels
+            frameHeight = 32;
+        }
 
         Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
         Rectangle sourceRec2 = { 0, 0, (float)frameWidth, (float)frameHeight };
@@ -634,6 +655,29 @@ private:
 
         //Animation of Mario
         if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
+            mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
+            if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
+                frameSpeed = 0.05f; //Increases running speed
+            }
+            if (player.big == 0) {
+                if (frameTime >= frameSpeed) {
+                    frameTime = 0.0f;
+                    currentFrame = (currentFrame + 1) % 3; //Cycling between the 3 walk/run frames
+                }
+                sourceRec.x = (float)(currentFrame * frameWidth); //Change frame
+            }
+            else if (player.big == 1) {
+                if (frameTime >= frameSpeed) {
+                    frameTime = 0.0f;
+                    currentFrame = (currentFrame + 1) % 3; //Cycling between the 3 walk/run frames
+                }
+                sourceRec.y = (float) 1 * frameHeight;
+                sourceRec.x = (float)(currentFrame * frameWidth); //Change frame
+            }
+        }
+
+        if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
+            mario = LoadTexture("Sprites/MARIO/Mario_Left.png");
             if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
                 frameSpeed = 0.05f; //Increases running speed
             }
@@ -670,8 +714,15 @@ private:
         DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
         DrawTextureEx(flagTexture, { flag.position.x, flag.position.y - flagTexture.height }, 0, 3, WHITE);
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
-        DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
-       
+        if (player.big == 0) {
+            DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+
+        }
+        if (player.big == 1) {
+            sourceRec.y = 16;
+            DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+        }
+        
         if (player.position.x >= 1320) { //Mario arrived to the flag
             camera.target.x = 1320;
             DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);

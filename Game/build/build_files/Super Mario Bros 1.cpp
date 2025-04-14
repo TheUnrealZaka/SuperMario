@@ -633,20 +633,31 @@ private:
             DrawRectangleRec(element.rect, element.color);
         }
 
-        int frameWidth;
-        int frameHeight;
+        int frameWidthP;
+        int frameHeightP;
 
+        //Player
         if (player.big == 0) {
-            frameWidth = 16; //Each frame mesure 16x16 pixels
-            frameHeight = 16;
+            frameWidthP = 16; //Each frame mesure 16x16 pixels
+            frameHeightP = 16;
         }
         if (player.big == 1) {
-            frameWidth = 16; //Each frame mesure 16x16 pixels
-            frameHeight = 32;
+            frameWidthP = 16; //Each frame mesure 16x16 pixels
+            frameHeightP = 32;
         }
 
-        Rectangle sourceRec = { 0, 0, (float)frameWidth, (float)frameHeight };
-        Rectangle sourceRec2 = { 0, 0, (float)frameWidth, (float)frameHeight };
+        Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
+
+        //Enemies
+        /*--Goomba--*/
+        int frameWidthG = 16;
+        int frameHeightG = 16;
+        Rectangle sourceRec2 = { 0, 0, (float)frameWidthG, (float)frameHeightG };
+
+        /*--Koopa--*/
+        int frameWidthK = 16;
+        int frameHeightK = 24;
+        Rectangle sourceRec3 = { 0, 0, (float)frameWidthK, (float)frameHeightK };
 
         static float frameTime = 0.0f;
         static int currentFrame = 0;
@@ -659,21 +670,11 @@ private:
             if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
                 frameSpeed = 0.05f; //Increases running speed
             }
-            if (player.big == 0) {
-                if (frameTime >= frameSpeed) {
-                    frameTime = 0.0f;
-                    currentFrame = (currentFrame + 1) % 3; //Cycling between the 3 walk/run frames
+            if (frameTime >= frameSpeed) {
+                frameTime = 0.0f;
+                currentFrame = (currentFrame + 1) % 4; //Cycling between the 3 walk/run frames
                 }
-                sourceRec.x = (float)(currentFrame * frameWidth); //Change frame
-            }
-            else if (player.big == 1) {
-                if (frameTime >= frameSpeed) {
-                    frameTime = 0.0f;
-                    currentFrame = (currentFrame + 1) % 3; //Cycling between the 3 walk/run frames
-                }
-                sourceRec.y = (float) 1 * frameHeight;
-                sourceRec.x = (float)(currentFrame * frameWidth); //Change frame
-            }
+                sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
         }
 
         if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
@@ -683,9 +684,9 @@ private:
             }
             if (frameTime >= frameSpeed) {
                 frameTime = 0.0f;
-                currentFrame = (currentFrame + 1) % 3; //Cycling between the 3 walk/run frames
+                currentFrame = (currentFrame + 1) % 4; //Cycling between the 3 walk/run frames
             }
-            sourceRec.x = (float)(currentFrame * frameWidth); //Change frame
+            sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
         }
 
         //Animation of Enemies
@@ -694,7 +695,7 @@ private:
                 frameTime = 0.0f;
                 currentFrame = (currentFrame + 1) % 3;
             }
-            sourceRec2.x = (float)(currentFrame * frameWidth);
+            sourceRec2.x = (float)(currentFrame * frameWidthP);
         }
 
         else {
@@ -703,11 +704,12 @@ private:
         }
 
         if (!player.canJump && !flag.reached) { 
-            sourceRec.x = frameWidth * 5;
+            sourceRec.x = frameWidthP * 5;
         }
 
         if (Timer <= 0 || player.alive == 0) {
-            sourceRec.x = frameWidth * 6;
+            player.big = 0;
+            sourceRec.x = frameWidthP * 6;
         }
 
         //Draw all entities, structures and objetcs
@@ -716,7 +718,6 @@ private:
         DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
         if (player.big == 0) {
             DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
-
         }
         if (player.big == 1) {
             sourceRec.y = 16;

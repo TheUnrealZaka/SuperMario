@@ -280,22 +280,23 @@ private:
                     player.canJump = false;
                     player.canJump2 = true;
                     player.jumpTime = 0.0f;
+                    if (framesCounter == 0) {
+                        player.lifes--;
+                        framesCounter++;
+                    }
                     contmuerte++;
                 }
-                if (framesCounter == 0) {
-                    player.lifes--;
-                    framesCounter++;
+                elapsedTime += GetFrameTime();
+                if (elapsedTime >= 15.0f) {
                     if (player.lifes <= 0) {
-                        while (framesCounter < 2999999999) {
-                            framesCounter++;
+                        while (elapsedTime < 30.0f) {
+                            elapsedTime += GetFrameTime();
                         }
-                        if (framesCounter >= 2999999999) {
+                        if (elapsedTime >= 30.0f) {
                             currentScreen = GameScreen::ENDING;
+                            break;
                         }
                     }
-                }
-                elapsedTime += GetFrameTime();
-                if (elapsedTime >= 10.0f) {
                     currentScreen = GameScreen::DEATH;
                     elapsedTime = 0.0f;
                 }
@@ -312,7 +313,7 @@ private:
                 }
 
                 elapsedTime += GetFrameTime();
-                if (elapsedTime >= 10.0f) {
+                if (elapsedTime >= 15.0f) {
                     currentScreen = GameScreen::TIMEOUT;
                     elapsedTime = 0.0f;
                 }
@@ -596,7 +597,7 @@ private:
         }
         DrawTextEx(marioFont, TextFormat("WORLD\n 1-1 "), { 580, 30 }, 32, 1, WHITE);
         DrawTextEx(marioFont, TextFormat("TIME"), { 800, 30 }, 32, 1, WHITE);
-        if (player.lifes > 0)
+        if (currentScreen == GameScreen::GAMEPLAY)
         {
             if (Timer >= 100) {
                 DrawTextEx(marioFont, TextFormat("\n %d", Timer), { 800, 30 }, 32, 1, WHITE);
@@ -632,7 +633,7 @@ private:
         float frameSpeed = 0.1f; //Velocity animation
 
         //Animation of Mario
-        if (IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
+        if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
             if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
                 frameSpeed = 0.05f; //Increases running speed
             }

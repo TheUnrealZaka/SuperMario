@@ -415,13 +415,16 @@ private:
             player.canJump = true;
         }
 
-        if (IsKeyPressed(KEY_SPACE) && player.canJump && player.alive != 0) {
+        if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && player.alive != 0) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
         }
 
-        if (goomba.position.y < 600 && goomba.death == false) {
+        if (goomba.position.y < 596 && goomba.death == false) {
             goomba.position.y += GRAVITY * 2.0f * deltaTime;
+        }
+        else {
+            goomba.position.y = 600;
         }
 
         if (goomba.death == true) {
@@ -434,9 +437,7 @@ private:
 
         if (goomba.activated && goomba.death == false && player.alive != 0) {
             goomba.position.x += -150 * deltaTime;
-            if (player.position.y == goomba.position.y) {
-                goomba.death = true;
-            }
+            
         }
         if (!flag.reached && player.position.x >= flag.position.x - 20) { //Flag collision
             flag.reached = true;
@@ -460,12 +461,7 @@ private:
         }
 
         if (IsKeyPressed(KEY_R)) {
-            if (player.big == 0) {
-                player.position = { 400, 550 };
-            }
-            if (player.big == 1) {
-                player.position = { 400, 600 };
-            }
+            player.position = { 400, 550 };
             camera.target.x = player.position.x;
             camera.target.y = 280;
             goomba.position = { 700, 280 };
@@ -475,6 +471,7 @@ private:
             flag.reached = false;
             player.alive = 1;
             player.lifes = 3;
+            player.big = 0;
             elapsedTime = 0.0f;
             contmuerte = 0;
         }
@@ -504,7 +501,6 @@ private:
 
         if (IsKeyPressed(KEY_B)) {
             player.big = 1;
-
         }
     }
 
@@ -645,8 +641,12 @@ private:
             frameWidthP = 16; //Each frame mesure 16x16 pixels
             frameHeightP = 32;
         }
-
         Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
+
+        static float frameTime = 0.0f;
+        static int currentFrame = 0;
+        frameTime += GetFrameTime();
+        float frameSpeed = 0.1f; //Velocity animation
 
         //Enemies
         /*--Goomba--*/
@@ -659,10 +659,10 @@ private:
         int frameHeightK = 24;
         Rectangle sourceRec3 = { 0, 0, (float)frameWidthK, (float)frameHeightK };
 
-        static float frameTime = 0.0f;
-        static int currentFrame = 0;
-        frameTime += GetFrameTime();
-        float frameSpeed = 0.1f; //Velocity animation
+        static float frameTimeE = 0.0f;
+        static int currentFrameE = 0;
+        frameTimeE += GetFrameTime();
+        float frameSpeedE = 0.1f; //Velocity animation
 
         //Animation of Mario
         if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
@@ -691,11 +691,11 @@ private:
 
         //Animation of Enemies
         if (goomba.activated && player.alive != 0) {
-            if (frameTime >= frameSpeed) {
-                frameTime = 0.0f;
-                currentFrame = (currentFrame + 1) % 3;
+            if (frameTimeE >= frameSpeedE) {
+                frameTimeE = 0.0f;
+                currentFrameE = (currentFrameE + 1) % 3;
             }
-            sourceRec2.x = (float)(currentFrame * frameWidthP);
+            sourceRec2.x = (float)(currentFrameE * frameWidthG);
         }
 
         else {
@@ -727,6 +727,7 @@ private:
         if (player.position.x >= 1320) { //Mario arrived to the flag
             camera.target.x = 1320;
             DrawTextureEx(castle, { (1200), (360) }, 0.0f, 3, WHITE);
+            player.big = 0;
             UnloadTexture(mario);
         }
 

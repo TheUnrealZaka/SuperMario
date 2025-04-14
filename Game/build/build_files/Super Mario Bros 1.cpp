@@ -105,7 +105,6 @@ private:
     //Game
     GameScreen currentScreen;
     int framesCounter;
-    int framesCounter2;
     std::vector<EnvElement> envElements;
     Camera2D camera;
     unsigned int frameCounter;
@@ -144,7 +143,7 @@ private:
 
 public:
     //Initialise the game
-    Game() : currentScreen(GameScreen::LOGO), framesCounter(0), framesCounter2(0), player(400, 550), frameCounter(0),
+    Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(400, 550), frameCounter(0),
         playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), koopa(700, 330), flag(900, 264) {
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
@@ -274,6 +273,34 @@ private:
             framesCounter = 0;
             UpdateGameplay();
 
+            if (player.alive == 0) {
+                if (contmuerte == 0)
+                {
+                    player.speed = -PLAYER_JUMP_SPD * 1.2f;
+                    player.canJump = false;
+                    player.canJump2 = true;
+                    player.jumpTime = 0.0f;
+                    contmuerte++;
+                }
+                if (framesCounter == 0) {
+                    player.lifes--;
+                    framesCounter++;
+                    if (player.lifes <= 0) {
+                        while (framesCounter < 2999999999) {
+                            framesCounter++;
+                        }
+                        if (framesCounter >= 2999999999) {
+                            currentScreen = GameScreen::ENDING;
+                        }
+                    }
+                }
+                elapsedTime += GetFrameTime();
+                if (elapsedTime >= 10.0f) {
+                    currentScreen = GameScreen::DEATH;
+                    elapsedTime = 0.0f;
+                }
+            }
+
             if (Timer <= 0) {
                 if (contmuerte == 0)
                 {
@@ -310,7 +337,7 @@ private:
         elapsedTime += deltaTime * 2.5;
 
         //In-game controls and conditions
-        if (IsKeyDown(KEY_RIGHT) && !flag.reached && Timer > 0)
+        if (IsKeyDown(KEY_RIGHT) && !flag.reached && Timer > 0 && player.alive != 0)
         {
             if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0)
             {
@@ -319,7 +346,7 @@ private:
             player.position.x += PLAYER_HOR_SPD * deltaTime;
         }
 
-        if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0)
+        if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && player.alive != 0)
         {
             if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0)
             {
@@ -335,30 +362,30 @@ private:
         static constexpr float MAX_JUMP_TIME = 0.3f;
         static constexpr float JUMP_HOLD_FORCE = 500.0f;
 
-        if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0) {
+        if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0 && player.alive != 0) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
             player.canJump2 = true; 
             player.jumpTime = 0.0f;
         }
 
-        if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0) {
+        if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0 && player.alive != 0) {
             player.speed -= JUMP_HOLD_FORCE * deltaTime;
             player.jumpTime += deltaTime;
         }
 
-        if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0) {
+        if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0 && player.alive != 0) {
             player.canJump2 = false;  //Cut the jump when releasing the key
             player.speed += JUMP_HOLD_FORCE - 300;
         }
 
-        if (Timer <= 0) {
+        if (Timer <= 0 || player.alive == 0) {
             bool hitObstacle = false;
         }
 
         bool hitObstacle = false;
         for (auto& element : envElements) {
-            if (element.blocking && Timer > 0 &&
+            if (element.blocking && Timer > 0 && player.alive != 0 &&
                 element.rect.x <= player.position.x &&
                 element.rect.x + element.rect.width >= player.position.x &&
                 element.rect.y >= player.position.y &&
@@ -386,7 +413,7 @@ private:
             player.canJump = true;
         }
 
-        if (IsKeyPressed(KEY_SPACE) && player.canJump) {
+        if (IsKeyPressed(KEY_SPACE) && player.canJump && player.alive != 0) {
             player.speed = -PLAYER_JUMP_SPD;
             player.canJump = false;
         }
@@ -399,11 +426,11 @@ private:
             goomba.position.y += 100 * GetFrameTime(); //The goomba fall
         }
 
-        if (player.position.x - goomba.position.x <= -200 && goomba.death == false) {
+        if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0) {
             goomba.activated = true;
         }
 
-        if (goomba.activated && goomba.death == false) {
+        if (goomba.activated && goomba.death == false && player.alive != 0) {
             goomba.position.x += -150 * deltaTime;
             if (player.position.y == goomba.position.y) {
                 goomba.death = true;
@@ -560,8 +587,8 @@ private:
             DrawTextEx(marioFont, TextFormat("\n  0%d", Money), { 365, 30 }, 32, 1, WHITE);
         }
         if (Money >= 10 && Money < 100) {
-            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 360, 30 }, 32, 1, WHITE);
-            DrawTextEx(marioFont, TextFormat("\n x%d", Money), { 365, 30 }, 32, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n x", Money), { 360, 30 }, 32, 1, WHITE);
+            DrawTextEx(marioFont, TextFormat("\n  %d", Money), { 365, 30 }, 32, 1, WHITE);
         }
         if (Money == 100) {
             Money = 0;
@@ -605,7 +632,7 @@ private:
         float frameSpeed = 0.1f; //Velocity animation
 
         //Animation of Mario
-        if (IsKeyDown(KEY_RIGHT) && Timer > 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
+        if (IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 1320 && player.position.y == 600 || player.position.y == 550) {
             if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
                 frameSpeed = 0.05f; //Increases running speed
             }
@@ -617,7 +644,7 @@ private:
         }
 
         //Animation of Enemies
-        if (goomba.activated) {
+        if (goomba.activated && player.alive != 0) {
             if (frameTime >= frameSpeed) {
                 frameTime = 0.0f;
                 currentFrame = (currentFrame + 1) % 3;
@@ -634,7 +661,7 @@ private:
             sourceRec.x = frameWidth * 5;
         }
 
-        if (Timer <= 0) {
+        if (Timer <= 0 || player.alive == 0) {
             sourceRec.x = frameWidth * 6;
         }
 

@@ -12,19 +12,16 @@ using namespace std;
 enum class GameScreen { LOGO, TITLE, LEVEL1, GAMEPLAY, TIMEOUT, DEATH, ENDING };
 
 /*--------------------------------------------------------------------------*/
-/*                            SPRITES AND SOUND                             */
-/*--------------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------------*/
 /*                           CONST AND VARIABLES                            */
 /*--------------------------------------------------------------------------*/
 
-int GRAVITY = 500;
 constexpr float PLAYER_JUMP_SPD = 350.0f;
 constexpr float PLAYER_HOR_SPD = 250.0f;
 constexpr float PLAYER_RUN_SPD = 250.0f;
+
+
+const float suelo = 600;
+int GRAVITY = 500;
 
 int Timer;
 int Score = 000000;
@@ -33,41 +30,30 @@ float elapsedTime = 0.0f;
 int contmuerte = 0;
 
 /*--------------------------------------------------------------------------*/
-/*                            CLASS DEFINITION                              */
+/*                            STRUCTS DEFINITION                            */
 /*--------------------------------------------------------------------------*/
-
-//class Mario { //Yo lo dejaba en structs y a chuparla
-//public:
-//    Mario(){}
-//    
-//    Mario(float x, float y) : position{ x, y }, speed(0), canJump(false) {}
-//
-//    Vector2 position;
-//    float speed;
-//    bool canJump;
-//    bool canJump2;
-//    float jumpTime;
-//    int alive = 1; //If alive = 0 --> Mario is death
-//    int lifes = 3;
-//
-//    ~Mario() {}
-//};
 
 struct Mario {
     Vector2 position;
-    float speed;
+    Rectangle mario_hitbox;
+    Vector2 speed;
+    const float saltoFuerza = -10.0f;
+ 
     bool canJump;
     bool canJump2;
     float jumpTime;
+
     int alive = 1; //If alive = 0 --> Mario is death
     int lifes = 3;
     bool big;
 
-    Mario(float x, float y) : position{ x, y }, speed(0), canJump(false), big(false) {}
+    Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false) {}
 };
 
 struct Enemy {
     Vector2 position;
+    Rectangle goomba_hitbox;
+
     float speed;
     bool activated;
     bool alive;
@@ -145,7 +131,8 @@ private:
 public:
     //Initialise the game
     Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(400, 550), frameCounter(0),
-        playFrameCounter(0), currentPlayFrame(0), goomba(700, 280), koopa(700, 330), flag(900, 264) {
+        playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(900, 264) {
+
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
 
@@ -223,7 +210,7 @@ private:
                 player.position = { 400, 550 };
                 camera.target.x = player.position.x;
                 camera.target.y = 280;
-                goomba.position = { 700, 280 };
+                goomba.position = { 700, 600 };
                 Timer = 20;
                 Score = 000000;
                 Money = 00;
@@ -262,7 +249,7 @@ private:
                 player.position = { 400, 550 };
                 camera.target.x = player.position.x;
                 camera.target.y = 280;
-                goomba.position = { 700, 280 };
+                goomba.position = { 700, 600 };
                 Timer = 20;
                 player.alive = 1;
                 elapsedTime = 0.0f;
@@ -277,7 +264,7 @@ private:
             if (player.alive == 0) {
                 if (contmuerte == 0)
                 {
-                    player.speed = -PLAYER_JUMP_SPD * 1.2f;
+                    player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
                     player.canJump = false;
                     player.canJump2 = true;
                     player.jumpTime = 0.0f;
@@ -306,7 +293,7 @@ private:
             if (Timer <= 0) {
                 if (contmuerte == 0)
                 {
-                    player.speed = -PLAYER_JUMP_SPD * 1.2f;
+                    player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
                     player.canJump = false;
                     player.canJump2 = true;
                     player.jumpTime = 0.0f;
@@ -333,6 +320,9 @@ private:
     }
 
     void UpdateGameplay() {
+
+        Rectangle mario_hitbox = { player.position.x, player.position.y, 16,16 };
+        Rectangle goomba_hitbox = { goomba.position.x, goomba.position.y, 16,16 };
 
         mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
         float deltaTime = GetFrameTime();
@@ -365,20 +355,20 @@ private:
         static constexpr float JUMP_HOLD_FORCE = 500.0f;
 
         if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0 && player.alive != 0) {
-            player.speed = -PLAYER_JUMP_SPD;
+            player.speed.y = -PLAYER_JUMP_SPD;
             player.canJump = false;
             player.canJump2 = true; 
             player.jumpTime = 0.0f;
         }
 
         if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0 && player.alive != 0) {
-            player.speed -= JUMP_HOLD_FORCE * deltaTime;
+            player.speed.y -= JUMP_HOLD_FORCE * deltaTime;
             player.jumpTime += deltaTime;
         }
 
         if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0 && player.alive != 0) {
             player.canJump2 = false;  //Cut the jump when releasing the key
-            player.speed += JUMP_HOLD_FORCE - 300;
+            player.speed.y += JUMP_HOLD_FORCE - 300;
         }
 
         if (Timer <= 0 || player.alive == 0) {
@@ -391,22 +381,22 @@ private:
                 element.rect.x <= player.position.x &&
                 element.rect.x + element.rect.width >= player.position.x &&
                 element.rect.y >= player.position.y &&
-                element.rect.y <= player.position.y + player.speed * deltaTime) {
+                element.rect.y <= player.position.y + player.speed.y * deltaTime) {
                 hitObstacle = true;
-                player.speed = 0.0f;
+                player.speed.y = 0.0f;
                 player.position.y = element.rect.y;
             }
         }
 
         if (!hitObstacle) {
-            player.position.y += player.speed * deltaTime;
-            if (player.speed > 0)
+            player.position.y += player.speed.y * deltaTime;
+            if (player.speed.y > 0)
             {
-                player.speed += GRAVITY * 3.0f * deltaTime; // Increase gravity in fall
+                player.speed.y += GRAVITY * 3.0f * deltaTime; // Increase gravity in fall
             }
             else
             {
-                player.speed += GRAVITY * deltaTime; // Normal upward gravity
+                player.speed.y += GRAVITY * deltaTime; // Normal upward gravity
             }
             player.canJump = false;
             player.canJump2 = true;
@@ -416,10 +406,11 @@ private:
         }
 
         if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && player.alive != 0) {
-            player.speed = -PLAYER_JUMP_SPD;
+            player.speed.y = -PLAYER_JUMP_SPD;
             player.canJump = false;
         }
 
+        //GOOMBA
         if (goomba.position.y < 596 && goomba.death == false) {
             goomba.position.y += GRAVITY * 2.0f * deltaTime;
         }
@@ -439,10 +430,29 @@ private:
             goomba.position.x += -150 * deltaTime;
             
         }
+
+
+        if (goomba.alive && CheckCollisionRecs(player.mario_hitbox, goomba.goomba_hitbox))
+        {
+            if (player.position.y + player.mario_hitbox.height <= goomba.position.y + 5)
+            {
+                // Saltó sobre el goomba
+                goomba.alive = false;
+                player.speed.y = player.saltoFuerza * 0.7f;
+            }
+            else
+            {
+                player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
+                player.canJump = false;
+                player.canJump2 = true;
+                player.jumpTime = 0.0f;
+            }
+        }
+
         if (!flag.reached && player.position.x >= flag.position.x - 20) { //Flag collision
             flag.reached = true;
             player.position.x = flag.position.x;
-            player.speed = 0;
+            player.speed.y = 0;
         }
 
         if (flag.reached) {
@@ -460,11 +470,13 @@ private:
             }
         }
 
+        // FUNCIONES DE PRUEBA //
+
         if (IsKeyPressed(KEY_R)) {
             player.position = { 400, 550 };
             camera.target.x = player.position.x;
             camera.target.y = 280;
-            goomba.position = { 700, 280 };
+            goomba.position = { 700, 600 };
             Timer = 20;
             Money = 00;
             Score = 000000;

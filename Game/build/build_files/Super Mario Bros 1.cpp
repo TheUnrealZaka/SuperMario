@@ -136,6 +136,8 @@ public:
         InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
         SetTargetFPS(60);
 
+ 
+
         //Initialising textures and typography
         logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
         UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
@@ -151,13 +153,14 @@ public:
 
         //Blocks
         envElements = {
-            {-200, -300, 10000, 10000, false, BLUE},
+             {-200, -300, 10000, 10000, false, BLUE},
             {-200, 600, 10000, 200, true, BROWN},
             {300, 200, 50, 50, true, YELLOW},
             {250, 300, 50, 50, true, BROWN},
             {650, 500, 50, 50, true, BROWN},
             { 895, 550, 60, 50, true, YELLOW}
         };
+
 
         //Camera of the game
         camera.target = player.position;
@@ -321,9 +324,12 @@ private:
 
     void UpdateGameplay() {
 
-        Rectangle mario_hitbox = { player.position.x, player.position.y, 16,16 };
         Rectangle goomba_hitbox = { goomba.position.x, goomba.position.y, 16,16 };
+        Rectangle mario_hitbox = { player.position.x, player.position.y, 16,16 };
+        Rectangle prev_hitbox = mario_hitbox;
 
+        mario_hitbox.x += player.speed.x;
+        mario_hitbox.y += player.speed.y;
         mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
         float deltaTime = GetFrameTime();
         elapsedTime += deltaTime * 2.5;
@@ -410,6 +416,12 @@ private:
             player.canJump = false;
         }
 
+        for (EnvElement bloque : envElements) {
+            if (bloque.blocking && CheckCollisionRecs(mario_hitbox, bloque.rect)) {
+                mario_hitbox = prev_hitbox;
+                break;
+            }
+        }
         //GOOMBA
         if (goomba.position.y < 596 && goomba.death == false) {
             goomba.position.y += GRAVITY * 2.0f * deltaTime;

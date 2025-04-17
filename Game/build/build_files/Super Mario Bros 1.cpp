@@ -54,12 +54,12 @@ struct Enemy {
     Vector2 position;
     Rectangle goomba_hitbox;
 
-    float speed;
+    Vector2 speed;
     bool activated;
     bool alive;
     bool death;
 
-    Enemy(float x, float y) : position{ x, y }, speed(0), activated(false), death(false) {}
+    Enemy(float x, float y) : position{ x, y }, activated(false), death(false) {}
 };
 
 //Structure for objects in the environment
@@ -657,12 +657,12 @@ private:
         int frameHeightP;
 
         //Player
-        if (player.big == 0) {
+        if (player.big == 0) { //Small Mode
             frameWidthP = 16; //Each frame mesure 16x16 pixels
             frameHeightP = 16;
         }
-        if (player.big == 1) {
-            frameWidthP = 16; //Each frame mesure 16x16 pixels
+        if (player.big == 1) { //Big Mode
+            frameWidthP = 16; 
             frameHeightP = 32;
         }
         Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };

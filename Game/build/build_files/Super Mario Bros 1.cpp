@@ -46,6 +46,7 @@ struct Mario {
 	int alive = 1; //If alive = 0 --> Mario is death
 	int lifes = 3;
 	bool big;
+	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 
 	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false) {}
 };
@@ -131,13 +132,11 @@ private:
 
 public:
 	//Initialise the game
-	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(400, 550), frameCounter(0),
+	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
 		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(3700, 264) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		SetTargetFPS(60);
-
-
 
 		//Initialising textures and typography
 		logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
@@ -156,7 +155,7 @@ public:
 
 		//Blocks
 		envElements = {
-			 {-200, -300, 10000, 10000, false, BLUE}, // CIELO
+		
 			{-200, 600, 10000, 200, true, BROWN}, // SUELO
 
 			{650, 400, 50, 50, true, YELLOW},	//PRIMER BLOQUE /MONEDAS
@@ -174,7 +173,8 @@ public:
 			{1250, 500, 100, 100, true, GREEN},
 			{1675, 450, 100, 150, true, GREEN},
 
-
+			//Bandera
+			{3700, 550, 65, 50, true, BLANK}
 		};
 
 
@@ -226,8 +226,8 @@ private:
 			framesCounter++;
 			if (framesCounter >= 120) {
 				currentScreen = GameScreen::GAMEPLAY;
-				player.position = { 400, 550 };
-				camera.target.x = player.position.x;
+				player.position = { 50, 600 };
+				camera.target.x = 400;
 				camera.target.y = 280;
 				goomba.position = { 700, 600 };
 				Timer = 60;
@@ -265,8 +265,8 @@ private:
 
 			if (elapsedTime >= 3.0f) {
 				currentScreen = GameScreen::GAMEPLAY;
-				player.position = { 400, 550 };
-				camera.target.x = player.position.x;
+				player.position = { 50, 600 };
+				camera.target.x = 400;
 				camera.target.y = 280;
 				goomba.position = { 700, 600 };
 				Timer = 20;
@@ -370,7 +370,7 @@ private:
 			}
 			player.position.x -= PLAYER_HOR_SPD * deltaTime;
 		}
-		if (player.position.x > camera.target.x && camera.target.x < 1320)
+		if (player.position.x > camera.target.x && camera.target.x < 4120)
 		{
 			camera.target.x = player.position.x;
 		}
@@ -434,7 +434,7 @@ private:
 			player.canJump = false;
 		}
 
-		for (EnvElement bloque : envElements) {
+		for (EnvElement& bloque : envElements) {
 			if (bloque.blocking && CheckCollisionRecs(mario_hitbox, bloque.rect)) {
 				mario_hitbox = prev_hitbox;
 				break;
@@ -503,11 +503,11 @@ private:
 		// FUNCIONES DE PRUEBA //
 
 		if (IsKeyPressed(KEY_R)) {
-			player.position = { 400, 550 };
-			camera.target.x = player.position.x;
+			player.position = { 50, 600 };
+			camera.target.x = 400;
 			camera.target.y = 280;
 			goomba.position = { 700, 600 };
-			Timer = 20;
+			Timer = 40;
 			Money = 00;
 			Score = 000000;
 			flag.reached = false;
@@ -666,6 +666,7 @@ private:
 
 	void DrawGameplay() {
 		BeginMode2D(camera);
+		ClearBackground(BLUE);
 
 		for (const auto& element : envElements) {
 			DrawRectangleRec(element.rect, element.color);
@@ -683,6 +684,10 @@ private:
 			frameWidthP = 16;
 			frameHeightP = 32;
 		}
+
+		if (player.side == 0) mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
+		else if (player.side == 1) mario = LoadTexture("Sprites/MARIO/Mario_Left.png");
+
 		Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
 
 		static float frameTime = 0.0f;
@@ -709,6 +714,7 @@ private:
 		//Animation of Mario
 		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 4120 && player.position.y == 600 || player.position.y == 550) {
 			mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
+			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
 			}
@@ -721,6 +727,7 @@ private:
 
 		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
 			mario = LoadTexture("Sprites/MARIO/Mario_Left.png");
+			player.side = 1;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
 			}
@@ -756,6 +763,10 @@ private:
 
 		//Draw all entities, structures and objetcs
 		DrawTextureEx(fondo, { (-113), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (2191), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (4269), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (6347), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (8425), (75) }, 0.0f, 3, WHITE);
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 
@@ -776,8 +787,6 @@ private:
 			player.big = 0;
 			UnloadTexture(mario);
 		}
-		// He movido el castillo por eso no aparece.
-		//No se porque no sigue avanzando la camara
 
 		EndMode2D();
 		UItest();

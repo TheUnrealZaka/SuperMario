@@ -60,7 +60,7 @@ struct Enemy {
 	bool alive;
 	bool death;
 
-	Enemy(float x, float y) : position{ x, y }, activated(false), death(false) {}
+	Enemy(float x, float y) : position{ x, y }, activated(false), alive(true), death(false) {}
 };
 
 //Structure for objects in the environment
@@ -93,7 +93,7 @@ private:
 	//Game
 	GameScreen currentScreen;
 	int framesCounter;
-	std::vector<EnvElement> envElements;
+	
 	Camera2D camera;
 	unsigned int frameCounter;
 	unsigned int playFrameCounter;
@@ -130,6 +130,30 @@ private:
 	//Typography
 	Font marioFont;
 
+	//Blocks
+	vector<Rectangle> blocks = {
+		
+			{-200, 600, 10000, 200}, // SUELO
+
+			{650, 400, 50, 50},	//PRIMER BLOQUE /MONEDAS
+
+			//Conjuto de bloques
+			{850, 400, 50, 50}, 
+			{900, 400, 50, 50}, // TIENE UN CHAMPIÑON
+			{950, 400, 50, 50},
+			{1000, 400, 50, 50}, // MONEDAS
+			{1050, 400, 50, 50},
+					//Bloque superior
+			{950, 200, 50, 50}, //MONEDAS
+
+			//Tuberias
+			{1250, 500, 100, 100},
+			{1675, 450, 100, 150},
+
+			//Bandera
+			{3700, 550, 65, 50}
+		};
+
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
@@ -152,31 +176,6 @@ public:
 		fondo = LoadTexture("Sprites/Background/Fondo.png");
 
 		marioFont = LoadFont("Fonts/MarioFont.ttf");
-
-		//Blocks
-		envElements = {
-		
-			{-200, 600, 10000, 200, true, BROWN}, // SUELO
-
-			{650, 400, 50, 50, true, YELLOW},	//PRIMER BLOQUE /MONEDAS
-
-			//Conjuto de bloques
-			{850, 400, 50, 50, true, BROWN}, 
-			{900, 400, 50, 50, true, YELLOW}, // TIENE UN CHAMPIÑON
-			{950, 400, 50, 50, true, BROWN},
-			{1000, 400, 50, 50, true, YELLOW}, // MONEDAS
-			{1050, 400, 50, 50, true, BROWN},
-					//Bloque superior
-			{950, 200, 50, 50, true, BROWN}, //MONEDAS
-
-			//Tuberias
-			{1250, 500, 100, 100, true, GREEN},
-			{1675, 450, 100, 150, true, GREEN},
-
-			//Bandera
-			{3700, 550, 65, 50, true, BLANK}
-		};
-
 
 		//Camera of the game
 		camera.target = player.position;
@@ -340,14 +339,11 @@ private:
 
 	void UpdateGameplay() {
 
-		Rectangle goomba_hitbox = { goomba.position.x, goomba.position.y, 16,16 };
-		Rectangle mario_hitbox = { player.position.x, player.position.y, 16,16 };
-		Rectangle prev_hitbox = mario_hitbox;
-		mario_hitbox.x += player.speed.x;
-		mario_hitbox.y += player.speed.y;
-		mario = LoadTexture("Sprites/MARIO/Mario_RIGHT.png");
-		fondo = LoadTexture("Sprites/Background/Fondo.png");
-
+		goomba.goomba_hitbox = { goomba.position.x, goomba.position.y, 32,16 };
+		player.mario_hitbox = { player.position.x, player.position.y, 32,16 };
+		Rectangle prev_hitbox = player.mario_hitbox;
+		player.mario_hitbox.x += player.speed.x;
+		player.mario_hitbox.y += player.speed.y;
 
 		float deltaTime = GetFrameTime();
 		elapsedTime += deltaTime * 2.5;
@@ -358,8 +354,10 @@ private:
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0)
 			{
 				player.position.x += PLAYER_RUN_SPD * deltaTime;
+				player.speed.x = 2.0f;
 			}
 			player.position.x += PLAYER_HOR_SPD * deltaTime;
+			player.speed.x = 2.0f;
 		}
 
 		if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && player.alive != 0)
@@ -367,8 +365,10 @@ private:
 			if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0)
 			{
 				player.position.x -= PLAYER_RUN_SPD * deltaTime;
+				player.speed.x = -2.0f;
 			}
 			player.position.x -= PLAYER_HOR_SPD * deltaTime;
+			player.speed.x = -2.0f;
 		}
 		if (player.position.x > camera.target.x && camera.target.x < 4120)
 		{
@@ -400,15 +400,61 @@ private:
 		}
 
 		bool hitObstacle = false;
-		for (auto& element : envElements) {
-			if (element.blocking && Timer > 0 && player.alive != 0 &&
-				element.rect.x <= player.position.x &&
-				element.rect.x + element.rect.width >= player.position.x &&
-				element.rect.y >= player.position.y &&
-				element.rect.y <= player.position.y + player.speed.y * deltaTime) {
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0
+				&& block.x <= player.position.x 
+				&& block.x + block.width >= player.position.x
+				&& block.y >= player.position.y
+				&& block.y <= player.position.y + player.speed.y * deltaTime) {
 				hitObstacle = true;
 				player.speed.y = 0.0f;
-				player.position.y = element.rect.y;
+				player.position.y = block.y;
+			}
+		}
+		/*for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 
+				&& block.y <= player.position.y 
+				&& block.y + block.height >= player.position.y 
+				&& block.x >= player.position.x 
+				&& block.x <= player.position.x + player.speed.x * deltaTime) {
+				hitObstacle = true;
+				player.speed.x = 0.0f;
+				player.position.x = block.x;
+			}
+		}*/
+
+		// 1) Calcula la posición futura en X
+		float nextX = player.position.x + player.speed.x * deltaTime;
+
+		// --- COLISIÓN POR LA DERECHA (Mario viene de la izquierda) ---
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				player.speed.x > 0 &&                                                        // Sólo si va a la derecha
+				player.position.y >= block.y &&                // Mario no está completamente por encima
+				player.position.y <= (block.y + block.height) &&                              // Mario no está completamente por debajo
+				player.position.x <= block.x &&
+				player.position.x == block.x - 1)                              // En el siguiente frame entraría en el bloque
+			{
+				// ¡Choque! Ajustamos posición y detenemos velocidad horizontal
+				cout << "holA" << endl;
+				player.speed.x = 0;
+				player.position.x = block.x - player.mario_hitbox.width;
+			}
+		}
+
+		// --- COLISIÓN POR LA IZQUIERDA (Mario viene de la derecha) ---
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				player.speed.x < 0 &&                                                        // Sólo si va a la izquierda
+				(player.position.y + player.mario_hitbox.height) > block.y &&                // Mario no está completamente por encima
+				player.position.y < (block.y + block.height) &&                              // Mario no está completamente por debajo
+				player.position.x >= (block.x + block.width) &&                              // Actualmente está a la derecha del bloque
+				(nextX) <= (block.x + block.width))                                          // En el siguiente frame entraría en el bloque
+			{
+				// ¡Choque! Ajustamos posición y detenemos velocidad horizontal
+				cout << "holA" << endl;
+				player.speed.x = 0;
+				player.position.x = block.x + block.width;
 			}
 		}
 
@@ -429,17 +475,11 @@ private:
 			player.canJump = true;
 		}
 
-		if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && player.alive != 0) {
+		if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && player.alive != 0 && hitObstacle) {
 			player.speed.y = -PLAYER_JUMP_SPD;
 			player.canJump = false;
 		}
 
-		for (EnvElement& bloque : envElements) {
-			if (bloque.blocking && CheckCollisionRecs(mario_hitbox, bloque.rect)) {
-				mario_hitbox = prev_hitbox;
-				break;
-			}
-		}
 		//GOOMBA
 		if (goomba.position.y < 596 && goomba.death == false) {
 			goomba.position.y += GRAVITY * 2.0f * deltaTime;
@@ -458,25 +498,11 @@ private:
 
 		if (goomba.activated && goomba.death == false && player.alive != 0) {
 			goomba.position.x += -150 * deltaTime;
-
 		}
-
 
 		if (goomba.alive && CheckCollisionRecs(player.mario_hitbox, goomba.goomba_hitbox))
 		{
-			if (player.position.y + player.mario_hitbox.height <= goomba.position.y + 5)
-			{
-				// Saltó sobre el goomba
-				goomba.alive = false;
-				player.speed.y = player.saltoFuerza * 0.7f;
-			}
-			else
-			{
-				player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
-				player.canJump = false;
-				player.canJump2 = true;
-				player.jumpTime = 0.0f;
-			}
+			player.alive = 0;
 		}
 
 		if (!flag.reached && player.position.x >= flag.position.x - 20) { //Flag collision
@@ -668,8 +694,8 @@ private:
 		BeginMode2D(camera);
 		ClearBackground(BLUE);
 
-		for (const auto& element : envElements) {
-			DrawRectangleRec(element.rect, element.color);
+		for (const Rectangle block : blocks) {
+			DrawRectangleRec(block, BROWN);
 		}
 
 		int frameWidthP;
@@ -762,6 +788,8 @@ private:
 		}
 
 		//Draw all entities, structures and objetcs
+
+		//All background
 		DrawTextureEx(fondo, { (-113), (75) }, 0.0f, 3, WHITE);
 		DrawTextureEx(fondo, { (2191), (75) }, 0.0f, 3, WHITE);
 		DrawTextureEx(fondo, { (4269), (75) }, 0.0f, 3, WHITE);

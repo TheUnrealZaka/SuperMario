@@ -1,6 +1,6 @@
 ﻿  Super Mario Bros 1.cpp
-C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(353,28): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(490,28): warning C4305: '+=': truncamiento de 'double' a 'float'
-C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(756,30): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(761,30): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(349,28): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(516,28): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(782,30): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\User\Documents\GitHub\Proyecto-1\Game\build\build_files\Super Mario Bros 1.cpp(787,30): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
   Proyecto-1.vcxproj -> C:\Users\User\Documents\GitHub\Proyecto-1\Game\bin\Debug\Proyecto-1.exe

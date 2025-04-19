@@ -93,7 +93,7 @@ private:
 	//Game
 	GameScreen currentScreen;
 	int framesCounter;
-	
+
 	Camera2D camera;
 	unsigned int frameCounter;
 	unsigned int playFrameCounter;
@@ -132,32 +132,153 @@ private:
 
 	//Blocks
 	vector<Rectangle> blocks = {
-		
-			{-200, 600, 10000, 200}, // SUELO
 
-			{650, 400, 50, 50},	//PRIMER BLOQUE /MONEDAS
+	{-200, 600, 10000, 200}, // SUELO
 
-			//Conjuto de bloques
-			{850, 400, 50, 50}, 
-			{900, 400, 50, 50}, // TIENE UN CHAMPIÑON
-			{950, 400, 50, 50},
-			{1000, 400, 50, 50}, // MONEDAS
-			{1050, 400, 50, 50},
-					//Bloque superior
-			{950, 200, 50, 50}, //MONEDAS
+	{650, 400, 50, 50},	//PRIMER BLOQUE /MONEDAS
 
-			//Tuberias
-			{1250, 500, 100, 100},
-			{1675, 450, 100, 150},
+	//Conjuto de bloques
+	{850, 400, 50, 50},
+	{900, 400, 50, 50}, // TIENE UN CHAMPIÑON
+	{950, 400, 50, 50},
+	{1000, 400, 50, 50}, // MONEDAS
+	{1050, 400, 50, 50},
+		//Bloque superior
+	{950, 200, 50, 50}, //MONEDAS
 
-			//Bandera
-			{3700, 550, 65, 50}
-		};
+	//Tuberias
+	{1250, 500, 100, 100},
+	{1675, 450, 100, 150},
+	{2075, 400, 100, 200},
+	{2600, 400, 100, 200},
+
+	//Bloque oculto (ya se hará) -Vida extra-
+	//Boquete 1
+
+	//Segundo conjuto de bloques
+		//Zona inferior
+	{3550, 400, 50, 50},
+	{3600, 400, 50, 50}, //Champiñon
+	{3650, 400, 50, 50},
+		//Zona superior
+	{3700, 200, 50, 50},
+	{3750, 200, 50, 50},
+	{3800, 200, 50, 50},
+	{3850, 200, 50, 50},
+	{3900, 200, 50, 50},
+	{3950, 200, 50, 50},
+	{4000, 200, 50, 50},
+	{4050, 200, 50, 50},
+	//Boquete 2
+		//Zona superior 2
+	{4250, 200, 50, 50},
+	{4300, 200, 50, 50},
+	{4350, 200, 50, 50},
+	{4400, 200, 50, 50},//Monedas
+		//Bloque inferior
+	{4400, 400, 50, 50}, //Moneda
+
+	//Bloques extrella
+	{4700, 400, 50, 50},
+	{4750, 400, 50, 50}, //Estrella
+
+	//Bloques ?
+		//Inferior
+	{5000, 400, 50, 50}, //Monedas
+	{5125, 400, 50, 50}, //Monedas
+	{5250, 400, 50, 50}, //Monedas
+		//Superior
+	{5125, 200, 50, 50}, //Champiñon
+
+	//Secuencia de bloques
+	{5550, 400, 50, 50},
+
+	{5700, 200, 50, 50},
+	{5750, 200, 50, 50},
+	{5800, 200, 50, 50},
+
+	{6000, 200, 50, 50},
+	{6050, 200, 50, 50},
+	{6100, 200, 50, 50},
+	{6150, 200, 50, 50},
+
+	{6050, 400, 50, 50},
+	{6100, 400, 50, 50},
+
+
+
+	//Primera escalera
+	//Primer escalon
+	{6310, 550, 50, 50},
+	{6360, 550, 50, 50},
+	{6410, 550, 50, 50},
+	{6460, 550, 50, 50},
+	//Segundo escalon
+	{6360, 500, 50, 50},
+	{6410, 500, 50, 50},
+	{6460, 500, 50, 50},
+	//Tercer escalon
+	{6410, 450, 50, 50},
+	{6460, 450, 50, 50},
+	//Quarto escalon
+	{6460, 400, 50, 50},
+	//-Invertida-//
+	//Primer escalón
+	{6590, 550, 50, 50 },
+	{6640, 550, 50, 50},
+	{6690, 550, 50, 50},
+	{6740, 550, 50, 50},
+	//Segundo escalón
+	{6590, 500, 50, 50},
+	{6640, 500, 50, 50},
+	{6690, 500, 50, 50},
+	//Tercer escalón
+	{ 6590, 450, 50, 50},
+	{ 6640, 450, 50, 50},
+	//Quarto escalón
+	{ 6590, 400, 50, 50},
+
+
+
+	//Segunda escalera
+	//Primer escalon
+	{7000, 550, 50, 50},
+	{7050, 550, 50, 50},
+	{7100, 550, 50, 50},
+	{7150, 550, 50, 50},
+	//Segundo escalon
+	{7050, 500, 50, 50},
+	{7100, 500, 50, 50},
+	{7150, 500, 50, 50},
+	//Tercer escalon
+	{7100, 450, 50, 50},
+	{7150, 450, 50, 50},
+	//Quarto escalon
+	{7150, 400, 50, 50},
+	//-Invertida-//
+	//Primer escalón
+	{7250, 550, 50, 50 },
+	{7300, 550, 50, 50},
+	{7200, 550, 50, 50},
+	{7250, 550, 50, 50},
+	//Segundo escalón
+	{7100, 500, 50, 50},
+	{7150, 500, 50, 50},
+	{7200, 500, 50, 50},
+	//Tercer escalón
+	{7100, 450, 50, 50},
+	{7150, 450, 50, 50},
+	//Quarto escalón
+	{7100, 400, 50, 50},
+
+	//Bandera
+	{10000, 550, 65, 50 }
+	};
 
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(3700, 264) {
+		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(10000, 264) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		SetTargetFPS(60);
@@ -229,7 +350,7 @@ private:
 				camera.target.x = 400;
 				camera.target.y = 280;
 				goomba.position = { 700, 600 };
-				Timer = 60;
+				Timer = 100;
 				Score = 000000;
 				Money = 00;
 				player.alive = 1;
@@ -370,7 +491,7 @@ private:
 			player.position.x -= PLAYER_HOR_SPD * deltaTime;
 			player.speed.x = -2.0f;
 		}
-		if (player.position.x > camera.target.x && camera.target.x < 4120)
+		if (player.position.x > camera.target.x && camera.target.x < 10420)
 		{
 			camera.target.x = player.position.x;
 		}
@@ -402,7 +523,7 @@ private:
 		bool hitObstacle = false;
 		for (Rectangle block : blocks) {
 			if (Timer > 0 && player.alive != 0
-				&& block.x <= player.position.x 
+				&& block.x <= player.position.x
 				&& block.x + block.width >= player.position.x
 				&& block.y >= player.position.y
 				&& block.y <= player.position.y + player.speed.y * deltaTime) {
@@ -412,10 +533,10 @@ private:
 			}
 		}
 		/*for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0 
-				&& block.y <= player.position.y 
-				&& block.y + block.height >= player.position.y 
-				&& block.x >= player.position.x 
+			if (Timer > 0 && player.alive != 0
+				&& block.y <= player.position.y
+				&& block.y + block.height >= player.position.y
+				&& block.x >= player.position.x
 				&& block.x <= player.position.x + player.speed.x * deltaTime) {
 				hitObstacle = true;
 				player.speed.x = 0.0f;
@@ -432,8 +553,8 @@ private:
 				player.speed.x > 0 &&                                                        // Sólo si va a la derecha
 				player.position.y >= block.y &&                // Mario no está completamente por encima
 				player.position.y <= (block.y + block.height) &&                              // Mario no está completamente por debajo
-				player.position.x <= block.x &&
-				player.position.x == block.x - 1)                              // En el siguiente frame entraría en el bloque
+				player.position.x == block.x &&
+				player.position.x == block.x -1)                              // En el siguiente frame entraría en el bloque
 			{
 				// ¡Choque! Ajustamos posición y detenemos velocidad horizontal
 				cout << "holA" << endl;
@@ -738,7 +859,7 @@ private:
 		float frameSpeedE = 0.1f; //Velocity animation
 
 		//Animation of Mario
-		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 4120 && player.position.y == 600 || player.position.y == 550) {
+		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 10420 && player.position.y == 600 || player.position.y == 550) {
 			mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
 			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
@@ -791,16 +912,17 @@ private:
 
 		//All background
 		DrawTextureEx(fondo, { (-113), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (2191), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (4269), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (6347), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (8425), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (2190), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (4490), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (6790), (75) }, 0.0f, 3, WHITE);
+
+
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 
 		//META Y CASTILLO//
-		DrawTextureEx(flagTexture, { 3700, flag.position.y - flagTexture.height }, 0, 3, WHITE);
-		DrawTextureEx(castle, { (4000), (360) }, 0.0f, 3, WHITE);
+		DrawTextureEx(flagTexture, { 10000, flag.position.y - flagTexture.height }, 0, 3, WHITE);
+		DrawTextureEx(castle, { (10300), (360) }, 0.0f, 3, WHITE);
 		if (player.big == 0) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
@@ -809,9 +931,9 @@ private:
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 
-		if (player.position.x >= 4120) { //Mario arrived to the flag
-			camera.target.x = 4120;
-			DrawTextureEx(castle, { (4000), (360) }, 0.0f, 3, WHITE);
+		if (player.position.x >= 10420) { //Mario arrived to the flag
+			camera.target.x = 10420;
+			DrawTextureEx(castle, { (10300), (360) }, 0.0f, 3, WHITE);
 			player.big = 0;
 			UnloadTexture(mario);
 		}

@@ -112,6 +112,8 @@ private:
 	//Blocks
 	Texture2D bloque_int;
 	Texture2D ladrillo;
+	Texture2D escalera;
+
 
 	//Interactive Structures
 	Flag flag;
@@ -383,6 +385,7 @@ public:
 		/*------------------------------------------------------------*/
 		bloque_int = LoadTexture("Sprites/Bloques/Bloque_int.png");
 		ladrillo = LoadTexture("Sprites/Bloques/Ladrillo.png");
+		escalera = LoadTexture("Sprites/Bloques/escalera.png");
 
 		/*------------------------------------------------------------*/
 		/*--------------------------Tileset---------------------------*/
@@ -1078,123 +1081,123 @@ private:
 		DrawTextureEx(ladrillo, { (6050), (400) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(ladrillo, { (6100), (400) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(ladrillo, { (6310), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6360), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6410), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6460), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6310), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6360), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6410), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6460), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
-		DrawTextureEx(ladrillo, { (6360), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6410), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6460), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6360), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6410), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6460), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
-		DrawTextureEx(ladrillo, { (6410), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6460), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6410), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6460), (450) }, 0.0f, 3.2, WHITE);
 		/*--*/
-		DrawTextureEx(ladrillo, { (6460), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6460), (400) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
-		DrawTextureEx(ladrillo, { (6590), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6640), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6690), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6740), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6590), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6640), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6690), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6740), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
-		DrawTextureEx(ladrillo, { (6590), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6640), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6690), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6590), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6640), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6690), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
-		DrawTextureEx(ladrillo, { (6590), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (6640), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6590), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6640), (450) }, 0.0f, 3.2, WHITE);
 		/*--*/
-		DrawTextureEx(ladrillo, { (6590), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6590), (400) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
-		DrawTextureEx(ladrillo, { (6980), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7030), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7080), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7130), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6980), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7030), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7080), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7130), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
-		DrawTextureEx(ladrillo, { (7030), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7080), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7130), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7030), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7080), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7130), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
-		DrawTextureEx(ladrillo, { (7080), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7130), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7080), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7130), (450) }, 0.0f, 3.2, WHITE);
 		/*--*/
-		DrawTextureEx(ladrillo, { (7130), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7130), (400) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
-		DrawTextureEx(ladrillo, { (7270), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7320), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7370), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7420), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7270), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7320), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7370), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7420), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
-		DrawTextureEx(ladrillo, { (7270), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7320), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7370), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7270), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7320), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7370), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
-		DrawTextureEx(ladrillo, { (7270), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (7320), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7270), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7320), (450) }, 0.0f, 3.2, WHITE);
 		/*--*/
-		DrawTextureEx(ladrillo, { (7270), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7270), (400) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
 		DrawTextureEx(ladrillo, { (7950), (400) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(ladrillo, { (8000), (400) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(ladrillo, { (8100), (400) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(ladrillo, { (8570), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8620), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8670), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8720), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8770), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8820), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8870), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8570), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8620), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8670), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8720), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8770), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8820), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (550) }, 0.0f, 3.2, WHITE);
 		/*---------*/
-		DrawTextureEx(ladrillo, { (8620), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8670), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8720), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8770), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8820), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8870), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8620), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8670), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8720), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8770), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8820), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (500) }, 0.0f, 3.2, WHITE);
 		/*--------*/
-		DrawTextureEx(ladrillo, { (8670), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8720), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8770), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8820), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8870), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8670), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8720), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8770), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8820), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (450) }, 0.0f, 3.2, WHITE);
 		/*-------*/
-		DrawTextureEx(ladrillo, { (8720), (400) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8770), (400) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8820), (400) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8870), (400) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (400) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8720), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8770), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8820), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (400) }, 0.0f, 3.2, WHITE);
 		/*------*/
-		DrawTextureEx(ladrillo, { (8770), (350) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8820), (350) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8870), (350) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (350) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (350) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8770), (350) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8820), (350) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (350) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (350) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (350) }, 0.0f, 3.2, WHITE);
 		/*-----*/
-		DrawTextureEx(ladrillo, { (8820), (300) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8870), (300) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (300) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (300) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8820), (300) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (300) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (300) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (300) }, 0.0f, 3.2, WHITE);
 		/*----*/
-		DrawTextureEx(ladrillo, { (8870), (250) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8920), (250) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (250) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8870), (250) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (250) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (250) }, 0.0f, 3.2, WHITE);
 		/*---*/
-		DrawTextureEx(ladrillo, { (8920), (200) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(ladrillo, { (8970), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8920), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (200) }, 0.0f, 3.2, WHITE);
 		/*--*/
-		DrawTextureEx(ladrillo, { (8970), (250) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (8970), (250) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
 		DrawTexturePro(bloque_int, sourceRec4, { 650, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
@@ -1210,6 +1213,12 @@ private:
 		DrawTexturePro(bloque_int, sourceRec4, { 6050, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 6100, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+
+		//Tuberias 
+		DrawTextureEx(escalera, { (1250), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (1675), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (2075), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (2600), (400) }, 0.0f, 3.2, WHITE);
 
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);

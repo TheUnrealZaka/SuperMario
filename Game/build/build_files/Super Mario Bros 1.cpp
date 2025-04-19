@@ -286,7 +286,7 @@ private:
 		{8000, 400, 50, 50 },
 		{8050, 400, 50, 50 },
 		{8100, 400, 50, 50 },
-	{8470, 500, 100, 100},
+	{8460, 500, 100, 100},
 
 
 	//ESCALERA FINAL
@@ -748,7 +748,7 @@ private:
 			camera.target.x = 400;
 			camera.target.y = 280;
 			goomba.position = { 700, 600 };
-			Timer = 40;
+			Timer = 100;
 			Money = 00;
 			Score = 000000;
 			flag.reached = false;
@@ -952,8 +952,21 @@ private:
 		frameTimeE += GetFrameTime();
 		float frameSpeedE = 0.1f; //Velocity animation
 
+		//Blocks
+		/*--?--*/
+		int frameWidthInt = 16;
+		int frameHeightInt = 16;
+		Rectangle sourceRec4 = { 0, 0, (float)frameWidthInt, (float)frameHeightInt };
+
+		static float frameTimeInt = 0.0f;
+		static int currentFrameInt = 0;
+		frameTimeInt += GetFrameTime();
+		float frameSpeedInt = 0.5f; //Velocity animation
+		int variant = 1;
+
+
 		//Animation of Mario
-		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && player.position.y == 600 || player.position.y == 550) {
+		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && (player.position.y == 600 || player.position.y == 550)) {
 			mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
 			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
@@ -988,6 +1001,21 @@ private:
 			sourceRec2.x = (float)(currentFrameE * frameWidthG);
 		}
 
+		//Animation of Blocks
+		if (player.alive != 0 && Timer > 0) {
+			if (currentFrameInt == 3) {
+				variant = -1;
+			}
+			else if (currentFrameInt == 1) {
+				variant = 1;
+			}
+			if (frameTimeInt >= frameSpeedInt) {
+				frameTimeInt = 0.0f;
+				currentFrameInt = (currentFrameInt + variant) % 3;
+			}
+			sourceRec4.x = (float)(currentFrameInt * frameWidthInt);
+		}
+
 		else {
 			currentFrame = 0; //Return to the first frame if still
 			sourceRec.x = 0;
@@ -1012,55 +1040,103 @@ private:
 		DrawTextureEx(fondo, { (9090), (75) }, 0.0f, 3, WHITE);
 
 		//Bloques ? y ladrillos
-		DrawTextureEx(ladrillo, { (850), (400) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (950), (400) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (1050), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (850), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (950), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (1050), (400) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(ladrillo, { (3550), (400) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3650), (400) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3700), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3750), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3800), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3850), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3900), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (3950), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4000), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4050), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4250), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4300), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4350), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4400), (400) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4700), (400) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (4750), (400) }, 0.0f, 3, WHITE); // Estrella
-		DrawTextureEx(ladrillo, { (5550), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3550), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (3650), (400) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(ladrillo, { (5700), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (5750), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (5800), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3700), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (3750), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (3800), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (3850), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (3900), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (3950), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (4000), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (4050), (200) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(ladrillo, { (6000), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (6050), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (6100), (200) }, 0.0f, 3, WHITE);
-		DrawTextureEx(ladrillo, { (6150), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4250), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (4300), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (4350), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (4400), (400) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (4700), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (4750), (400) }, 0.0f, 3.2, WHITE); // Estrella
+
+		DrawTextureEx(ladrillo, { (5550), (400) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (5700), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (5750), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (5800), (200) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (6000), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6050), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6100), (200) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6150), (200) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (6310), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6360), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6410), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6460), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6360), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6410), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6460), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6410), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6460), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6460), (400) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (6590), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6640), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6690), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6740), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6590), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6640), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6690), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6590), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6640), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (6590), (400) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (6980), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7030), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7080), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7130), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7030), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7080), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7130), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7080), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7130), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7130), (400) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (7270), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7320), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7370), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7420), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7270), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7320), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7370), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7270), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7320), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (7270), (400) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(ladrillo, { (7950), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (8000), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(ladrillo, { (8100), (400) }, 0.0f, 3.2, WHITE);
 
 
-
-
-
-
-		DrawTexturePro(bloque_int, sourceRec2, { 650, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 900, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 1000, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 950, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 3600, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 4400, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 5000, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 5125, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 5250, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 5125, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 6050, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 6100, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-		DrawTexturePro(bloque_int, sourceRec2, { 8050, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 650, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 900, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 1000, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 950, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 3600, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 4400, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 5000, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 5125, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 5250, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 5125, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 6050, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 6100, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);

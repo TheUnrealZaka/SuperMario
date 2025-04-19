@@ -107,11 +107,16 @@ private:
 	Enemy goomba;
 	Texture2D Goomba;
 	Enemy koopa;
+	Texture2D Koopa;
+
+	//Blocks
+	Texture2D bloque_int;
+	Texture2D ladrillo;
 
 	//Interactive Structures
 	Flag flag;
 	Texture2D flagTexture;
-	/*Falta la tuveria aqui*/
+	Texture2D tuberia;
 
 	//Map
 	Texture2D castle;
@@ -135,7 +140,7 @@ private:
 
 	{-200, 600, 10000, 200}, // SUELO
 
-	{650, 400, 50, 50},	//PRIMER BLOQUE /MONEDAS
+	{650, 400, 50, 50},	//PRIMER ? /MONEDAS
 
 	//Conjuto de bloques
 	{850, 400, 50, 50},
@@ -242,61 +247,150 @@ private:
 
 	//Segunda escalera
 	//Primer escalon
-	{7000, 550, 50, 50},
-	{7050, 550, 50, 50},
-	{7100, 550, 50, 50},
-	{7150, 550, 50, 50},
+	{6980, 550, 50, 50},
+	{7030, 550, 50, 50},
+	{7080, 550, 50, 50},
+	{7130, 550, 50, 50},
 	//Segundo escalon
-	{7050, 500, 50, 50},
-	{7100, 500, 50, 50},
-	{7150, 500, 50, 50},
+	{7030, 500, 50, 50},
+	{7080, 500, 50, 50},
+	{7130, 500, 50, 50},
 	//Tercer escalon
-	{7100, 450, 50, 50},
-	{7150, 450, 50, 50},
+	{7080, 450, 50, 50},
+	{7130, 450, 50, 50},
 	//Quarto escalon
-	{7150, 400, 50, 50},
+	{7130, 400, 50, 50},
+		//BOQUETE 3
 	//-Invertida-//
 	//Primer escalón
-	{7250, 550, 50, 50 },
-	{7300, 550, 50, 50},
-	{7200, 550, 50, 50},
-	{7250, 550, 50, 50},
+	{7270, 550, 50, 50},
+	{7320, 550, 50, 50},
+	{7370, 550, 50, 50},
+	{7420, 550, 50, 50},
 	//Segundo escalón
-	{7100, 500, 50, 50},
-	{7150, 500, 50, 50},
-	{7200, 500, 50, 50},
+	{7270, 500, 50, 50},
+	{7320, 500, 50, 50},
+	{7370, 500, 50, 50},
 	//Tercer escalón
-	{7100, 450, 50, 50},
-	{7150, 450, 50, 50},
+	{7270, 450, 50, 50},
+	{7320, 450, 50, 50},
 	//Quarto escalón
-	{7100, 400, 50, 50},
+	{7270, 400, 50, 50},
+
+
+
+	//Tuberias finales
+	{7700, 500, 100, 100 },
+		//Bloques intermedios
+		{7950, 400, 50, 50},
+		{8000, 400, 50, 50 },
+		{8050, 400, 50, 50 },
+		{8100, 400, 50, 50 },
+	{8470, 500, 100, 100},
+
+
+	//ESCALERA FINAL
+// Primer escalón (base de 9 bloques)
+	{ 8570, 550, 50, 50 },
+	{ 8620, 550, 50, 50 },
+	{ 8670, 550, 50, 50 },
+	{ 8720, 550, 50, 50 },
+	{ 8770, 550, 50, 50 },
+	{ 8820, 550, 50, 50 },
+	{ 8870, 550, 50, 50 },
+	{ 8920, 550, 50, 50 },
+	{ 8970, 550, 50, 50 },
+
+	// Segundo escalón (8 bloques)
+	{ 8620, 500, 50, 50 },
+	{ 8670, 500, 50, 50 },
+	{ 8720, 500, 50, 50 },
+	{ 8770, 500, 50, 50 },
+	{ 8820, 500, 50, 50 },
+	{ 8870, 500, 50, 50 },
+	{ 8920, 500, 50, 50 },
+	{ 8970, 500, 50, 50 },
+
+	// Tercer escalón (7 bloques)
+	{ 8670, 450, 50, 50 },
+	{ 8720, 450, 50, 50 },
+	{ 8770, 450, 50, 50 },
+	{ 8820, 450, 50, 50 },
+	{ 8870, 450, 50, 50 },
+	{ 8920, 450, 50, 50 },
+	{ 8970, 450, 50, 50 },
+
+	// Cuarto escalón (6 bloques)
+	{ 8720, 400, 50, 50 },
+	{ 8770, 400, 50, 50 },
+	{ 8820, 400, 50, 50 },
+	{ 8870, 400, 50, 50 },
+	{ 8920, 400, 50, 50 },
+	{ 8970, 400, 50, 50 },
+
+	// Quinto escalón (5 bloques)
+	{ 8770, 350, 50, 50 },
+	{ 8820, 350, 50, 50 },
+	{ 8870, 350, 50, 50 },
+	{ 8920, 350, 50, 50 },
+	{ 8970, 350, 50, 50 },
+
+	// Sexto escalón (4 bloques)
+	{ 8820, 300, 50, 50 },
+	{ 8870, 300, 50, 50 },
+	{ 8920, 300, 50, 50 },
+	{ 8970, 300, 50, 50 },
+
+	// Séptimo escalón (3 bloques)
+	{ 8870, 250, 50, 50 },
+	{ 8920, 250, 50, 50 },
+	{ 8970, 250, 50, 50 },
+
+	// Octavo escalón (2 bloques)
+	{ 8920, 200, 50, 50 },
+	{ 8970, 200, 50, 50 },
 
 	//Bandera
-	{10000, 550, 65, 50 }
+	{9375, 550, 50, 50 }
 	};
 
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(10000, 264) {
+		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(9375, 264) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		SetTargetFPS(60);
 
-		//Initialising textures and typography
+		/*--------------------------------------------------------------------------*/
+		/*                       Textures and Typography                            */
+		/*--------------------------------------------------------------------------*/
+
 		logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
 		UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
 		money = LoadTexture("Sprites/Items/Monedas.png");
 		Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
 		mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
 		Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
-		flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
-		castle = LoadTexture("Sprites/Tileset/Castle.png");
 		icon_lifes = LoadTexture("Images/Player/Icon_Lifes.png");
 		icon_money = LoadTexture("Images/Player/Icon_Money.png");
 		fondo = LoadTexture("Sprites/Background/Fondo.png");
 
 		marioFont = LoadFont("Fonts/MarioFont.ttf");
+
+		/*------------------------------------------------------------*/
+		/*--------------------------Bloques---------------------------*/
+		/*------------------------------------------------------------*/
+		bloque_int = LoadTexture("Sprites/Bloques/Bloque_int.png");
+		ladrillo = LoadTexture("Sprites/Bloques/Ladrillo.png");
+
+		/*------------------------------------------------------------*/
+		/*--------------------------Tileset---------------------------*/
+		/*------------------------------------------------------------*/
+		castle = LoadTexture("Sprites/Tileset/Castle.png");
+		flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
+		tuberia = LoadTexture("Sprites/Tileset/Tuberias.png");
+
 
 		//Camera of the game
 		camera.target = player.position;
@@ -491,7 +585,7 @@ private:
 			player.position.x -= PLAYER_HOR_SPD * deltaTime;
 			player.speed.x = -2.0f;
 		}
-		if (player.position.x > camera.target.x && camera.target.x < 10420)
+		if (player.position.x > camera.target.x && camera.target.x < 9795)
 		{
 			camera.target.x = player.position.x;
 		}
@@ -859,7 +953,7 @@ private:
 		float frameSpeedE = 0.1f; //Velocity animation
 
 		//Animation of Mario
-		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 10420 && player.position.y == 600 || player.position.y == 550) {
+		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && player.position.y == 600 || player.position.y == 550) {
 			mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
 			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
@@ -915,14 +1009,65 @@ private:
 		DrawTextureEx(fondo, { (2190), (75) }, 0.0f, 3, WHITE);
 		DrawTextureEx(fondo, { (4490), (75) }, 0.0f, 3, WHITE);
 		DrawTextureEx(fondo, { (6790), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (9090), (75) }, 0.0f, 3, WHITE);
 
+		//Bloques ? y ladrillos
+		DrawTextureEx(ladrillo, { (850), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (950), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (1050), (400) }, 0.0f, 3, WHITE);
+
+		DrawTextureEx(ladrillo, { (3550), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3650), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3700), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3750), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3800), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3850), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3900), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (3950), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4000), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4050), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4250), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4300), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4350), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4400), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4700), (400) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (4750), (400) }, 0.0f, 3, WHITE); // Estrella
+		DrawTextureEx(ladrillo, { (5550), (400) }, 0.0f, 3, WHITE);
+
+		DrawTextureEx(ladrillo, { (5700), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (5750), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (5800), (200) }, 0.0f, 3, WHITE);
+
+		DrawTextureEx(ladrillo, { (6000), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (6050), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (6100), (200) }, 0.0f, 3, WHITE);
+		DrawTextureEx(ladrillo, { (6150), (200) }, 0.0f, 3, WHITE);
+
+
+
+
+
+
+		DrawTexturePro(bloque_int, sourceRec2, { 650, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 900, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 1000, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 950, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 3600, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 4400, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 5000, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 5125, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 5250, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 5125, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 6050, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 6100, 200, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(bloque_int, sourceRec2, { 8050, 400, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 
 		//META Y CASTILLO//
-		DrawTextureEx(flagTexture, { 10000, flag.position.y - flagTexture.height }, 0, 3, WHITE);
-		DrawTextureEx(castle, { (10300), (360) }, 0.0f, 3, WHITE);
+		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
+		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 		if (player.big == 0) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
@@ -931,9 +1076,9 @@ private:
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 
-		if (player.position.x >= 10420) { //Mario arrived to the flag
-			camera.target.x = 10420;
-			DrawTextureEx(castle, { (10300), (360) }, 0.0f, 3, WHITE);
+		if (player.position.x >= 9795) { //Mario arrived to the flag
+			camera.target.x = 9795;
+			DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 			player.big = 0;
 			UnloadTexture(mario);
 		}

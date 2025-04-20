@@ -140,7 +140,7 @@ private:
 	//Blocks
 	vector<Rectangle> blocks = {
 
-	{-200, 600, 10000, 200}, // SUELO
+	{-200, 600, 11000, 200}, // SUELO
 
 	{650, 400, 50, 50},	//PRIMER ? /MONEDAS
 
@@ -352,7 +352,7 @@ private:
 	{ 8920, 200, 50, 50 },
 	{ 8970, 200, 50, 50 },
 
-	//Bandera
+	//Flag
 	{9375, 550, 50, 50 }
 	};
 
@@ -365,7 +365,7 @@ public:
 		SetTargetFPS(60);
 
 		/*--------------------------------------------------------------------------*/
-		/*                       Textures and Typography                            */
+		/*                        Textures and Typography                           */
 		/*--------------------------------------------------------------------------*/
 
 		logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
@@ -381,14 +381,14 @@ public:
 		marioFont = LoadFont("Fonts/MarioFont.ttf");
 
 		/*------------------------------------------------------------*/
-		/*--------------------------Bloques---------------------------*/
+		/*                          Bloques                           */
 		/*------------------------------------------------------------*/
 		bloque_int = LoadTexture("Sprites/Bloques/Bloque_int.png");
 		ladrillo = LoadTexture("Sprites/Bloques/Ladrillo.png");
 		escalera = LoadTexture("Sprites/Bloques/escalera.png");
 
 		/*------------------------------------------------------------*/
-		/*--------------------------Tileset---------------------------*/
+		/*                          Tileset                           */
 		/*------------------------------------------------------------*/
 		castle = LoadTexture("Sprites/Tileset/Castle.png");
 		flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
@@ -557,11 +557,14 @@ private:
 
 	void UpdateGameplay() {
 
-		goomba.goomba_hitbox = { goomba.position.x, goomba.position.y, 32,16 };
-		player.mario_hitbox = { player.position.x, player.position.y, 32,16 };
+		goomba.goomba_hitbox = { goomba.position.x, goomba.position.y, 16,16 };
+		player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
 		Rectangle prev_hitbox = player.mario_hitbox;
 		player.mario_hitbox.x += player.speed.x;
 		player.mario_hitbox.y += player.speed.y;
+
+		bool hitObstacleFloor = false;
+		bool hitObstacleWall = false;
 
 		float deltaTime = GetFrameTime();
 		elapsedTime += deltaTime * 2.5;
@@ -569,7 +572,7 @@ private:
 		//In-game controls and conditions
 		if (IsKeyDown(KEY_RIGHT) && !flag.reached && Timer > 0 && player.alive != 0)
 		{
-			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0)
+			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0 && !hitObstacleWall)
 			{
 				player.position.x += PLAYER_RUN_SPD * deltaTime;
 				player.speed.x = 2.0f;
@@ -580,7 +583,7 @@ private:
 
 		if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && player.alive != 0)
 		{
-			if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0)
+			if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && !hitObstacleWall)
 			{
 				player.position.x -= PLAYER_RUN_SPD * deltaTime;
 				player.speed.x = -2.0f;
@@ -614,88 +617,7 @@ private:
 		}
 
 		if (Timer <= 0 || player.alive == 0) {
-			bool hitObstacle = false;
-		}
-
-		bool hitObstacle = false;
-		for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0
-				&& block.x <= player.position.x
-				&& block.x + block.width >= player.position.x
-				&& block.y >= player.position.y
-				&& block.y <= player.position.y + player.speed.y * deltaTime) {
-				hitObstacle = true;
-				player.speed.y = 0.0f;
-				player.position.y = block.y;
-			}
-		}
-		/*for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0
-				&& block.y <= player.position.y
-				&& block.y + block.height >= player.position.y
-				&& block.x >= player.position.x
-				&& block.x <= player.position.x + player.speed.x * deltaTime) {
-				hitObstacle = true;
-				player.speed.x = 0.0f;
-				player.position.x = block.x;
-			}
-		}*/
-
-		// 1) Calcula la posición futura en X
-		float nextX = player.position.x + player.speed.x * deltaTime;
-
-		// --- COLISIÓN POR LA DERECHA (Mario viene de la izquierda) ---
-		for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0 &&
-				player.speed.x > 0 &&                                                        // Sólo si va a la derecha
-				player.position.y >= block.y &&                // Mario no está completamente por encima
-				player.position.y <= (block.y + block.height) &&                              // Mario no está completamente por debajo
-				player.position.x == block.x &&
-				player.position.x == block.x -1)                              // En el siguiente frame entraría en el bloque
-			{
-				// ¡Choque! Ajustamos posición y detenemos velocidad horizontal
-				cout << "holA" << endl;
-				player.speed.x = 0;
-				player.position.x = block.x - player.mario_hitbox.width;
-			}
-		}
-
-		// --- COLISIÓN POR LA IZQUIERDA (Mario viene de la derecha) ---
-		for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0 &&
-				player.speed.x < 0 &&                                                        // Sólo si va a la izquierda
-				(player.position.y + player.mario_hitbox.height) > block.y &&                // Mario no está completamente por encima
-				player.position.y < (block.y + block.height) &&                              // Mario no está completamente por debajo
-				player.position.x >= (block.x + block.width) &&                              // Actualmente está a la derecha del bloque
-				(nextX) <= (block.x + block.width))                                          // En el siguiente frame entraría en el bloque
-			{
-				// ¡Choque! Ajustamos posición y detenemos velocidad horizontal
-				cout << "holA" << endl;
-				player.speed.x = 0;
-				player.position.x = block.x + block.width;
-			}
-		}
-
-		if (!hitObstacle) {
-			player.position.y += player.speed.y * deltaTime;
-			if (player.speed.y > 0)
-			{
-				player.speed.y += GRAVITY * 3.0f * deltaTime; // Increase gravity in fall
-			}
-			else
-			{
-				player.speed.y += GRAVITY * deltaTime; // Normal upward gravity
-			}
-			player.canJump = false;
-			player.canJump2 = true;
-		}
-		else {
-			player.canJump = true;
-		}
-
-		if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && player.alive != 0 && hitObstacle) {
-			player.speed.y = -PLAYER_JUMP_SPD;
-			player.canJump = false;
+			hitObstacleFloor = false;
 		}
 
 		//GOOMBA
@@ -706,10 +628,6 @@ private:
 			goomba.position.y = 600;
 		}
 
-		if (goomba.death == true) {
-			goomba.position.y += 100 * GetFrameTime(); //The goomba fall
-		}
-
 		if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0) {
 			goomba.activated = true;
 		}
@@ -718,22 +636,119 @@ private:
 			goomba.position.x += -150 * deltaTime;
 		}
 
-		if (goomba.alive && CheckCollisionRecs(player.mario_hitbox, goomba.goomba_hitbox))
+		if (goomba.death == true) {
+			goomba.activated = false;
+			goomba.position.y += 100 * GetFrameTime(); //The goomba fall
+		}
+
+
+		//--------Colisiones de Mario--------\\
+
+		//Suelo
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0
+				&& block.x <= player.position.x + player.mario_hitbox.width - 5
+				&& block.x + block.width + 10 >= player.position.x
+				&& block.y >= player.position.y
+				&& block.y <= player.position.y + player.speed.y * deltaTime) {
+				hitObstacleFloor = true;
+				player.speed.y = 0.0f;
+				player.position.y = block.y;
+			}
+		}
+
+		//Techo
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0
+				&& block.x <= player.position.x + player.mario_hitbox.width - 5
+				&& block.x + block.width + 10 >= player.position.x
+				&& block.y + block.height + block.height <= player.position.y
+				&& block.y + block.height + block.height >= player.position.y + player.speed.y * deltaTime) {
+				hitObstacleFloor = true;
+				player.speed.y = 0.0f;
+				player.position.y = block.y + block.height + block.height;
+			}
+		}
+
+		//Lados
+		float nextX = player.position.x + player.speed.x * deltaTime; //Calcula la posición futura en X
+
+		//--- COLISIÓN POR LA DERECHA (Mario viene de la izquierda) ---
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				player.speed.x > 0 &&
+				player.position.y > block.y &&
+				player.position.y < (block.y + block.height + block.height) &&
+				player.position.x - 10 <= block.x &&
+				(nextX + player.mario_hitbox.width) >= block.x)
+			{
+				//¡Choque! Ajustamos posición y detenemos velocidad horizontal
+				hitObstacleWall = true;
+				player.speed.x = 0;
+				player.position.x = block.x - player.mario_hitbox.width;
+			}
+		}
+
+		//--- COLISIÓN POR LA IZQUIERDA (Mario viene de la derecha) ---
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				player.speed.x < 0 &&
+				player.position.y > block.y &&
+				player.position.y < (block.y + block.height + block.height) &&
+				player.position.x + 10 >= (block.x + block.width) &&
+				(nextX) <= (block.x + block.width + 14))
+			{
+				//¡Choque! Ajustamos posición y detenemos velocidad horizontal
+				hitObstacleWall = true;
+				player.speed.x = 0;
+				player.position.x = block.x + block.width + player.mario_hitbox.width - 7;
+			}
+		}
+
+		if (!hitObstacleFloor) {
+			player.position.y += player.speed.y * deltaTime;
+			if (player.speed.y > 0)
+			{
+				player.speed.y += GRAVITY * 3.0f * deltaTime; //Increase gravity in fall
+			}
+			else
+			{
+				player.speed.y += GRAVITY * deltaTime; //Normal upward gravity
+			}
+			player.canJump = false;
+			player.canJump2 = true;
+		}
+		else {
+			player.canJump = true;
+		}
+
+		//--------Colisiones de Enemigos--------\\
+
+		//Con Mario
+		if (goomba.alive && player.position.x + player.mario_hitbox.width + 10 >= goomba.position.x &&
+			player.position.x <= goomba.position.x + goomba.goomba_hitbox.width + 20 &&
+			player.position.y >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
 		{
 			player.alive = 0;
 		}
 
-		if (!flag.reached && player.position.x >= flag.position.x - 20) { //Flag collision
-			flag.reached = true;
-			player.position.x = flag.position.x;
-			player.speed.y = 0;
-		}
+		//Con el suelo
+		/*for (Rectangle block : blocks) {
+			if (goomba.alive && 
+				player.position.y >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
+			{
+				player.alive = 0;
+			}
+		}*/
+		
 
+		//--------Colision Bandera--------\\
+		
 		if (flag.reached) {
-			if (!hitObstacle && player.position.y != 550) {
+			if (!hitObstacleFloor && player.position.y != 550) {
 				player.position.y += 1 * 0.01;
 			}
-			else if (hitObstacle) {
+			else if (hitObstacleFloor) {
 				if (player.position.y >= flag.position.y + 50) {
 					float playerMovementSpeed = 120.0f * GetFrameTime();
 					player.position.x += playerMovementSpeed;
@@ -809,9 +824,9 @@ private:
 			DrawTextureEx(logoTexture, { (screenWidth - logoTexture.width - logoTexture.width + 1000) / 9.0f, (screenHeight - logoTexture.height + 700) / 10.0f }, 0.0f, 1.2f, WHITE);
 			DrawText("Project 1 - GDD - CITM", 330, 420, 30, GRAY);
 			DrawText("   Members", 420, 500, 25, GRAY);
-			DrawText("Sauc Pellejero", 410, 550, 25, GRAY);
-			DrawText(" Marc Jimenez", 408, 600, 25, GRAY);
-			DrawText(" Ruben Mateo", 410, 650, 25, GRAY);
+			DrawText(" Marc Jimenez", 408, 550, 25, GRAY);
+			DrawText(" Ruben Mateo", 410, 600, 25, GRAY);
+			DrawText("Sauc Pellejero", 410, 650, 25, GRAY);
 			break;
 
 		case GameScreen::TITLE:
@@ -1238,7 +1253,7 @@ private:
 			camera.target.x = 9795;
 			DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 			player.big = 0;
-			UnloadTexture(mario);
+			
 		}
 
 		EndMode2D();

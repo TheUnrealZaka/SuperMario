@@ -62,7 +62,15 @@ struct Enemy {
 
 	Enemy(float x, float y) : position{ x, y }, activated(false), alive(true), death(false) {}
 };
+struct PowerUp {
+	Vector2 position;
+	Rectangle powerup_hitbox;
 
+	Vector2 speed;
+	bool active;
+
+	PowerUp(float x, float y) : position{ x, y } {}
+};
 //Structure for objects in the environment
 struct EnvElement {
 	Rectangle rect;
@@ -108,6 +116,10 @@ private:
 	Texture2D Goomba;
 	Enemy koopa;
 	Texture2D Koopa;
+
+	//PowerUp
+	PowerUp mooshroom;
+	Texture2D Mooshroom;
 
 	//Blocks
 	Texture2D bloque_int;
@@ -359,7 +371,7 @@ private:
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(9375, 264) {
+		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(9375, 264), mooshroom(700, 600) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		SetTargetFPS(60);
@@ -377,6 +389,7 @@ public:
 		icon_lifes = LoadTexture("Images/Player/Icon_Lifes.png");
 		icon_money = LoadTexture("Images/Player/Icon_Money.png");
 		fondo = LoadTexture("Sprites/Background/Fondo.png");
+		Mooshroom = LoadTexture("SPRITES/Items/Power-ups.png");
 
 		marioFont = LoadFont("Fonts/MarioFont.ttf");
 
@@ -562,6 +575,8 @@ private:
 		Rectangle prev_hitbox = player.mario_hitbox;
 		player.mario_hitbox.x += player.speed.x;
 		player.mario_hitbox.y += player.speed.y;
+		mooshroom.powerup_hitbox = { mooshroom.position.x, mooshroom.position.y,32,16 };
+
 
 		bool hitObstacleFloor = false;
 		bool hitObstacleWall = false;
@@ -618,6 +633,18 @@ private:
 
 		if (Timer <= 0 || player.alive == 0) {
 			hitObstacleFloor = false;
+		}
+		//MOOSHROOM
+		/*if (mooshroom.active && player.alive != 0) {
+			mooshroom.position.x += -150 * deltaTime;
+		}*/
+		if (mooshroom.active && CheckCollisionRecs(player.mario_hitbox, mooshroom.powerup_hitbox))
+		{
+			if (!player.big) player.big = true;
+			mooshroom.active = false;
+		}
+		if (!mooshroom.active) {
+			mooshroom.position = { 0, 0 };
 		}
 
 		//GOOMBA
@@ -1237,7 +1264,7 @@ private:
 
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
-
+		DrawTexturePro(Mooshroom, sourceRec2, { mooshroom.position.x - 20, mooshroom.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		//META Y CASTILLO//
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
 		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);

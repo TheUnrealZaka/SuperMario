@@ -71,7 +71,7 @@ struct PowerUp {
 	bool active;
 	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 
-	PowerUp(float x, float y) : position{ x, y }, active(false), side(false) {}
+	PowerUp(float x, float y) : position{ x, y }, active(false), side(true) {}
 };
 //Structure for objects in the environment
 struct EnvElement {
@@ -492,6 +492,7 @@ private:
 				camera.target.x = 400;
 				camera.target.y = 280;
 				goomba.position = { 750, 100 };
+				mooshroom.position = { 900, 350 };
 				Timer = 100;
 				Score = 000000;
 				Money = 00;
@@ -531,6 +532,7 @@ private:
 				camera.target.x = 400;
 				camera.target.y = 280;
 				goomba.position = { 700, 600 };
+				mooshroom.position = { 900, 350 };
 				Timer = 20;
 				player.alive = 1;
 				elapsedTime = 0.0f;
@@ -607,8 +609,7 @@ private:
 		Rectangle prev_hitbox = player.mario_hitbox;
 		player.mario_hitbox.x += player.speed.x;
 		player.mario_hitbox.y += player.speed.y;
-		mooshroom.powerup_hitbox = { mooshroom.position.x, mooshroom.position.y,32,16 };
-
+		mooshroom.powerup_hitbox = { mooshroom.position.x, mooshroom.position.y, 16,16 };
 
 		bool hitObstacleFloor = false;
 		bool hitObstacleWall = false;
@@ -619,7 +620,7 @@ private:
 		elapsedTime += deltaTime * 2.5;
 
 		//In-game controls and conditions
-		if (IsKeyDown(KEY_RIGHT) && !flag.reached && Timer > 0 && player.alive != 0)
+		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && !flag.reached && Timer > 0 && player.alive != 0)
 		{
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0 && !hitObstacleWall)
 			{
@@ -630,7 +631,7 @@ private:
 			player.speed.x = 2.0f;
 		}
 
-		if (IsKeyDown(KEY_LEFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && player.alive != 0)
+		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_DOWN) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && player.alive != 0)
 		{
 			if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && !hitObstacleWall)
 			{
@@ -669,10 +670,12 @@ private:
 			hitObstacleFloor = false;
 		}
 		//MOOSHROOM
-		if (player.position.x - mooshroom.position.x <= -200 && player.alive != 0) {
+		if (player.position.x >= mooshroom.position.x && player.alive != 0) {
 			mooshroom.active = true;
 		}
+		if (!mooshroom.active && !player.big) mooshroom.position = { 900, 350 };
 
+		mooshroom.speed.x = 1.0f;
 		if (mooshroom.active && player.alive != 0 && mooshroom.side) {
 			mooshroom.position.x += -120 * deltaTime;
 		}
@@ -699,7 +702,6 @@ private:
 			goomba.position.y += 100 * GetFrameTime(); //The goomba fall
 		}
 
-
 		//--------Colisiones de Mario--------\\
 
 		//Suelo
@@ -722,7 +724,6 @@ private:
 				&& block.x + block.width + 10 >= player.position.x
 				&& block.y + block.height + block.height <= player.position.y
 				&& block.y + block.height + block.height >= player.position.y + player.speed.y * deltaTime) {
-				hitObstacleFloor = true;
 				player.speed.y = 0.0f;
 				player.position.y = block.y + block.height + block.height;
 			}
@@ -853,6 +854,7 @@ private:
 		{
 			if (!player.big) player.big = true;
 			mooshroom.active = false;
+			mooshroom.position.y = 1000;
 		}
 
 		//Con el suelo
@@ -885,25 +887,27 @@ private:
 
 		//Derecha
 		for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0 && mooshroom.active && mooshroom.side &&
+			if (Timer > 0 && player.alive != 0 &&
+				mooshroom.active && !mooshroom.side &&
 				mooshroom.position.y > block.y &&
 				mooshroom.position.y < (block.y + block.height + block.height) &&
 				mooshroom.position.x - 10 <= block.x &&
-				(nextXE + mooshroom.powerup_hitbox.width) >= block.x - 15)
+				(nextXP + mooshroom.powerup_hitbox.width) >= block.x - 15)
 			{
-				mooshroom.side = false;
+				mooshroom.side = true;
 			}
 		}
 
 		//Izquierda
 		for (Rectangle block : blocks) {
-			if (Timer > 0 && player.alive != 0 && mooshroom.active && !mooshroom.side &&
+			if (Timer > 0 && player.alive != 0 &&
+				mooshroom.active && mooshroom.side &&
 				mooshroom.position.y > block.y &&
 				mooshroom.position.y < (block.y + block.height + block.height) &&
 				mooshroom.position.x + 10 >= (block.x + block.width) &&
-				(nextXE) <= (block.x + block.width + 20))
+				(nextXP) <= (block.x + block.width + 20))
 			{
-				mooshroom.side = true;
+				mooshroom.side = false;
 			}
 		}
 
@@ -937,6 +941,7 @@ private:
 			camera.target.x = 400;
 			camera.target.y = 280;
 			goomba.position = { 700, 600 };
+			mooshroom.position = { 900, 350 };
 			Timer = 100;
 			Money = 00;
 			Score = 000000;
@@ -1167,9 +1172,15 @@ private:
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
 			}
-			if (frameTime >= frameSpeed) {
+			if (IsKeyDown(KEY_DOWN) && Timer > 0 && player.alive != 0 && !flag.reached && !player.big) currentFrame = 0;
+			if (frameTime >= frameSpeed && !IsKeyDown(KEY_DOWN)) {
 				frameTime = 0.0f;
 				currentFrame = (currentFrame + 1) % 4; //Cycling between the 3 walk/run frames
+			}
+			if (IsKeyDown(KEY_DOWN) && Timer > 0 && player.alive != 0 && !flag.reached && player.big)
+			{
+				currentFrame = 0;
+				sourceRec.x = frameWidthP * 6;
 			}
 			sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
 		}
@@ -1180,12 +1191,20 @@ private:
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
 			}
-			if (frameTime >= frameSpeed) {
+			if (IsKeyDown(KEY_DOWN) && Timer > 0 && player.alive != 0 && !flag.reached && !player.big) currentFrame = 0;
+			if (frameTime >= frameSpeed && !IsKeyDown(KEY_DOWN)) {
 				frameTime = 0.0f;
 				currentFrame = (currentFrame + 1) % 4; //Cycling between the 3 walk/run frames
 			}
+			if (IsKeyDown(KEY_DOWN) && Timer > 0 && player.alive != 0 && !flag.reached && player.big)
+			{
+				currentFrame = 0;
+				sourceRec.x = frameWidthP * 6;
+			}
 			sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
 		}
+
+		if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached && player.big) sourceRec.x = frameWidthP * 6;
 
 		//Animation of Enemies
 		if (goomba.activated && player.alive != 0) {

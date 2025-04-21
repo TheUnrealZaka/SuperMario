@@ -31,8 +31,12 @@ El objetivo es llegar al final de cada nivel, eliminando enemigos y recogiendo m
 - ✅ Movimiento de Mario y animaciones básicas  
 - ✅ Enemigo clásico: Goomba
 - ✅ Power-ups: Super Mushroom  
-- ✅ Nivele con desplazamiento horizontal  
-- ✅ Sistema de puntuación y vidas  
+- ✅ Nivel con desplazamiento horizontal
+- ✅ Camara con desplazamiento hacia la derecha únicamente
+- ✅ Replica del nivel 1-1 entera
+- ✅ Win/Lose conditions
+- ✅ UI functionality: score and lives
+- ✅ Pantallas de carga (Logo, pantalla informativa, pantalla inicial, se acabo el tiempo etc...)
 - ✅ Música de fondo  
 - ✅ Detección de colisiones
 
@@ -42,3 +46,6 @@ El objetivo es llegar al final de cada nivel, eliminando enemigos y recogiendo m
 ¡Gracias por visitar nuestro proyecto! 🍄  
 
 NOENTIENDO STD
+> **We don't own any of the information or images of this project.**  
+> Last Resort and all of the content used for the game is property of Nintendo.  
+> Every piece of content is used and can be used by anyone for non-commercial projects.

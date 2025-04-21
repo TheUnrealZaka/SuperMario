@@ -401,54 +401,54 @@ public:
 		/*                        Textures and Typography                           */
 		/*--------------------------------------------------------------------------*/
 
-		logoTexture = LoadTexture("Images/HOME/LogoProyecto1.png");
-		UI = LoadTexture("Images/Seleccion Modo/Pantalla_Intro.png");
-		money = LoadTexture("Sprites/Items/Monedas.png");
-		Level1 = LoadTexture("Images/Seleccion Modo/World 1-1.png");
-		mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
-		Goomba = LoadTexture("Sprites/Enemies/Goomba.png");
-		icon_lifes = LoadTexture("Images/Player/Icon_Lifes.png");
-		icon_money = LoadTexture("Images/Player/Icon_Money.png");
-		fondo = LoadTexture("Sprites/Background/Fondo.png");
+		logoTexture = LoadTexture("Resources/Images/HOME/LogoProyecto1.png");
+		UI = LoadTexture("Resources/Images/Seleccion Modo/Pantalla_Intro.png");
+		money = LoadTexture("Resources/Sprites/Items/Monedas.png");
+		Level1 = LoadTexture("Resources/Images/Seleccion Modo/World 1-1.png");
+		mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
+		icon_lifes = LoadTexture("Resources/Images/Player/Icon_Lifes.png");
+		icon_money = LoadTexture("Resources/Images/Player/Icon_Money.png");
+		fondo = LoadTexture("Resources/Sprites/Background/Fondo.png");
 
-		marioFont = LoadFont("Fonts/MarioFont.ttf");
+		marioFont = LoadFont("Resources/Fonts/MarioFont.ttf");
 		/*------------------------------------------------------------*/
 		/*                           Items                            */
 		/*------------------------------------------------------------*/
-		Mooshroom = LoadTexture("SPRITES/Items/Mushroom.png");
+		Mooshroom = LoadTexture("Resources/Sprites/Items/Mushroom.png");
 
 		/*------------------------------------------------------------*/
 		/*                          Bloques                           */
 		/*------------------------------------------------------------*/
-		bloque_int = LoadTexture("Sprites/Bloques/Bloque_int.png");
-		ladrillo = LoadTexture("Sprites/Bloques/Ladrillo.png");
-		escalera = LoadTexture("Sprites/Bloques/escalera.png");
+		bloque_int = LoadTexture("Resources/Sprites/Bloques/Bloque_int.png");
+		ladrillo = LoadTexture("Resources/Sprites/Bloques/Ladrillo.png");
+		escalera = LoadTexture("Resources/Sprites/Bloques/escalera.png");
 
 		/*------------------------------------------------------------*/
 		/*                          Tileset                           */
 		/*------------------------------------------------------------*/
-		castle = LoadTexture("Sprites/Tileset/Castle.png");
-		flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
-		tuberia_s = LoadTexture("Sprites/Tileset/Tuberia1.png");
-		tuberia_m = LoadTexture("Sprites/Tileset/Tuberia2.png");
-		tuberia_b = LoadTexture("Sprites/Tileset/Tuberia3.png");
+		castle = LoadTexture("Resources/Sprites/Tileset/Castle.png");
+		flagTexture = LoadTexture("Resources/Sprites/Tileset/Flag.png");
+		tuberia_s = LoadTexture("Resources/Sprites/Tileset/Tuberia1.png");
+		tuberia_m = LoadTexture("Resources/Sprites/Tileset/Tuberia2.png");
+		tuberia_b = LoadTexture("Resources/Sprites/Tileset/Tuberia3.png");
 
 		/*--------------------------------------------------------------------------*/
 		/*                            Music and effects                             */
 		/*--------------------------------------------------------------------------*/
 
-		musicOverworld = LoadMusicStream("Audio/Music/Cancion.ogg");
-		musicOverworld_hurry = LoadMusicStream("Audio/Music/CancionHurry.ogg");
-		musicInvencible = LoadMusicStream("Audio/Music/Invencible.ogg");
-		musicInvencible_hurry = LoadMusicStream("Audio/Music/InvencibleHurry.ogg");
+		musicOverworld = LoadMusicStream("Resources/Audio/Music/Cancion.ogg");
+		musicOverworld_hurry = LoadMusicStream("Resources/Audio/Music/CancionHurry.ogg");
+		musicInvencible = LoadMusicStream("Resources/Audio/Music/Invencible.ogg");
+		musicInvencible_hurry = LoadMusicStream("Resources/Audio/Music/InvencibleHurry.ogg");
 
-		sfxJumpSmall = LoadSound("Audio/FX/smb_jump-small.wav");
-		sfxJumpSuper = LoadSound("Audio/FX/smb_jump-super.wav");
-		sfxMushroom = LoadSound("Audio/FX/smb_mushroom.wav");
-		sfxGameOver = LoadSound("Audio/FX/smb_gameover.wav");
-		sfxFlagpole = LoadSound("Audio/FX/smb_flagpole.wav");
-		sfxDeath = LoadSound("Audio/Music/Muerte.ogg");
-		sfxCompleted = LoadSound("Audio/FX/smb_stage_clear.wav");
+		sfxJumpSmall = LoadSound("Resources/Audio/FX/smb_jump-small.wav");
+		sfxJumpSuper = LoadSound("Resources/Audio/FX/smb_jump-super.wav");
+		sfxMushroom = LoadSound("Resources/Audio/FX/smb_mushroom.wav");
+		sfxGameOver = LoadSound("Resources/Audio/FX/smb_gameover.wav");
+		sfxFlagpole = LoadSound("Resources/Audio/FX/smb_flagpole.wav");
+		sfxDeath = LoadSound("Resources/Audio/Music/Muerte.ogg");
+		sfxCompleted = LoadSound("Resources/Audio/FX/smb_stage_clear.wav");
 
 		SetMusicVolume(musicOverworld, 0.5f);
 		SetMusicVolume(musicInvencible, 0.5f);
@@ -1201,8 +1201,8 @@ private:
 			frameHeightP = 32;
 		}
 
-		if (player.side == 0) mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
-		else if (player.side == 1) mario = LoadTexture("Sprites/MARIO/Mario_Left.png");
+		if (player.side == 0) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+		else if (player.side == 1) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
 
 		Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
 
@@ -1251,7 +1251,7 @@ private:
 
 		//Animation of Mario
 		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && (player.position.y == 600 || player.position.y == 550)) {
-			mario = LoadTexture("Sprites/MARIO/Mario_Right.png");
+			mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
 			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
@@ -1270,7 +1270,7 @@ private:
 		}
 
 		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
-			mario = LoadTexture("Sprites/MARIO/Mario_Left.png");
+			mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
 			player.side = 1;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed

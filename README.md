@@ -18,11 +18,11 @@ La historia se desarrolla en el Reino Champiñón, donde Bowser ha secuestrado a
 ## 🎮 ¿Cómo jugar?
 
 - `←` Moverse a la izquierda  
-- `→` Moverse a la derecha  
-- `↑` Saltar  
-- `↓` Agacharse / Entrar en tuberías  
+- `→` Moverse a la derecha   
+- `↓` Agacharse / Entrar en tuberías
+- `Space` Saltar 
 - `Shift` Correr  
-- `X` Disparar (si tiene Fire Flower)
+- `x` Disparar (si tiene Fire Flower)
 
 El objetivo es llegar al final de cada nivel, eliminando enemigos y recogiendo monedas, hasta llegar al castillo final.
 
@@ -35,7 +35,8 @@ El objetivo es llegar al final de cada nivel, eliminando enemigos y recogiendo m
 - ✅ Sistema de puntuación y vidas  
 - ✅ Música de fondo  
 - ✅ Detección de colisiones
-- 
+
+
 ---
 
 ¡Gracias por visitar nuestro proyecto! 🍄  

@@ -59,8 +59,9 @@ struct Enemy {
 	bool activated;
 	bool alive;
 	bool death;
+	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 
-	Enemy(float x, float y) : position{ x, y }, activated(false), alive(true), death(false) {}
+	Enemy(float x, float y) : position{ x, y }, activated(false), alive(true), death(false), side(true) {}
 };
 struct PowerUp {
 	Vector2 position;
@@ -68,8 +69,9 @@ struct PowerUp {
 
 	Vector2 speed;
 	bool active;
+	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 
-	PowerUp(float x, float y) : position{ x, y } {}
+	PowerUp(float x, float y) : position{ x, y }, active(false), side(false) {}
 };
 //Structure for objects in the environment
 struct EnvElement {
@@ -155,6 +157,8 @@ private:
 	{-200, 600, 11000, 200}, // SUELO
 
 	{650, 400, 50, 50},	//PRIMER ? /MONEDAS
+
+	{400, 550, 50, 50},
 
 	//Conjuto de bloques
 	{850, 400, 50, 50},
@@ -371,7 +375,7 @@ private:
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(9375, 264), mooshroom(700, 600) {
+		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		SetTargetFPS(60);
@@ -459,7 +463,7 @@ private:
 				player.position = { 50, 600 };
 				camera.target.x = 400;
 				camera.target.y = 280;
-				goomba.position = { 700, 600 };
+				goomba.position = { 750, 100 };
 				Timer = 100;
 				Score = 000000;
 				Money = 00;
@@ -580,6 +584,8 @@ private:
 
 		bool hitObstacleFloor = false;
 		bool hitObstacleWall = false;
+		bool onGroundEnemy = false;
+		bool onGroundPowerUp = false;
 
 		float deltaTime = GetFrameTime();
 		elapsedTime += deltaTime * 2.5;
@@ -635,32 +641,29 @@ private:
 			hitObstacleFloor = false;
 		}
 		//MOOSHROOM
-		/*if (mooshroom.active && player.alive != 0) {
-			mooshroom.position.x += -150 * deltaTime;
-		}*/
-		if (mooshroom.active && CheckCollisionRecs(player.mario_hitbox, mooshroom.powerup_hitbox))
-		{
-			if (!player.big) player.big = true;
-			mooshroom.active = false;
+		if (player.position.x - mooshroom.position.x <= -200 && player.alive != 0) {
+			mooshroom.active = true;
 		}
-		if (!mooshroom.active) {
-			mooshroom.position = { 0, 0 };
+
+		if (mooshroom.active && player.alive != 0 && mooshroom.side) {
+			mooshroom.position.x += -120 * deltaTime;
+		}
+
+		if (mooshroom.active && player.alive != 0 && !mooshroom.side) {
+			mooshroom.position.x += 120 * deltaTime;
 		}
 
 		//GOOMBA
-		if (goomba.position.y < 596 && goomba.death == false) {
-			goomba.position.y += GRAVITY * 2.0f * deltaTime;
-		}
-		else {
-			goomba.position.y = 600;
-		}
-
 		if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0) {
 			goomba.activated = true;
 		}
 
-		if (goomba.activated && goomba.death == false && player.alive != 0) {
-			goomba.position.x += -150 * deltaTime;
+		goomba.speed.x = 1.0f;
+		if (goomba.activated && goomba.death == false && player.alive != 0 && goomba.side) {
+			goomba.position.x += -120 * deltaTime;
+		}
+		if (goomba.activated && goomba.death == false && player.alive != 0 && !goomba.side) {
+			goomba.position.x += 120 * deltaTime;
 		}
 
 		if (goomba.death == true) {
@@ -760,17 +763,130 @@ private:
 		}
 
 		//Con el suelo
-		/*for (Rectangle block : blocks) {
-			if (goomba.alive && 
-				player.position.y >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
-			{
-				player.alive = 0;
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 && goomba.activated
+				&& block.x <= goomba.position.x + goomba.goomba_hitbox.width - 5
+				&& block.x + block.width + 10 >= goomba.position.x
+				&& block.y + block.height >= goomba.position.y
+				&& block.y <= goomba.position.y) {
+				onGroundEnemy = true;
+				goomba.speed.y = 0.0f;
+				goomba.position.y = block.y;
 			}
-		}*/
-		
+		}
+
+		if (!onGroundEnemy && player.alive && Timer > 0) {
+			goomba.position.y += (GRAVITY - 300) * deltaTime;
+			if (goomba.position.y > 0)
+			{
+				goomba.position.y += (GRAVITY - 300) * 2.0f * deltaTime; //Increase gravity in fall
+			}
+			else
+			{
+				goomba.position.y += (GRAVITY - 300) * deltaTime; //Normal upward gravity
+			}
+		}
+
+		//Los lados
+		float nextXE = goomba.position.x + goomba.speed.x * deltaTime; //Calcula la posición futura en X
+
+		//Derecha
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 && goomba.alive &&
+				goomba.activated && !goomba.side &&
+				goomba.position.y > block.y &&
+				goomba.position.y < (block.y + block.height + block.height) &&
+				goomba.position.x - 10 <= block.x &&
+				(nextXE + goomba.goomba_hitbox.width) >= block.x - 15)
+			{
+				goomba.side = true;
+			}
+		}
+
+		//Izquierda
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				goomba.activated && goomba.side &&
+				goomba.position.y > block.y &&
+				goomba.position.y < (block.y + block.height + block.height) &&
+				goomba.position.x + 10 >= (block.x + block.width) &&
+				(nextXE) <= (block.x + block.width + 20))
+			{
+				goomba.side = false;
+			}
+		}
+
+		//--------Colisiones de Power-Ups--------\\
+
+		//Con Mario
+		if (mooshroom.active && player.position.x + player.mario_hitbox.width + 10 >= mooshroom.position.x &&
+			player.position.x <= mooshroom.position.x + mooshroom.powerup_hitbox.width + 20 &&
+			player.position.y >= mooshroom.position.y && player.position.y <= mooshroom.position.y + mooshroom.powerup_hitbox.height)
+		{
+			if (!player.big) player.big = true;
+			mooshroom.active = false;
+		}
+
+		//Con el suelo
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 && mooshroom.active
+				&& block.x <= mooshroom.position.x + mooshroom.powerup_hitbox.width - 5
+				&& block.x + block.width + 10 >= mooshroom.position.x
+				&& block.y + block.height >= mooshroom.position.y
+				&& block.y <= mooshroom.position.y) {
+				onGroundPowerUp = true;
+				mooshroom.speed.y = 0.0f;
+				mooshroom.position.y = block.y;
+			}
+		}
+
+		if (!onGroundPowerUp && player.alive && Timer > 0) {
+			mooshroom.position.y += (GRAVITY - 300) * deltaTime;
+			if (mooshroom.position.y > 0)
+			{
+				mooshroom.position.y += (GRAVITY - 300) * 2.0f * deltaTime; //Increase gravity in fall
+			}
+			else
+			{
+				mooshroom.position.y += (GRAVITY - 300) * deltaTime; //Normal upward gravity
+			}
+		}
+
+		//Los lados
+		float nextXP = mooshroom.position.x + mooshroom.speed.x * deltaTime; //Calcula la posición futura en X
+
+		//Derecha
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 && mooshroom.active && mooshroom.side &&
+				mooshroom.position.y > block.y &&
+				mooshroom.position.y < (block.y + block.height + block.height) &&
+				mooshroom.position.x - 10 <= block.x &&
+				(nextXE + mooshroom.powerup_hitbox.width) >= block.x - 15)
+			{
+				mooshroom.side = false;
+			}
+		}
+
+		//Izquierda
+		for (Rectangle block : blocks) {
+			if (Timer > 0 && player.alive != 0 && mooshroom.active && !mooshroom.side &&
+				mooshroom.position.y > block.y &&
+				mooshroom.position.y < (block.y + block.height + block.height) &&
+				mooshroom.position.x + 10 >= (block.x + block.width) &&
+				(nextXE) <= (block.x + block.width + 20))
+			{
+				mooshroom.side = true;
+			}
+		}
 
 		//--------Colision Bandera--------\\
 		
+		if (!flag.reached && player.position.x >= flag.position.x - 20) {
+		flag.reached = true;
+		player.position.x = flag.position.x;
+		player.speed.y = 0;
+		}
+
 		if (flag.reached) {
 			if (!hitObstacleFloor && player.position.y != 550) {
 				player.position.y += 1 * 0.01;
@@ -800,6 +916,7 @@ private:
 			player.alive = 1;
 			player.lifes = 3;
 			player.big = 0;
+			goomba.side = true;
 			elapsedTime = 0.0f;
 			contmuerte = 0;
 		}
@@ -1280,7 +1397,7 @@ private:
 			camera.target.x = 9795;
 			DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 			player.big = 0;
-			
+			UnloadTexture(mario);
 		}
 
 		EndMode2D();

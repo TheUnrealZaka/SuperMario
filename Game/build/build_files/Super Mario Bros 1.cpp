@@ -515,6 +515,7 @@ private:
 				Score = 000000;
 				Money = 00;
 				player.alive = 1;
+				goomba.death = false;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
 				conttiempo = 0;
@@ -557,6 +558,7 @@ private:
 				mooshroom.position = { 900, 350 };
 				Timer = 400;
 				player.alive = 1;
+				goomba.death = false;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
 				conttiempo = 0;
@@ -640,6 +642,8 @@ private:
 
 	void UpdateGameplay() {
 
+		if (player.big) player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
+		if (!player.big) player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
 		goomba.goomba_hitbox = { goomba.position.x, goomba.position.y, 16,16 };
 		player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
 		Rectangle prev_hitbox = player.mario_hitbox;
@@ -747,7 +751,8 @@ private:
 				&& block.x <= player.position.x + player.mario_hitbox.width - 5
 				&& block.x + block.width + 10 >= player.position.x
 				&& block.y >= player.position.y
-				&& block.y <= player.position.y + player.speed.y * deltaTime) {
+				&& block.y <= player.position.y + player.speed.y * deltaTime) 
+			{
 				hitObstacleFloor = true;
 				player.speed.y = 0.0f;
 				player.position.y = block.y;
@@ -760,7 +765,8 @@ private:
 				&& block.x <= player.position.x + player.mario_hitbox.width - 5
 				&& block.x + block.width + 10 >= player.position.x
 				&& block.y + block.height + block.height <= player.position.y
-				&& block.y + block.height + block.height >= player.position.y + player.speed.y * deltaTime) {
+				&& block.y + block.height + block.height >= player.position.y + player.speed.y * deltaTime) 
+			{
 				player.speed.y = 0.0f;
 				player.position.y = block.y + block.height + block.height;
 			}
@@ -823,9 +829,17 @@ private:
 		//Con Mario
 		if (goomba.alive && player.position.x + player.mario_hitbox.width + 10 >= goomba.position.x &&
 			player.position.x <= goomba.position.x + goomba.goomba_hitbox.width + 20 &&
-			player.position.y >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
+			player.position.y + player.mario_hitbox.height + 16 >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
 		{
-			player.alive = 0;
+			if (player.position.y + player.mario_hitbox.height <= goomba.position.y && player.alive) {
+				goomba.death = true;
+				Score += 100;
+				player.speed.y = -PLAYER_JUMP_SPD + 100;
+				player.canJump = false;
+				player.canJump2 = true;
+				player.jumpTime = 0.0f;
+			}
+			else player.alive = 0;
 		}
 
 		//Con el suelo
@@ -892,6 +906,7 @@ private:
 			PlaySound(sfxMushroom);
 			if (!player.big) player.big = true;
 			mooshroom.active = false;
+			Score += 1000;
 			mooshroom.position.y = 1000;
 		}
 
@@ -991,6 +1006,7 @@ private:
 			player.lifes = 3;
 			player.big = 0;
 			goomba.side = true;
+			goomba.death = false;
 			elapsedTime = 0.0f;
 			contmuerte = 0;
 		}
@@ -1046,7 +1062,7 @@ private:
 			DrawText(" Ruben Mateo", 410, 600, 25, GRAY);
 			DrawText("Sauc Pellejero", 410, 650, 25, GRAY);
 			DrawText("Professor: Alejandro Gomez Paris", 310, 725, 25, GRAY);
-			DrawText("Replica Super Mario Bros 1 con Raylib", 200, 100, 30, GRAY);
+			DrawText("Replica Super Mario Bros 1 con Raylib", 220, 100, 30, GRAY);
 
 			break;
 
@@ -1172,10 +1188,10 @@ private:
 		BeginMode2D(camera);
 		ClearBackground(BLUE);
 
+		//Player
 		int frameWidthP;
 		int frameHeightP;
-
-		//Player
+		
 		if (player.big == 0) { //Small Mode
 			frameWidthP = 16; //Each frame mesure 16x16 pixels
 			frameHeightP = 16;
@@ -1199,6 +1215,15 @@ private:
 		/*--Goomba--*/
 		int frameWidthG = 16;
 		int frameHeightG = 16;
+
+		if (!goomba.death) {
+			int frameWidthG = 16;
+			int frameHeightG = 16;
+		}
+		if (goomba.death) {
+			int frameWidthG = 16;
+			int frameHeightG = 16;
+		}
 		Rectangle sourceRec2 = { 0, 0, (float)frameWidthG, (float)frameHeightG };
 
 		/*--Koopa--*/

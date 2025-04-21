@@ -151,6 +151,15 @@ private:
 	Texture2D icon_lifes;
 	Texture2D icon_money;
 
+	//Musica
+	Music cancion;
+	Music cancion_hurry;
+	Music invencible;
+	Music invencible_hurry;
+	Music completado;
+	Music muerte;
+	Music gameover;
+
 	//Typography
 	Font marioFont;
 
@@ -419,7 +428,17 @@ public:
 		tuberia_m = LoadTexture("Sprites/Tileset/Tuberia2.png");
 		tuberia_b = LoadTexture("Sprites/Tileset/Tuberia3.png");
 
+		/*--------------------------------------------------------------------------*/
+		/*                            Music and effects                             */
+		/*--------------------------------------------------------------------------*/
 
+		cancion = LoadMusicStream("Audio/Music/Cancion.ogg");
+		cancion_hurry = LoadMusicStream("Audio/Music/CancionHurry.ogg");
+		invencible = LoadMusicStream("Audio/Music/Invencible.ogg");
+		invencible_hurry = LoadMusicStream("Audio/Music/InvencibleHurry.ogg");
+		completado = LoadMusicStream("Audio/Music/Completado.ogg");
+		muerte = LoadMusicStream("Audio/Music/Muerte.ogg");
+		gameover = LoadMusicStream("Audio/Music/Gameover.ogg");
 
 		//Camera of the game
 		camera.target = player.position;
@@ -995,6 +1014,7 @@ private:
 		case GameScreen::GAMEPLAY:
 
 			DrawGameplay();
+			AudioGameplay();
 			break;
 
 		case GameScreen::TIMEOUT:
@@ -1074,6 +1094,10 @@ private:
 				DrawTextEx(marioFont, TextFormat("\n 000", Timer), { 800, 30 }, 32, 1, WHITE);
 			}
 		}
+	}
+	void AudioGameplay() {
+		InitAudioDevice();              // Initialize audio device
+		PlayMusicStream(cancion);
 	}
 
 	void DrawGameplay() {

@@ -470,7 +470,7 @@ private:
 		switch (currentScreen) {
 		case GameScreen::LOGO:
 			framesCounter++;
-			if (framesCounter > 120) {
+			if (framesCounter > 250) {
 				currentScreen = GameScreen::TITLE;
 			}
 			break;
@@ -541,6 +541,7 @@ private:
 		case GameScreen::GAMEPLAY:
 			framesCounter = 0;
 			UpdateGameplay();
+			UpdateMusicStream(cancion);
 
 			if (player.alive == 0) {
 				if (contmuerte == 0)
@@ -1002,6 +1003,9 @@ private:
 			DrawText(" Marc Jimenez", 408, 550, 25, GRAY);
 			DrawText(" Ruben Mateo", 410, 600, 25, GRAY);
 			DrawText("Sauc Pellejero", 410, 650, 25, GRAY);
+			DrawText("Professor: Alejandro Gomez Paris", 310, 725, 25, GRAY);
+			DrawText("Replica Super Mario Bros 1 con Raylib", 200, 100, 30, GRAY);
+
 			break;
 
 		case GameScreen::TITLE:
@@ -1017,7 +1021,8 @@ private:
 		case GameScreen::GAMEPLAY:
 
 			DrawGameplay();
-			//AudioGameplay();
+			AudioGameplay();
+
 			break;
 
 		case GameScreen::TIMEOUT:
@@ -1098,10 +1103,11 @@ private:
 			}
 		}
 	}
-	//void AudioGameplay() {
-	//	InitAudioDevice();              // Initialize audio device
-	//	PlayMusicStream(cancion);
-	//}
+
+	void AudioGameplay() {
+		InitAudioDevice();              // Initialize audio device
+		PlayMusicStream(cancion);		
+	}
 
 	void DrawGameplay() {
 		BeginMode2D(camera);

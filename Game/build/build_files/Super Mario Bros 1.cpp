@@ -170,8 +170,6 @@ private:
 
 	{650, 400, 50, 50},	//PRIMER ? /MONEDAS
 
-	{400, 550, 50, 50},
-
 	//Conjuto de bloques
 	{850, 400, 50, 50},
 	{900, 400, 50, 50}, // TIENE UN CHAMPIÑON
@@ -387,7 +385,7 @@ private:
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(700, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350) {
+		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		SetTargetFPS(60);
@@ -491,9 +489,9 @@ private:
 				player.position = { 50, 600 };
 				camera.target.x = 400;
 				camera.target.y = 280;
-				goomba.position = { 750, 100 };
+				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
-				Timer = 100;
+				Timer = 400;
 				Score = 000000;
 				Money = 00;
 				player.alive = 1;
@@ -531,9 +529,9 @@ private:
 				player.position = { 50, 600 };
 				camera.target.x = 400;
 				camera.target.y = 280;
-				goomba.position = { 700, 600 };
+				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
-				Timer = 20;
+				Timer = 400;
 				player.alive = 1;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
@@ -940,9 +938,9 @@ private:
 			player.position = { 50, 600 };
 			camera.target.x = 400;
 			camera.target.y = 280;
-			goomba.position = { 700, 600 };
+			goomba.position = { 1400, 600 };
 			mooshroom.position = { 900, 350 };
-			Timer = 100;
+			Timer = 400;
 			Money = 00;
 			Score = 000000;
 			flag.reached = false;
@@ -1019,7 +1017,7 @@ private:
 		case GameScreen::GAMEPLAY:
 
 			DrawGameplay();
-			AudioGameplay();
+			//AudioGameplay();
 			break;
 
 		case GameScreen::TIMEOUT:
@@ -1100,18 +1098,14 @@ private:
 			}
 		}
 	}
-	void AudioGameplay() {
-		InitAudioDevice();              // Initialize audio device
-		PlayMusicStream(cancion);
-	}
+	//void AudioGameplay() {
+	//	InitAudioDevice();              // Initialize audio device
+	//	PlayMusicStream(cancion);
+	//}
 
 	void DrawGameplay() {
 		BeginMode2D(camera);
 		ClearBackground(BLUE);
-
-		for (const Rectangle block : blocks) {
-			DrawRectangleRec(block, BROWN);
-		}
 
 		int frameWidthP;
 		int frameHeightP;

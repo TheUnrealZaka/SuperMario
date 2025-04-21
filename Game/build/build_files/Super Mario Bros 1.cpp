@@ -116,7 +116,9 @@ private:
 
 	//Enemies
 	Enemy goomba;
-	Texture2D Goomba;
+	Texture2D Goomba;	
+	Texture2D Goomba_chafado;
+
 	Enemy koopa;
 	Texture2D Koopa;
 
@@ -407,6 +409,7 @@ public:
 		Level1 = LoadTexture("Resources/Images/Seleccion Modo/World 1-1.png");
 		mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
 		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
+		Goomba_chafado = LoadTexture("Resources/Sprites/Enemies/Goomba_chafado.png");
 		icon_lifes = LoadTexture("Resources/Images/Player/Icon_Lifes.png");
 		icon_money = LoadTexture("Resources/Images/Player/Icon_Money.png");
 		fondo = LoadTexture("Resources/Sprites/Background/Fondo.png");
@@ -589,10 +592,10 @@ private:
 				elapsedTime += GetFrameTime();
 				if (elapsedTime >= 15.0f) {
 					if (player.lifes <= 0) {
-						while (elapsedTime < 30.0f) {
+						while (elapsedTime < 0.0f) {
 							elapsedTime += GetFrameTime();
 						}
-						if (elapsedTime >= 30.0f) {
+						if (elapsedTime >= 0.0f) {
 							currentScreen = GameScreen::ENDING;
 							PlaySound(sfxGameOver);
 							break;
@@ -728,6 +731,7 @@ private:
 		//GOOMBA
 		if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0) {
 			goomba.activated = true;
+
 		}
 
 		goomba.speed.x = 1.0f;
@@ -738,10 +742,11 @@ private:
 			goomba.position.x += 120 * deltaTime;
 		}
 
-		if (goomba.death == true) {
-			goomba.activated = false;
-			goomba.position.y += 100 * GetFrameTime(); //The goomba fall
-		}
+		//if (goomba.death == true) 
+		//{
+		//	goomba.activated = false;
+		//	goomba.position.y += 100 * GetFrameTime(); //The goomba fall
+		//}
 
 		//--------Colisiones de Mario--------\\
 
@@ -1221,9 +1226,11 @@ private:
 			int frameHeightG = 16;
 		}
 		if (goomba.death) {
+			DrawTextureEx(Goomba_chafado, { (goomba.position.x), (goomba.position.y) }, 0.0f, 1, WHITE);
 			int frameWidthG = 16;
 			int frameHeightG = 16;
 		}
+
 		Rectangle sourceRec2 = { 0, 0, (float)frameWidthG, (float)frameHeightG };
 
 		/*--Koopa--*/

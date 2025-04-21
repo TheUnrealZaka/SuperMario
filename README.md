@@ -5,7 +5,7 @@
 
 ## 👥 Integrantes del equipo
 
-- **Marc Jimenez** – [MarcJM-00](https://github.com/MarcJM-00)  
+- **Marc Jiménez** – [MarcJM-00](https://github.com/MarcJM-00)  
 - **Rubén Mateo** – [Rubenmg0](https://github.com/Rubenmg0)  
 - **Sauc Pellejero** – [ZReiNa](https://github.com/ZReiNa)  
 

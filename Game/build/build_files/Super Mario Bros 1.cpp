@@ -28,6 +28,7 @@ int Score = 000000;
 int Money = 00;
 float elapsedTime = 0.0f;
 int contmuerte = 0;
+int conttiempo = 0;
 
 /*--------------------------------------------------------------------------*/
 /*                            STRUCTS DEFINITION                            */
@@ -152,14 +153,18 @@ private:
 	Texture2D icon_money;
 
 	//Musica
-	Music cancion;
-	Music cancion_hurry;
-	Music invencible;
-	Music invencible_hurry;
-	Music completado;
-	Music muerte;
-	Music gameover;
+	Music musicOverworld;
+	Music musicOverworld_hurry;
+	Music musicInvencible;
+	Music musicInvencible_hurry;
 
+	Sound sfxJumpSmall;
+	Sound sfxJumpSuper;
+	Sound sfxMushroom;
+	Sound sfxFlagpole;
+	Sound sfxGameOver;
+	Sound sfxDeath;
+	Sound sfxCompleted;
 
 	//Typography
 	Font marioFont;
@@ -389,6 +394,7 @@ public:
 		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
+		InitAudioDevice();              // Initialize audio device
 		SetTargetFPS(60);
 
 		/*--------------------------------------------------------------------------*/
@@ -431,13 +437,22 @@ public:
 		/*                            Music and effects                             */
 		/*--------------------------------------------------------------------------*/
 
-		cancion = LoadMusicStream("Audio/Music/Cancion.ogg");
-		cancion_hurry = LoadMusicStream("Audio/Music/CancionHurry.ogg");
-		invencible = LoadMusicStream("Audio/Music/Invencible.ogg");
-		invencible_hurry = LoadMusicStream("Audio/Music/InvencibleHurry.ogg");
-		completado = LoadMusicStream("Audio/Music/Completado.ogg");
-		muerte = LoadMusicStream("Audio/Music/Muerte.ogg");
-		gameover = LoadMusicStream("Audio/Music/Gameover.ogg");
+		musicOverworld = LoadMusicStream("Audio/Music/Cancion.ogg");
+		musicOverworld_hurry = LoadMusicStream("Audio/Music/CancionHurry.ogg");
+		musicInvencible = LoadMusicStream("Audio/Music/Invencible.ogg");
+		musicInvencible_hurry = LoadMusicStream("Audio/Music/InvencibleHurry.ogg");
+
+		sfxJumpSmall = LoadSound("Audio/FX/smb_jump-small.wav");
+		sfxJumpSuper = LoadSound("Audio/FX/smb_jump-super.wav");
+		sfxMushroom = LoadSound("Audio/FX/smb_mushroom.wav");
+		sfxGameOver = LoadSound("Audio/FX/smb_gameover.wav");
+		sfxFlagpole = LoadSound("Audio/FX/smb_flagpole.wav");
+		sfxDeath = LoadSound("Audio/Music/Muerte.ogg");
+		sfxCompleted = LoadSound("Audio/FX/smb_stage_clear.wav");
+
+		SetMusicVolume(musicOverworld, 0.5f);
+		SetMusicVolume(musicInvencible, 0.5f);
+		SetMusicVolume(musicOverworld_hurry, 0.5f);
 
 		//Camera of the game
 		camera.target = player.position;
@@ -453,6 +468,7 @@ public:
 		UnloadTexture(Level1);
 		UnloadTexture(mario);
 		UnloadFont(marioFont);
+		UnloadAudioAssets();
 		
 
 
@@ -501,6 +517,9 @@ private:
 				player.alive = 1;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
+				conttiempo = 0;
+
+				PlayMusicStream(musicOverworld);
 			}
 			break;
 
@@ -514,6 +533,7 @@ private:
 					}
 					if (framesCounter >= 2999999999) {
 						currentScreen = GameScreen::ENDING;
+						PlaySound(sfxGameOver);
 					}
 				}
 			}
@@ -539,6 +559,9 @@ private:
 				player.alive = 1;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
+				conttiempo = 0;
+
+				PlayMusicStream(musicOverworld);
 			}
 			break;
 
@@ -549,6 +572,8 @@ private:
 			if (player.alive == 0) {
 				if (contmuerte == 0)
 				{
+					StopMusicStream(musicOverworld);
+					PlaySound(sfxDeath);
 					player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
 					player.canJump = false;
 					player.canJump2 = true;
@@ -567,6 +592,7 @@ private:
 						}
 						if (elapsedTime >= 30.0f) {
 							currentScreen = GameScreen::ENDING;
+							PlaySound(sfxGameOver);
 							break;
 						}
 					}
@@ -574,10 +600,18 @@ private:
 					elapsedTime = 0.0f;
 				}
 			}
+			if (flag.reached) {
+				StopMusicStream(musicOverworld);
+				if (conttiempo == 0 && player.position.y == 600) {
+					PlaySound(sfxCompleted);
+					conttiempo++;
+				}
+			}
 
 			if (Timer <= 0) {
 				if (contmuerte == 0)
 				{
+					PlaySound(sfxDeath);
 					player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
 					player.canJump = false;
 					player.canJump2 = true;
@@ -594,7 +628,7 @@ private:
 			break;
 
 		case GameScreen::ENDING:
-
+			
 			if (IsKeyPressed(KEY_ENTER)) {
 				player.lifes = 3;
 				flag.reached = false;
@@ -656,6 +690,7 @@ private:
 			player.canJump = false;
 			player.canJump2 = true;
 			player.jumpTime = 0.0f;
+			PlaySound(sfxJumpSmall);
 		}
 
 		if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0 && player.alive != 0) {
@@ -854,6 +889,7 @@ private:
 			player.position.x <= mooshroom.position.x + mooshroom.powerup_hitbox.width + 20 &&
 			player.position.y >= mooshroom.position.y && player.position.y <= mooshroom.position.y + mooshroom.powerup_hitbox.height)
 		{
+			PlaySound(sfxMushroom);
 			if (!player.big) player.big = true;
 			mooshroom.active = false;
 			mooshroom.position.y = 1000;
@@ -916,9 +952,11 @@ private:
 		//--------Colision Bandera--------\\
 		
 		if (!flag.reached && player.position.x >= flag.position.x - 20) {
-		flag.reached = true;
-		player.position.x = flag.position.x;
-		player.speed.y = 0;
+			PlaySound(sfxFlagpole);
+			player.position.x = flag.position.x;
+			player.speed.y = 0;
+			elapsedTime = 0;
+			flag.reached = true;
 		}
 
 		if (flag.reached) {
@@ -930,6 +968,7 @@ private:
 					float playerMovementSpeed = 120.0f * GetFrameTime();
 					player.position.x += playerMovementSpeed;
 				}
+				
 				if (player.position.x >= flag.position.x + 800) {
 					currentScreen = GameScreen::ENDING;
 				}
@@ -1109,10 +1148,25 @@ private:
 	}
 
 	void AudioGameplay() {
-		InitAudioDevice();              // Initialize audio device
-		PlayMusicStream(cancion);
+		UpdateMusicStream(musicOverworld);
 	}
 
+	void UnloadAudioAssets() {
+		UnloadMusicStream(musicOverworld);
+		UnloadMusicStream(musicOverworld_hurry);
+		UnloadMusicStream(musicInvencible);
+		UnloadMusicStream(musicInvencible_hurry);
+		
+		UnloadSound(sfxJumpSmall);
+		UnloadSound(sfxJumpSuper);
+		UnloadSound(sfxMushroom);
+		UnloadSound(sfxGameOver);
+		UnloadSound(sfxFlagpole);
+		UnloadSound(sfxDeath);
+		UnloadSound(sfxCompleted);
+
+		CloseAudioDevice();
+	}
 
 	void DrawGameplay() {
 		BeginMode2D(camera);

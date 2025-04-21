@@ -137,7 +137,10 @@ private:
 	//Map
 	Texture2D castle;
 	Texture2D fondo;
-
+	//Pipes
+	Texture2D tuberia_s;
+	Texture2D tuberia_m;
+	Texture2D tuberia_b;
 	//Objects
 	Texture2D money;
 
@@ -393,9 +396,12 @@ public:
 		icon_lifes = LoadTexture("Images/Player/Icon_Lifes.png");
 		icon_money = LoadTexture("Images/Player/Icon_Money.png");
 		fondo = LoadTexture("Sprites/Background/Fondo.png");
-		Mooshroom = LoadTexture("SPRITES/Items/Power-ups.png");
 
 		marioFont = LoadFont("Fonts/MarioFont.ttf");
+		/*------------------------------------------------------------*/
+		/*                           Items                            */
+		/*------------------------------------------------------------*/
+		Mooshroom = LoadTexture("SPRITES/Items/Mushroom.png");
 
 		/*------------------------------------------------------------*/
 		/*                          Bloques                           */
@@ -409,7 +415,10 @@ public:
 		/*------------------------------------------------------------*/
 		castle = LoadTexture("Sprites/Tileset/Castle.png");
 		flagTexture = LoadTexture("Sprites/Tileset/Flag.png");
-		tuberia = LoadTexture("Sprites/Tileset/Tuberias.png");
+		tuberia_s = LoadTexture("Sprites/Tileset/Tuberia1.png");
+		tuberia_m = LoadTexture("Sprites/Tileset/Tuberia2.png");
+		tuberia_b = LoadTexture("Sprites/Tileset/Tuberia3.png");
+
 
 
 		//Camera of the game
@@ -1193,6 +1202,14 @@ private:
 		}
 
 		//Draw all entities, structures and objetcs
+		
+		//Tuberias 
+		DrawTextureEx(tuberia_s, { (1242), (500) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_m, { (1667), (450) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_b, { (2067), (400) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_b, { (2592), (400) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_b, { (7692), (500) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_b, { (8452), (500) }, 0.0f, 1.2, WHITE);
 
 		//All background
 		DrawTextureEx(fondo, { (-113), (75) }, 0.0f, 3, WHITE);
@@ -1373,11 +1390,7 @@ private:
 		DrawTexturePro(bloque_int, sourceRec4, { 6100, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 
-		//Tuberias 
-		DrawTextureEx(escalera, { (1250), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (1675), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (2075), (400) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (2600), (400) }, 0.0f, 3.2, WHITE);
+		
 
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);

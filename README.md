@@ -37,7 +37,8 @@ The goal is to reach the end of each level, defeating enemies and collecting coi
 - ✅ Win/Lose conditions  
 - ✅ UI functionality: score and lives  
 - ✅ Loading screens (Logo, info screen, start screen, time up, etc.)  
-- ✅ Background music  
+- ✅ Background music
+- ✅ Sound efects  
 - ✅ Collision detection  
 
 ---

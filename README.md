@@ -1,51 +1,50 @@
 # 🎮 Super Mario Bros Clone
 
-[🔗 Ver en GitHub](https://github.com/Rubenmg0/Proyecto-1)  
-[▶️ Video demostrativo](https://youtube.com/...)
+[🔗 View on GitHub](https://github.com/Rubenmg0/Proyecto-1)  
+[▶️ Demo Video](https://youtube.com/...)
 
-## 👥 Integrantes del equipo
+## 👥 Team Members
 
 - **Marc Jiménez** – [MarcJM-00](https://github.com/MarcJM-00)  
 - **Rubén Mateo** – [Rubenmg0](https://github.com/Rubenmg0)  
 - **Sauc Pellejero** – [ZReiNa](https://github.com/ZReiNa)  
 
-## 📝 Descripción breve del juego
+## 📝 Game Description
 
-Este proyecto es una recreación del clásico nivel 1-1 de **Super Mario Bros**, un videojuego de plataformas lanzado por Nintendo en 1985 para la consola NES. En este juego, Mario debe rescatar a la Princesa Peach enfrentándose a enemigos icónicos y atravesando múltiples niveles llenos de obstáculos y potenciadores.
+This project is a recreation of the classic **Super Mario Bros** level 1-1, a platform video game released by Nintendo in 1985 for the NES console. In this game, Mario must rescue Princess Peach by facing iconic enemies and traversing multiple levels full of obstacles and power-ups.
 
-La historia se desarrolla en el Reino Champiñón, donde Bowser ha secuestrado a la princesa y la ha encerrado en su castillo. Mario se embarca en una aventura a través de 8 mundos para salvarla.
+The story takes place in the Mushroom Kingdom, where Bowser has kidnapped the princess and locked her in his castle. Mario embarks on an adventure across 8 worlds to save her.
 
-## 🎮 ¿Cómo jugar?
+## 🎮 How to Play
 
-- `←` Moverse a la izquierda  
-- `→` Moverse a la derecha   
-- `↓` Agacharse / Entrar en tuberías
-- `Space` Saltar 
-- `Shift` Correr  
-- `x` Disparar (si tiene Fire Flower)
+- `←` Move left  
+- `→` Move right  
+- `↓` Crouch / Enter pipes  
+- `Space` Jump  
+- `Shift` Run  
+- `x` Shoot (if Fire Flower is active)
 
-El objetivo es llegar al final de cada nivel, eliminando enemigos y recogiendo monedas, hasta llegar al castillo final.
+The goal is to reach the end of each level, defeating enemies and collecting coins, until reaching the final castle.
 
-## ✅ Funcionalidades implementadas
+## ✅ Features Implemented
 
-- ✅ Movimiento de Mario y animaciones básicas  
-- ✅ Enemigo clásico: Goomba
+- ✅ Mario movement and basic animations  
+- ✅ Classic enemy: Goomba  
 - ✅ Power-ups: Super Mushroom  
-- ✅ Nivel con desplazamiento horizontal
-- ✅ Camara con desplazamiento hacia la derecha únicamente
-- ✅ Replica del nivel 1-1 entera
-- ✅ Win/Lose conditions
-- ✅ UI functionality: score and lives
-- ✅ Pantallas de carga (Logo, pantalla informativa, pantalla inicial, se acabo el tiempo etc...)
-- ✅ Música de fondo  
-- ✅ Detección de colisiones
-
+- ✅ Side-scrolling level  
+- ✅ Right-only camera scrolling  
+- ✅ Full recreation of level 1-1  
+- ✅ Win/Lose conditions  
+- ✅ UI functionality: score and lives  
+- ✅ Loading screens (Logo, info screen, start screen, time up, etc.)  
+- ✅ Background music  
+- ✅ Collision detection  
 
 ---
 
-¡Gracias por visitar nuestro proyecto! 🍄  
+Thanks for checking out our project! 🍄  
 
-NOENTIENDO STD
-> **We don't own any of the information or images of this project.**  
-> Last Resort and all of the content used for the game is property of Nintendo.  
-> Every piece of content is used and can be used by anyone for non-commercial projects.
+NOENTIENDO STD  
+> **We don't own any of the information or images used in this project.**  
+> Last Resort and all content used for the game is property of Nintendo.  
+> All assets are used for non-commercial and educational purposes only.

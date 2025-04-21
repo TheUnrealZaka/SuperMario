@@ -160,6 +160,7 @@ private:
 	Music muerte;
 	Music gameover;
 
+
 	//Typography
 	Font marioFont;
 
@@ -452,9 +453,12 @@ public:
 		UnloadTexture(Level1);
 		UnloadTexture(mario);
 		UnloadFont(marioFont);
+		
+
 
 		CloseWindow();
 	}
+
 
 	void Run() {
 		while (!WindowShouldClose()) {
@@ -541,7 +545,6 @@ private:
 		case GameScreen::GAMEPLAY:
 			framesCounter = 0;
 			UpdateGameplay();
-			UpdateMusicStream(cancion);
 
 			if (player.alive == 0) {
 				if (contmuerte == 0)
@@ -1022,6 +1025,7 @@ private:
 
 			DrawGameplay();
 			AudioGameplay();
+			
 
 			break;
 
@@ -1106,8 +1110,9 @@ private:
 
 	void AudioGameplay() {
 		InitAudioDevice();              // Initialize audio device
-		PlayMusicStream(cancion);		
+		PlayMusicStream(cancion);
 	}
+
 
 	void DrawGameplay() {
 		BeginMode2D(camera);

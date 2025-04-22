@@ -727,9 +727,8 @@ private:
 		}
 
 		//GOOMBA
-		if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0) {
+		if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0 && Timer > 0) {
 			goomba.activated = true;
-
 		}
 
 		goomba.speed.x = 1.0f;
@@ -740,11 +739,8 @@ private:
 			goomba.position.x += 120 * deltaTime;
 		}
 
-		if (goomba.death == true) 
-		{
-			
-			if (player.position.y >= goomba.position.y)
-			{
+		if (goomba.death == true) {
+			if (player.position.y >= goomba.position.y) {
 				goomba.position.y = 1000;
 			}
 		}

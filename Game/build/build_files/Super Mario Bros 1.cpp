@@ -77,11 +77,10 @@ struct PowerUp {
 //Structure for objects in the environment
 struct EnvElement {
 	Rectangle rect;
-	bool blocking;
 	Color color;
 
-	EnvElement(float x, float y, float width, float height, bool block, Color col)
-		: rect{ x, y, width, height }, blocking(block), color(col) {
+	EnvElement(float x, float y, float width, float height, Color col)
+		: rect{ x, y, width, height, }, color(col) {
 	} //Esto da los datos pa los bloques del juego
 };
 
@@ -171,222 +170,222 @@ private:
 	Font marioFont;
 
 	//Blocks
-	vector<Rectangle> blocks = {
+	vector<EnvElement> blocks = {
 
-	{-200, 600, 11000, 200}, // SUELO
+	{-200, 600, 11000, 200, GREEN}, // SUELO
 
-	{650, 400, 50, 50},	//PRIMER ? /MONEDAS
+	{650, 400, 50, 50, GREEN},	//PRIMER ? /MONEDAS
 
 	//Conjuto de bloques
-	{850, 400, 50, 50},
-	{900, 400, 50, 50}, // TIENE UN CHAMPIÑON
-	{950, 400, 50, 50},
-	{1000, 400, 50, 50}, // MONEDAS
-	{1050, 400, 50, 50},
+	{850, 400, 50, 50, GREEN},
+	{900, 400, 50, 50, GREEN}, // TIENE UN CHAMPIÑON
+	{950, 400, 50, 50, GREEN},
+	{1000, 400, 50, 50, GREEN}, // MONEDAS
+	{1050, 400, 50, 50, GREEN},
 		//Bloque superior
-	{950, 200, 50, 50}, //MONEDAS
+	{950, 200, 50, 50, GREEN}, //MONEDAS
 
 	//Tuberias
-	{1250, 500, 100, 100},
-	{1675, 450, 100, 150},
-	{2075, 400, 100, 200},
-	{2600, 400, 100, 200},
+	{1250, 500, 100, 100, GREEN},
+	{1675, 450, 100, 150, GREEN},
+	{2075, 400, 100, 200, GREEN},
+	{2600, 400, 100, 200, GREEN},
 
 	//Bloque oculto (ya se hará) -Vida extra-
 	//Boquete 1
 
 	//Segundo conjuto de bloques
 		//Zona inferior
-	{3550, 400, 50, 50},
-	{3600, 400, 50, 50}, //Champiñon
-	{3650, 400, 50, 50},
+	{3550, 400, 50, 50, GREEN},
+	{3600, 400, 50, 50, GREEN}, //Champiñon
+	{3650, 400, 50, 50, GREEN},
 		//Zona superior
-	{3700, 200, 50, 50},
-	{3750, 200, 50, 50},
-	{3800, 200, 50, 50},
-	{3850, 200, 50, 50},
-	{3900, 200, 50, 50},
-	{3950, 200, 50, 50},
-	{4000, 200, 50, 50},
-	{4050, 200, 50, 50},
+	{3700, 200, 50, 50, GREEN},
+	{3750, 200, 50, 50, GREEN},
+	{3800, 200, 50, 50, GREEN},
+	{3850, 200, 50, 50, GREEN},
+	{3900, 200, 50, 50, GREEN},
+	{3950, 200, 50, 50, GREEN},
+	{4000, 200, 50, 50, GREEN},
+	{4050, 200, 50, 50, GREEN},
 	//Boquete 2
 		//Zona superior 2
-	{4250, 200, 50, 50},
-	{4300, 200, 50, 50},
-	{4350, 200, 50, 50},
-	{4400, 200, 50, 50},//Monedas
+	{4250, 200, 50, 50, GREEN},
+	{4300, 200, 50, 50, GREEN},
+	{4350, 200, 50, 50, GREEN},
+	{4400, 200, 50, 50, GREEN},//Monedas
 		//Bloque inferior
-	{4400, 400, 50, 50}, //Moneda
+	{4400, 400, 50, 50, GREEN}, //Moneda
 
 	//Bloques extrella
-	{4700, 400, 50, 50},
-	{4750, 400, 50, 50}, //Estrella
+	{4700, 400, 50, 50, GREEN},
+	{4750, 400, 50, 50, GREEN}, //Estrella
 
 	//Bloques ?
 		//Inferior
-	{5000, 400, 50, 50}, //Monedas
-	{5125, 400, 50, 50}, //Monedas
-	{5250, 400, 50, 50}, //Monedas
+	{5000, 400, 50, 50, GREEN}, //Monedas
+	{5125, 400, 50, 50, GREEN}, //Monedas
+	{5250, 400, 50, 50, GREEN}, //Monedas
 		//Superior
-	{5125, 200, 50, 50}, //Champiñon
+	{5125, 200, 50, 50, GREEN}, //Champiñon
 
 	//Secuencia de bloques
-	{5550, 400, 50, 50},
+	{5550, 400, 50, 50, GREEN},
 
-	{5700, 200, 50, 50},
-	{5750, 200, 50, 50},
-	{5800, 200, 50, 50},
+	{5700, 200, 50, 50, GREEN},
+	{5750, 200, 50, 50, GREEN},
+	{5800, 200, 50, 50, GREEN},
 
-	{6000, 200, 50, 50},
-	{6050, 200, 50, 50},
-	{6100, 200, 50, 50},
-	{6150, 200, 50, 50},
+	{6000, 200, 50, 50, GREEN},
+	{6050, 200, 50, 50, GREEN},
+	{6100, 200, 50, 50, GREEN},
+	{6150, 200, 50, 50, GREEN},
 
-	{6050, 400, 50, 50},
-	{6100, 400, 50, 50},
+	{6050, 400, 50, 50, GREEN},
+	{6100, 400, 50, 50, GREEN},
 
 
 
 	//Primera escalera
 	//Primer escalon
-	{6310, 550, 50, 50},
-	{6360, 550, 50, 50},
-	{6410, 550, 50, 50},
-	{6460, 550, 50, 50},
+	{6310, 550, 50, 50, GREEN},
+	{6360, 550, 50, 50, GREEN},
+	{6410, 550, 50, 50, GREEN},
+	{6460, 550, 50, 50, GREEN},
 	//Segundo escalon
-	{6360, 500, 50, 50},
-	{6410, 500, 50, 50},
-	{6460, 500, 50, 50},
+	{6360, 500, 50, 50, GREEN},
+	{6410, 500, 50, 50, GREEN},
+	{6460, 500, 50, 50, GREEN},
 	//Tercer escalon
-	{6410, 450, 50, 50},
-	{6460, 450, 50, 50},
+	{6410, 450, 50, 50, GREEN},
+	{6460, 450, 50, 50, GREEN},
 	//Quarto escalon
-	{6460, 400, 50, 50},
+	{6460, 400, 50, 50, GREEN},
 	//-Invertida-//
 	//Primer escalón
-	{6590, 550, 50, 50 },
-	{6640, 550, 50, 50},
-	{6690, 550, 50, 50},
-	{6740, 550, 50, 50},
+	{6590, 550, 50, 50, GREEN},
+	{6640, 550, 50, 50, GREEN},
+	{6690, 550, 50, 50, GREEN},
+	{6740, 550, 50, 50, GREEN},
 	//Segundo escalón
-	{6590, 500, 50, 50},
-	{6640, 500, 50, 50},
-	{6690, 500, 50, 50},
+	{6590, 500, 50, 50, GREEN},
+	{6640, 500, 50, 50, GREEN},
+	{6690, 500, 50, 50, GREEN},
 	//Tercer escalón
-	{ 6590, 450, 50, 50},
-	{ 6640, 450, 50, 50},
+	{ 6590, 450, 50, 50, GREEN},
+	{ 6640, 450, 50, 50, GREEN},
 	//Quarto escalón
-	{ 6590, 400, 50, 50},
+	{ 6590, 400, 50, 50, GREEN},
 
 
 
 	//Segunda escalera
 	//Primer escalon
-	{6980, 550, 50, 50},
-	{7030, 550, 50, 50},
-	{7080, 550, 50, 50},
-	{7130, 550, 50, 50},
+	{6980, 550, 50, 50, GREEN},
+	{7030, 550, 50, 50, GREEN},
+	{7080, 550, 50, 50, GREEN},
+	{7130, 550, 50, 50, GREEN},
 	//Segundo escalon
-	{7030, 500, 50, 50},
-	{7080, 500, 50, 50},
-	{7130, 500, 50, 50},
+	{7030, 500, 50, 50, GREEN},
+	{7080, 500, 50, 50, GREEN},
+	{7130, 500, 50, 50, GREEN},
 	//Tercer escalon
-	{7080, 450, 50, 50},
-	{7130, 450, 50, 50},
+	{7080, 450, 50, 50, GREEN},
+	{7130, 450, 50, 50, GREEN},
 	//Quarto escalon
-	{7130, 400, 50, 50},
+	{7130, 400, 50, 50, GREEN},
 		//BOQUETE 3
 	//-Invertida-//
 	//Primer escalón
-	{7270, 550, 50, 50},
-	{7320, 550, 50, 50},
-	{7370, 550, 50, 50},
-	{7420, 550, 50, 50},
+	{7270, 550, 50, 50, GREEN},
+	{7320, 550, 50, 50, GREEN},
+	{7370, 550, 50, 50, GREEN},
+	{7420, 550, 50, 50, GREEN},
 	//Segundo escalón
-	{7270, 500, 50, 50},
-	{7320, 500, 50, 50},
-	{7370, 500, 50, 50},
+	{7270, 500, 50, 50, GREEN},
+	{7320, 500, 50, 50, GREEN},
+	{7370, 500, 50, 50, GREEN},
 	//Tercer escalón
-	{7270, 450, 50, 50},
-	{7320, 450, 50, 50},
+	{7270, 450, 50, 50, GREEN},
+	{7320, 450, 50, 50, GREEN},
 	//Quarto escalón
-	{7270, 400, 50, 50},
+	{7270, 400, 50, 50, GREEN},
 
 
 
 	//Tuberias finales
-	{7700, 500, 100, 100 },
+	{7700, 500, 100, 100, GREEN},
 		//Bloques intermedios
-		{7950, 400, 50, 50},
-		{8000, 400, 50, 50 },
-		{8050, 400, 50, 50 },
-		{8100, 400, 50, 50 },
-	{8460, 500, 100, 100},
+		{7950, 400, 50, 50, GREEN},
+		{8000, 400, 50, 50, GREEN},
+		{8050, 400, 50, 50, GREEN},
+		{8100, 400, 50, 50, GREEN},
+	{8460, 500, 100, 100, GREEN},
 
 
 	//ESCALERA FINAL
 // Primer escalón (base de 9 bloques)
-	{ 8570, 550, 50, 50 },
-	{ 8620, 550, 50, 50 },
-	{ 8670, 550, 50, 50 },
-	{ 8720, 550, 50, 50 },
-	{ 8770, 550, 50, 50 },
-	{ 8820, 550, 50, 50 },
-	{ 8870, 550, 50, 50 },
-	{ 8920, 550, 50, 50 },
-	{ 8970, 550, 50, 50 },
+	{ 8570, 550, 50, 50, GREEN},
+	{ 8620, 550, 50, 50, GREEN},
+	{ 8670, 550, 50, 50, GREEN},
+	{ 8720, 550, 50, 50, GREEN},
+	{ 8770, 550, 50, 50, GREEN},
+	{ 8820, 550, 50, 50, GREEN},
+	{ 8870, 550, 50, 50, GREEN},
+	{ 8920, 550, 50, 50, GREEN},
+	{ 8970, 550, 50, 50, GREEN},
 
 	// Segundo escalón (8 bloques)
-	{ 8620, 500, 50, 50 },
-	{ 8670, 500, 50, 50 },
-	{ 8720, 500, 50, 50 },
-	{ 8770, 500, 50, 50 },
-	{ 8820, 500, 50, 50 },
-	{ 8870, 500, 50, 50 },
-	{ 8920, 500, 50, 50 },
-	{ 8970, 500, 50, 50 },
+	{ 8620, 500, 50, 50, GREEN},
+	{ 8670, 500, 50, 50, GREEN},
+	{ 8720, 500, 50, 50, GREEN},
+	{ 8770, 500, 50, 50, GREEN},
+	{ 8820, 500, 50, 50, GREEN},
+	{ 8870, 500, 50, 50, GREEN},
+	{ 8920, 500, 50, 50, GREEN},
+	{ 8970, 500, 50, 50, GREEN},
 
 	// Tercer escalón (7 bloques)
-	{ 8670, 450, 50, 50 },
-	{ 8720, 450, 50, 50 },
-	{ 8770, 450, 50, 50 },
-	{ 8820, 450, 50, 50 },
-	{ 8870, 450, 50, 50 },
-	{ 8920, 450, 50, 50 },
-	{ 8970, 450, 50, 50 },
+	{ 8670, 450, 50, 50, GREEN},
+	{ 8720, 450, 50, 50, GREEN},
+	{ 8770, 450, 50, 50, GREEN},
+	{ 8820, 450, 50, 50, GREEN},
+	{ 8870, 450, 50, 50, GREEN},
+	{ 8920, 450, 50, 50, GREEN},
+	{ 8970, 450, 50, 50, GREEN},
 
 	// Cuarto escalón (6 bloques)
-	{ 8720, 400, 50, 50 },
-	{ 8770, 400, 50, 50 },
-	{ 8820, 400, 50, 50 },
-	{ 8870, 400, 50, 50 },
-	{ 8920, 400, 50, 50 },
-	{ 8970, 400, 50, 50 },
+	{ 8720, 400, 50, 50, GREEN},
+	{ 8770, 400, 50, 50, GREEN},
+	{ 8820, 400, 50, 50, GREEN},
+	{ 8870, 400, 50, 50, GREEN},
+	{ 8920, 400, 50, 50, GREEN},
+	{ 8970, 400, 50, 50, GREEN},
 
 	// Quinto escalón (5 bloques)
-	{ 8770, 350, 50, 50 },
-	{ 8820, 350, 50, 50 },
-	{ 8870, 350, 50, 50 },
-	{ 8920, 350, 50, 50 },
-	{ 8970, 350, 50, 50 },
+	{ 8770, 350, 50, 50, GREEN},
+	{ 8820, 350, 50, 50, GREEN},
+	{ 8870, 350, 50, 50, GREEN},
+	{ 8920, 350, 50, 50, GREEN},
+	{ 8970, 350, 50, 50, GREEN},
 
 	// Sexto escalón (4 bloques)
-	{ 8820, 300, 50, 50 },
-	{ 8870, 300, 50, 50 },
-	{ 8920, 300, 50, 50 },
-	{ 8970, 300, 50, 50 },
+	{ 8820, 300, 50, 50, GREEN},
+	{ 8870, 300, 50, 50, GREEN},
+	{ 8920, 300, 50, 50, GREEN},
+	{ 8970, 300, 50, 50, GREEN},
 
 	// Séptimo escalón (3 bloques)
-	{ 8870, 250, 50, 50 },
-	{ 8920, 250, 50, 50 },
-	{ 8970, 250, 50, 50 },
+	{ 8870, 250, 50, 50, GREEN},
+	{ 8920, 250, 50, 50, GREEN},
+	{ 8970, 250, 50, 50, GREEN},
 
 	// Octavo escalón (2 bloques)
-	{ 8920, 200, 50, 50 },
-	{ 8970, 200, 50, 50 },
+	{ 8920, 200, 50, 50, GREEN},
+	{ 8970, 200, 50, 50, GREEN},
 
 	//Flag
-	{9375, 550, 50, 50 }
+	{9375, 550, 50, 50, GREEN}
 	};
 
 public:
@@ -748,29 +747,31 @@ private:
 		//--------Colisiones de Mario--------\\
 
 		//Suelo
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0
-				&& block.x <= player.position.x + player.mario_hitbox.width - 5
-				&& block.x + block.width + 10 >= player.position.x
-				&& block.y >= player.position.y
-				&& block.y <= player.position.y + player.speed.y * deltaTime) 
+				&& block.rect.x <= player.position.x + player.mario_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= player.position.x
+				&& block.rect.y >= player.position.y
+				&& block.rect.y <= player.position.y + player.speed.y * deltaTime
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				hitObstacleFloor = true;
 				player.speed.y = 0.0f;
-				player.position.y = block.y;
+				player.position.y = block.rect.y;
 			}
 		}
 
 		//Techo
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0
-				&& block.x <= player.position.x + player.mario_hitbox.width - 5
-				&& block.x + block.width + 10 >= player.position.x
-				&& block.y + block.height + block.height <= player.position.y
-				&& block.y + block.height + block.height >= player.position.y + player.speed.y * deltaTime) 
+				&& block.rect.x <= player.position.x + player.mario_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= player.position.x
+				&& block.rect.y + block.rect.height + block.rect.height <= player.position.y
+				&& block.rect.y + block.rect.height + block.rect.height >= player.position.y + player.speed.y * deltaTime
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				player.speed.y = 0.0f;
-				player.position.y = block.y + block.height + block.height;
+				player.position.y = block.rect.y + block.rect.height + block.rect.height;
 			}
 		}
 
@@ -778,34 +779,36 @@ private:
 		float nextX = player.position.x + player.speed.x * deltaTime; //Calcula la posición futura en X
 
 		//--- COLISIÓN POR LA DERECHA (Mario viene de la izquierda) ---
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 &&
 				player.speed.x > 0 &&
-				player.position.y > block.y &&
-				player.position.y < (block.y + block.height + block.height) &&
-				player.position.x - 10 <= block.x &&
-				(nextX + player.mario_hitbox.width) >= block.x)
+				player.position.y > block.rect.y &&
+				player.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				player.position.x - 10 <= block.rect.x &&
+				(nextX + player.mario_hitbox.width) >= block.rect.x
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				//¡Choque! Ajustamos posición y detenemos velocidad horizontal
 				hitObstacleWall = true;
 				player.speed.x = 0;
-				player.position.x = block.x - player.mario_hitbox.width;
+				player.position.x = block.rect.x - player.mario_hitbox.width;
 			}
 		}
 
 		//--- COLISIÓN POR LA IZQUIERDA (Mario viene de la derecha) ---
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 &&
 				player.speed.x < 0 &&
-				player.position.y > block.y &&
-				player.position.y < (block.y + block.height + block.height) &&
-				player.position.x + 10 >= (block.x + block.width) &&
-				(nextX) <= (block.x + block.width + 14))
+				player.position.y > block.rect.y &&
+				player.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				player.position.x + 10 >= (block.rect.x + block.rect.width) &&
+				(nextX) <= (block.rect.x + block.rect.width + 14)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				//¡Choque! Ajustamos posición y detenemos velocidad horizontal
 				hitObstacleWall = true;
 				player.speed.x = 0;
-				player.position.x = block.x + block.width + player.mario_hitbox.width - 7;
+				player.position.x = block.rect.x + block.rect.width + player.mario_hitbox.width - 7;
 			}
 		}
 
@@ -845,15 +848,16 @@ private:
 		}
 
 		//Con el suelo
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 && goomba.activated
-				&& block.x <= goomba.position.x + goomba.goomba_hitbox.width - 5
-				&& block.x + block.width + 10 >= goomba.position.x
-				&& block.y + block.height >= goomba.position.y
-				&& block.y <= goomba.position.y) {
+				&& block.rect.x <= goomba.position.x + goomba.goomba_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= goomba.position.x
+				&& block.rect.y + block.rect.height >= goomba.position.y
+				&& block.rect.y <= goomba.position.y
+				&& ColorToInt(block.color) != ColorToInt(BLUE)) {
 				onGroundEnemy = true;
 				goomba.speed.y = 0.0f;
-				goomba.position.y = block.y;
+				goomba.position.y = block.rect.y;
 			}
 		}
 
@@ -873,26 +877,28 @@ private:
 		float nextXE = goomba.position.x + goomba.speed.x * deltaTime; //Calcula la posición futura en X
 
 		//Derecha
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 && goomba.alive &&
 				goomba.activated && !goomba.side &&
-				goomba.position.y > block.y &&
-				goomba.position.y < (block.y + block.height + block.height) &&
-				goomba.position.x - 10 <= block.x &&
-				(nextXE + goomba.goomba_hitbox.width) >= block.x - 15)
+				goomba.position.y > block.rect.y &&
+				goomba.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				goomba.position.x - 10 <= block.rect.x &&
+				(nextXE + goomba.goomba_hitbox.width) >= block.rect.x - 15
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				goomba.side = true;
 			}
 		}
 
 		//Izquierda
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 &&
 				goomba.activated && goomba.side &&
-				goomba.position.y > block.y &&
-				goomba.position.y < (block.y + block.height + block.height) &&
-				goomba.position.x + 10 >= (block.x + block.width) &&
-				(nextXE) <= (block.x + block.width + 20))
+				goomba.position.y > block.rect.y &&
+				goomba.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				goomba.position.x + 10 >= (block.rect.x + block.rect.width) &&
+				(nextXE) <= (block.rect.x + block.rect.width + 20)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				goomba.side = false;
 			}
@@ -913,15 +919,16 @@ private:
 		}
 
 		//Con el suelo
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 && mooshroom.active
-				&& block.x <= mooshroom.position.x + mooshroom.powerup_hitbox.width - 5
-				&& block.x + block.width + 10 >= mooshroom.position.x
-				&& block.y + block.height >= mooshroom.position.y
-				&& block.y <= mooshroom.position.y) {
+				&& block.rect.x <= mooshroom.position.x + mooshroom.powerup_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= mooshroom.position.x
+				&& block.rect.y + block.rect.height >= mooshroom.position.y
+				&& block.rect.y <= mooshroom.position.y
+				&& ColorToInt(block.color) != ColorToInt(BLUE)) {
 				onGroundPowerUp = true;
 				mooshroom.speed.y = 0.0f;
-				mooshroom.position.y = block.y;
+				mooshroom.position.y = block.rect.y;
 			}
 		}
 
@@ -941,26 +948,28 @@ private:
 		float nextXP = mooshroom.position.x + mooshroom.speed.x * deltaTime; //Calcula la posición futura en X
 
 		//Derecha
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 &&
 				mooshroom.active && !mooshroom.side &&
-				mooshroom.position.y > block.y &&
-				mooshroom.position.y < (block.y + block.height + block.height) &&
-				mooshroom.position.x - 10 <= block.x &&
-				(nextXP + mooshroom.powerup_hitbox.width) >= block.x - 15)
+				mooshroom.position.y > block.rect.y &&
+				mooshroom.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				mooshroom.position.x - 10 <= block.rect.x &&
+				(nextXP + mooshroom.powerup_hitbox.width) >= block.rect.x - 15
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				mooshroom.side = true;
 			}
 		}
 
 		//Izquierda
-		for (Rectangle block : blocks) {
+		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 &&
 				mooshroom.active && mooshroom.side &&
-				mooshroom.position.y > block.y &&
-				mooshroom.position.y < (block.y + block.height + block.height) &&
-				mooshroom.position.x + 10 >= (block.x + block.width) &&
-				(nextXP) <= (block.x + block.width + 20))
+				mooshroom.position.y > block.rect.y &&
+				mooshroom.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				mooshroom.position.x + 10 >= (block.rect.x + block.rect.width) &&
+				(nextXP) <= (block.rect.x + block.rect.width + 20)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
 			{
 				mooshroom.side = false;
 			}

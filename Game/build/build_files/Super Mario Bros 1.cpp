@@ -196,7 +196,7 @@ private:
 	{-200, 600, 3350, 200, RED}, // SUELO
 	{3250, 600, 760, 200, RED}, // SUELO
 	{4160, 600, 3023, 200, RED}, // SUELO
-	{7270, 600, 2500, 200, RED}, // SUELO
+	{7270, 600, 3000, 200, RED}, // SUELO
 
 
 	{650, 400, 50, 50, GREEN},	//PRIMER ? /MONEDAS
@@ -1489,10 +1489,10 @@ private:
 			sourceRec.x = frameWidthP * 6;
 		}
 
-		for (EnvElement block : blocks)
+	/*	for (EnvElement block : blocks)
 		{
 			DrawRectangle(block.rect.x, block.rect.y, block.rect.width, block.rect.height, block.color);
-		}
+		}*/
 
 		//Draw all entities, structures and objetcs
 		//Tuberias 
@@ -1504,18 +1504,19 @@ private:
 		DrawTextureEx(tuberia_s, { (8452), (500) }, 0.0f, 1.2, WHITE);
 
 		//All background
-		DrawTextureEx(fondo, { (-113), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (2190), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (4490), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (6790), (75) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (9090), (75) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (-113), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (2190), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (4490), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (6790), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (9090), (72) }, 0.0f, 3, WHITE);
 
-		//Boquetes
+		//Boquete 1
 		DrawTextureEx(azul, { (3150), (600) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (3200), (600) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (3150), (650) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (3200), (650) }, 0.0f, 3.2, WHITE);
 
+		//Boquete 2
 		DrawTextureEx(azul, { (4010), (600) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (4060), (600) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (4110), (600) }, 0.0f, 3.2, WHITE);
@@ -1524,10 +1525,12 @@ private:
 		DrawTextureEx(azul, { (4060), (650) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (4110), (650) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(azul, { (4010), (700) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (4060), (700) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (4110), (700) }, 0.0f, 3.2, WHITE);
+		//Boquete 3
+		DrawTextureEx(azul, { (7182), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7220), (600) }, 0.0f, 3.2, WHITE);
 
+		DrawTextureEx(azul, { (7182), (650) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7220), (650) }, 0.0f, 3.2, WHITE);
 		//Bloques ? y ladrillos
 		DrawTextureEx(ladrillo, { (850), (400) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(ladrillo, { (950), (400) }, 0.0f, 3.2, WHITE);
@@ -1588,7 +1591,7 @@ private:
 		DrawTextureEx(escalera, { (6740), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
 		DrawTextureEx(escalera, { (6590), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (6640), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx( , { (6640), (500) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (6690), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
 		DrawTextureEx(escalera, { (6590), (450) }, 0.0f, 3.2, WHITE);

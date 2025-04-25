@@ -138,6 +138,8 @@ private:
 	//Map
 	Texture2D castle;
 	Texture2D fondo;
+	Texture2D azul;
+
 	//Pipes
 	Texture2D tuberia_s;
 	Texture2D tuberia_m;
@@ -172,7 +174,11 @@ private:
 	//Blocks
 	vector<EnvElement> blocks = {
 
-	{-200, 600, 11000, 200, GREEN}, // SUELO
+	{-200, 600, 3350, 200, RED}, // SUELO
+	{3250, 600, 760, 200, RED}, // SUELO
+	{4160, 600, 3023, 200, RED}, // SUELO
+	{7270, 600, 2500, 200, RED}, // SUELO
+
 
 	{650, 400, 50, 50, GREEN},	//PRIMER ? /MONEDAS
 
@@ -193,7 +199,10 @@ private:
 
 	//Bloque oculto (ya se hará) -Vida extra-
 	//Boquete 1
-
+	{3150, 600, 50, 50, BLUE},
+	{3200, 600, 50, 50, BLUE},
+	{3150, 650, 50, 50, BLUE},
+	{3200, 650, 50, 50, BLUE},
 	//Segundo conjuto de bloques
 		//Zona inferior
 	{3550, 400, 50, 50, GREEN},
@@ -209,6 +218,19 @@ private:
 	{4000, 200, 50, 50, GREEN},
 	{4050, 200, 50, 50, GREEN},
 	//Boquete 2
+	{4010, 600, 50, 50, BLUE},
+	{4060, 600, 50, 50, BLUE},
+	{4110, 600, 50, 50, BLUE},
+
+	{4010, 650, 50, 50, BLUE},
+	{4060, 650, 50, 50, BLUE},
+	{4110, 650, 50, 50, BLUE},
+
+	{4010, 700, 50, 50, BLUE},
+	{4060, 700, 50, 50, BLUE},
+	{4110, 700, 50, 50, BLUE},
+
+
 		//Zona superior 2
 	{4250, 200, 50, 50, GREEN},
 	{4300, 200, 50, 50, GREEN},
@@ -409,7 +431,13 @@ public:
 		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
 		icon_lifes = LoadTexture("Resources/Images/Player/Icon_Lifes.png");
 		icon_money = LoadTexture("Resources/Images/Player/Icon_Money.png");
+
+		/*------------------------------------------------------------*/
+		/*                           FONDO                            */
+		/*------------------------------------------------------------*/
 		fondo = LoadTexture("Resources/Sprites/Background/Fondo.png");
+		azul = LoadTexture("Resources/Sprites/Background/Azul.png");
+
 
 		marioFont = LoadFont("Resources/Fonts/MarioFont.ttf");
 		/*------------------------------------------------------------*/
@@ -1315,15 +1343,13 @@ private:
 
 		//Animation of Blocks
 		if (player.alive != 0 && Timer > 0) {
-			if (currentFrameInt == 3) {
-				variant = -1;
-			}
-			else if (currentFrameInt == 1) {
-				variant = 1;
+			if (currentFrameInt != 0)
+			{
+				frameSpeedInt = 0.16;
 			}
 			if (frameTimeInt >= frameSpeedInt) {
 				frameTimeInt = 0.0f;
-				currentFrameInt = (currentFrameInt + variant) % 3;
+				currentFrameInt = (currentFrameInt + variant) % 4;
 			}
 			sourceRec4.x = (float)(currentFrameInt * frameWidthInt);
 		}
@@ -1342,15 +1368,19 @@ private:
 			sourceRec.x = frameWidthP * 6;
 		}
 
+		for (EnvElement block : blocks)
+		{
+			DrawRectangle(block.rect.x, block.rect.y, block.rect.width, block.rect.height, block.color);
+		}
+
 		//Draw all entities, structures and objetcs
-		
 		//Tuberias 
 		DrawTextureEx(tuberia_s, { (1242), (500) }, 0.0f, 1.2, WHITE);
 		DrawTextureEx(tuberia_m, { (1667), (450) }, 0.0f, 1.2, WHITE);
-		DrawTextureEx(tuberia_b, { (2067), (400) }, 0.0f, 1.2, WHITE);
-		DrawTextureEx(tuberia_b, { (2592), (400) }, 0.0f, 1.2, WHITE);
-		DrawTextureEx(tuberia_b, { (7692), (500) }, 0.0f, 1.2, WHITE);
-		DrawTextureEx(tuberia_b, { (8452), (500) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_b, { (2067), (399) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_b, { (2592), (399) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_s, { (7692), (500) }, 0.0f, 1.2, WHITE);
+		DrawTextureEx(tuberia_s, { (8452), (500) }, 0.0f, 1.2, WHITE);
 
 		//All background
 		DrawTextureEx(fondo, { (-113), (75) }, 0.0f, 3, WHITE);
@@ -1358,6 +1388,24 @@ private:
 		DrawTextureEx(fondo, { (4490), (75) }, 0.0f, 3, WHITE);
 		DrawTextureEx(fondo, { (6790), (75) }, 0.0f, 3, WHITE);
 		DrawTextureEx(fondo, { (9090), (75) }, 0.0f, 3, WHITE);
+
+		//Boquetes
+		DrawTextureEx(azul, { (3150), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (3200), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (3150), (650) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (3200), (650) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(azul, { (4010), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4060), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4110), (600) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(azul, { (4010), (650) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4060), (650) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4110), (650) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(azul, { (4010), (700) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4060), (700) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4110), (700) }, 0.0f, 3.2, WHITE);
 
 		//Bloques ? y ladrillos
 		DrawTextureEx(ladrillo, { (850), (400) }, 0.0f, 3.2, WHITE);

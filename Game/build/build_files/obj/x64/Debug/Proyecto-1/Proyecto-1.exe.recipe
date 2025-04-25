@@ -2,11 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-<<<<<<< Updated upstream
       <FullPath>C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\bin\Debug\Proyecto-1.exe</FullPath>
-=======
-      <FullPath>C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\bin\Debug\Proyecto-1.exe</FullPath>
->>>>>>> Stashed changes
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

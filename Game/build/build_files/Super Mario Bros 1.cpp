@@ -48,6 +48,7 @@ struct Mario {
 	int lifes = 3;
 	bool big;
 	bool side; //If side = 0 (Right) ; If side = 1 (Left)
+	bool fire;
 
 	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false) {}
 };
@@ -74,6 +75,18 @@ struct PowerUp {
 
 	PowerUp(float x, float y) : position{ x, y }, active(false), side(true) {}
 };
+
+struct Projectile {
+	Vector2 position;
+	Rectangle projectile_hitbox;
+
+	Vector2 speed;
+	bool active;
+
+	Projectile(float x, float y) : position{ x,y }, active(false), speed{ 0,0 } {}
+};
+
+
 //Structure for objects in the environment
 struct EnvElement {
 	Rectangle rect;
@@ -123,6 +136,12 @@ private:
 	//PowerUp
 	PowerUp mooshroom;
 	Texture2D Mooshroom;
+	PowerUp fireFlower;
+	Texture2D FireFlower;
+
+	//Projectiles
+	Projectile fireBall;
+	Texture2D FireBall;
 
 	//Blocks
 	Texture2D bloque_int;
@@ -413,7 +432,8 @@ private:
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350) {
+		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350),
+		fireFlower(450, 600), fireBall(0, 9000) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		InitAudioDevice();              // Initialize audio device
@@ -444,6 +464,9 @@ public:
 		/*                           Items                            */
 		/*------------------------------------------------------------*/
 		Mooshroom = LoadTexture("Resources/Sprites/Items/Mushroom.png");
+		FireFlower = LoadTexture("Resources/Sprites/Items/Power-ups.png");
+
+		FireBall = LoadTexture("Resources/Sprites/Items/Bolas_Fuego.png");
 
 		/*------------------------------------------------------------*/
 		/*                          Bloques                           */
@@ -670,19 +693,20 @@ private:
 
 	void UpdateGameplay() {
 
-		if (player.big) player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
+		if (player.big) player.mario_hitbox = { player.position.x, player.position.y, 23,32 };
 		if (!player.big) player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
 		goomba.goomba_hitbox = { goomba.position.x, goomba.position.y, 16,16 };
-		player.mario_hitbox = { player.position.x, player.position.y, 23,16 };
-		Rectangle prev_hitbox = player.mario_hitbox;
 		player.mario_hitbox.x += player.speed.x;
 		player.mario_hitbox.y += player.speed.y;
 		mooshroom.powerup_hitbox = { mooshroom.position.x, mooshroom.position.y, 16,16 };
+		fireFlower.powerup_hitbox = { fireFlower.position.x, fireFlower.position.y, 16, 16 };
+		fireBall.projectile_hitbox = { fireBall.position.x, fireBall.position.y, 4, 4 };
 
 		bool hitObstacleFloor = false;
 		bool hitObstacleWall = false;
 		bool onGroundEnemy = false;
 		bool onGroundPowerUp = false;
+		bool projectileHitObstacleFloor = false;
 
 		float deltaTime = GetFrameTime();
 		elapsedTime += deltaTime * 2.5;
@@ -735,6 +759,18 @@ private:
 			player.speed.y += JUMP_HOLD_FORCE - 300;
 		}
 
+		if (player.fire) {
+			if (IsKeyDown(KEY_E)) {
+				fireBall.position = { player.position.x, player.position.y + -40 };
+				fireBall.active = true;
+				if (player.side) fireBall.speed.x = -650 * deltaTime;
+				else if (!player.side) fireBall.speed.x = 650 * deltaTime;
+			}
+		}
+		if (fireBall.active) {
+			fireBall.position += fireBall.speed;
+		}
+
 		if (Timer <= 0 || player.alive == 0) {
 			hitObstacleFloor = false;
 		}
@@ -751,6 +787,11 @@ private:
 
 		if (mooshroom.active && player.alive != 0 && !mooshroom.side) {
 			mooshroom.position.x += 120 * deltaTime;
+		}
+
+		//FIRE FLOWER
+		if (player.position.x >= fireFlower.position.x && player.alive != 0) {
+			fireFlower.active = true;
 		}
 
 		//GOOMBA
@@ -791,7 +832,17 @@ private:
 
 		//Techo
 		for (EnvElement block : blocks) {
-			if (Timer > 0 && player.alive != 0
+			if (player.big && Timer > 0 && player.alive != 0 && player.speed.y < 0
+				&& block.rect.x <= player.position.x + player.mario_hitbox.width - 10
+				&& block.rect.x + block.rect.width + 10 >= player.position.x
+				&& block.rect.y + block.rect.height + block.rect.height <= player.position.y
+				&& block.rect.y + block.rect.height + block.rect.height + block.rect.height - 2 >= player.position.y + player.speed.y * deltaTime
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				player.speed.y = 0.0f;
+				player.position.y = block.rect.y + block.rect.height + block.rect.height + block.rect.height - 2;
+			}
+			else if (!player.big && Timer > 0 && player.alive != 0
 				&& block.rect.x <= player.position.x + player.mario_hitbox.width - 5
 				&& block.rect.x + block.rect.width + 10 >= player.position.x
 				&& block.rect.y + block.rect.height + block.rect.height <= player.position.y
@@ -808,7 +859,20 @@ private:
 
 		//--- COLISIÓN POR LA DERECHA (Mario viene de la izquierda) ---
 		for (EnvElement block : blocks) {
-			if (Timer > 0 && player.alive != 0 &&
+			if (player.big && Timer > 0 && player.alive != 0 &&
+				player.speed.x > 0 &&
+				player.position.y > block.rect.y &&
+				player.position.y < (block.rect.y + block.rect.height + block.rect.height + block.rect.height - 4) &&
+				player.position.x - 10 <= block.rect.x &&
+				(nextX + player.mario_hitbox.width) >= block.rect.x
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				//¡Choque! Ajustamos posición y detenemos velocidad horizontal
+				hitObstacleWall = true;
+				player.speed.x = 0;
+				player.position.x = block.rect.x - player.mario_hitbox.width;
+			}
+			else if (!player.big && Timer > 0 && player.alive != 0 &&
 				player.speed.x > 0 &&
 				player.position.y > block.rect.y &&
 				player.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
@@ -825,7 +889,20 @@ private:
 
 		//--- COLISIÓN POR LA IZQUIERDA (Mario viene de la derecha) ---
 		for (EnvElement block : blocks) {
-			if (Timer > 0 && player.alive != 0 &&
+			if (player.big && Timer > 0 && player.alive != 0 &&
+				player.speed.x < 0 &&
+				player.position.y > block.rect.y &&
+				player.position.y < (block.rect.y + block.rect.height + block.rect.height + block.rect.height - 4) &&
+				player.position.x + 10 >= (block.rect.x + block.rect.width) &&
+				(nextX) <= (block.rect.x + block.rect.width + 14)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				//¡Choque! Ajustamos posición y detenemos velocidad horizontal
+				hitObstacleWall = true;
+				player.speed.x = 0;
+				player.position.x = block.rect.x + block.rect.width + player.mario_hitbox.width - 7;
+			}
+			else if (!player.big && Timer > 0 && player.alive != 0 &&
 				player.speed.x < 0 &&
 				player.position.y > block.rect.y &&
 				player.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
@@ -873,6 +950,17 @@ private:
 				player.jumpTime = 0.0f;
 			}
 			else player.alive = 0;
+		}
+
+		//Con bola de fuego
+		if (goomba.alive && fireBall.position.x + fireBall.projectile_hitbox.width + 10 >= goomba.position.x &&
+			fireBall.position.x <= goomba.position.x + goomba.goomba_hitbox.width + 20 &&
+			fireBall.position.y + fireBall.projectile_hitbox.height + 16 >= goomba.position.y && fireBall.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
+		{
+			Score += 100;
+			goomba.death = true;
+			fireBall.active = false;
+			fireBall.position.y = 9000;
 		}
 
 		//Con el suelo
@@ -946,6 +1034,16 @@ private:
 			mooshroom.position.y = 1000;
 		}
 
+		if (fireFlower.active && player.position.x + player.mario_hitbox.width + 10 >=
+			fireFlower.position.x && player.position.x <= fireFlower.position.x + fireFlower.powerup_hitbox.width + 20 &&
+			fireFlower.position.y >= fireFlower.position.y && player.position.y <= fireFlower.position.y + fireFlower.powerup_hitbox.height)
+		{
+			if (!player.fire) player.fire = true;
+			fireFlower.active = false;
+			Score += 1000;
+			fireFlower.position.y = 1000;
+		}
+
 		//Con el suelo
 		for (EnvElement block : blocks) {
 			if (Timer > 0 && player.alive != 0 && mooshroom.active
@@ -957,6 +1055,29 @@ private:
 				onGroundPowerUp = true;
 				mooshroom.speed.y = 0.0f;
 				mooshroom.position.y = block.rect.y;
+			}
+		}
+
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 && fireBall.active
+				&& block.rect.x <= fireBall.position.x + fireBall.projectile_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= fireBall.position.x
+				&& block.rect.y + block.rect.height >= fireBall.position.y
+				&& block.rect.y <= fireBall.position.y) {
+				projectileHitObstacleFloor = true;
+				fireBall.speed.y = 500.0f * deltaTime;
+				projectileHitObstacleFloor = false;
+			}
+		}
+		if (!projectileHitObstacleFloor && player.alive && Timer > 0) {
+			fireBall.position.y += (10) * deltaTime;
+			if (fireBall.position.y > 0)
+			{
+				fireBall.position.y += (10) * 2.0f * deltaTime; //Increase gravity in fall
+			}
+			else
+			{
+				fireBall.position.y += (10) * deltaTime; //Normal upward gravity
 			}
 		}
 
@@ -1579,11 +1700,12 @@ private:
 		DrawTexturePro(bloque_int, sourceRec4, { 6100, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 
-		
-
 
 		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(Mooshroom, sourceRec2, { mooshroom.position.x - 20, mooshroom.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
+		DrawTexturePro(FireFlower, sourceRec2, { fireFlower.position.x - 20, fireFlower.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
+		DrawTexturePro(FireBall, sourceRec2, { fireBall.position.x - 20, fireBall.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
+		
 		//META Y CASTILLO//
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
 		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);

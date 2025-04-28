@@ -638,6 +638,8 @@ private:
 			framesCounter = 0;
 			UpdateGameplay();
 
+			if (player.position.y >= 1000) player.alive = 0;
+
 			if (player.alive == 0) {
 				if (contmuerte == 0)
 				{
@@ -1374,7 +1376,7 @@ private:
 
 	void DrawGameplay() {
 		BeginMode2D(camera);
-		ClearBackground(RED);
+		ClearBackground(BLUE);
 
 		//Player
 		int frameWidthP;
@@ -1528,10 +1530,10 @@ private:
 			sourceRec.x = frameWidthP * 6;
 		}
 
-		for (EnvElement block : blocks)
+		/*for (EnvElement block : blocks)
 		{
 			DrawRectangle(block.rect.x, block.rect.y, block.rect.width, block.rect.height, block.color);
-		}
+		}*/
 
 		//Draw all entities, structures and objetcs
 		//Tuberias 
@@ -1543,11 +1545,11 @@ private:
 		DrawTextureEx(tuberia_s, { (8452), (500) }, 0.0f, 1.2, WHITE);
 
 		//All background
-		//DrawTextureEx(fondo, { (-113), (72) }, 0.0f, 3, WHITE);
-		//DrawTextureEx(fondo, { (2190), (72) }, 0.0f, 3, WHITE);
-		//DrawTextureEx(fondo, { (4490), (72) }, 0.0f, 3, WHITE);
-		//DrawTextureEx(fondo, { (6790), (72) }, 0.0f, 3, WHITE);
-		//DrawTextureEx(fondo, { (9090), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (-113), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (2190), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (4490), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (6790), (72) }, 0.0f, 3, WHITE);
+		DrawTextureEx(fondo, { (9090), (72) }, 0.0f, 3, WHITE);
 
 		//Boquete 1
 		DrawTextureEx(azul, { (3150), (600) }, 0.0f, 3.2, WHITE);
@@ -1774,6 +1776,7 @@ private:
 			camera.target.x = 9795;
 			DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 			player.big = 0;
+			player.fire = 0;
 			UnloadTexture(mario);
 		}
 

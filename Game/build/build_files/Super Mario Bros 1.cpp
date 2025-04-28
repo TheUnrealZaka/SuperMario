@@ -193,10 +193,10 @@ private:
 	//Blocks
 	vector<EnvElement> blocks = {
 
-	{-200, 600, 3350, 200, RED}, // SUELO
-	{3250, 600, 760, 200, RED}, // SUELO
-	{4160, 600, 3023, 200, RED}, // SUELO
-	{7270, 600, 3000, 200, RED}, // SUELO
+	{-200, 600, 3350, 200, GREEN}, // SUELO
+	{3250, 600, 760, 200, GREEN}, // SUELO
+	{4160, 600, 3063, 200, GREEN}, // SUELO
+	{7320, 600, 3000, 200, GREEN}, // SUELO
 
 
 	{650, 400, 50, 50, GREEN},	//PRIMER ? /MONEDAS
@@ -313,44 +313,56 @@ private:
 	{6640, 500, 50, 50, GREEN},
 	{6690, 500, 50, 50, GREEN},
 	//Tercer escalón
-	{ 6590, 450, 50, 50, GREEN},
-	{ 6640, 450, 50, 50, GREEN},
+	{6590, 450, 50, 50, GREEN},
+	{6640, 450, 50, 50, GREEN},
 	//Quarto escalón
-	{ 6590, 400, 50, 50, GREEN},
+	{6590, 400, 50, 50, GREEN},
 
 
 
 	//Segunda escalera
 	//Primer escalon
-	{6980, 550, 50, 50, GREEN},
-	{7030, 550, 50, 50, GREEN},
-	{7080, 550, 50, 50, GREEN},
-	{7130, 550, 50, 50, GREEN},
+	{6970, 550, 50, 50, GREEN},
+	{7020, 550, 50, 50, GREEN},
+	{7070, 550, 50, 50, GREEN},
+	{7120, 550, 50, 50, GREEN},
+	{7170, 550, 50, 50, GREEN},
+
 	//Segundo escalon
-	{7030, 500, 50, 50, GREEN},
-	{7080, 500, 50, 50, GREEN},
-	{7130, 500, 50, 50, GREEN},
+	{7020, 500, 50, 50, GREEN},
+	{7070, 500, 50, 50, GREEN},
+	{7120, 500, 50, 50, GREEN},
+	{7170, 500, 50, 50, GREEN},
+
 	//Tercer escalon
-	{7080, 450, 50, 50, GREEN},
-	{7130, 450, 50, 50, GREEN},
+	{7070, 450, 50, 50, GREEN},
+	{7120, 450, 50, 50, GREEN},
+	{7170, 450, 50, 50, GREEN},
+
 	//Quarto escalon
-	{7130, 400, 50, 50, GREEN},
+	{7120, 400, 50, 50, GREEN},
+	{7170, 400, 50, 50, GREEN},
+
 		//BOQUETE 3
+	
 	//-Invertida-//
 	//Primer escalón
-	{7270, 550, 50, 50, GREEN},
 	{7320, 550, 50, 50, GREEN},
 	{7370, 550, 50, 50, GREEN},
 	{7420, 550, 50, 50, GREEN},
+
 	//Segundo escalón
-	{7270, 500, 50, 50, GREEN},
 	{7320, 500, 50, 50, GREEN},
 	{7370, 500, 50, 50, GREEN},
+	{7420, 500, 50, 50, GREEN},
+
 	//Tercer escalón
-	{7270, 450, 50, 50, GREEN},
 	{7320, 450, 50, 50, GREEN},
+	{7370, 450, 50, 50, GREEN},
+
 	//Quarto escalón
-	{7270, 400, 50, 50, GREEN},
+	{7320, 400, 50, 50, GREEN},
+
 
 
 
@@ -366,64 +378,64 @@ private:
 
 	//ESCALERA FINAL
 // Primer escalón (base de 9 bloques)
-	{ 8570, 550, 50, 50, GREEN},
-	{ 8620, 550, 50, 50, GREEN},
-	{ 8670, 550, 50, 50, GREEN},
-	{ 8720, 550, 50, 50, GREEN},
-	{ 8770, 550, 50, 50, GREEN},
-	{ 8820, 550, 50, 50, GREEN},
-	{ 8870, 550, 50, 50, GREEN},
-	{ 8920, 550, 50, 50, GREEN},
-	{ 8970, 550, 50, 50, GREEN},
+	{8570, 550, 50, 50, GREEN},
+	{8620, 550, 50, 50, GREEN},
+	{8670, 550, 50, 50, GREEN},
+	{8720, 550, 50, 50, GREEN},
+	{8770, 550, 50, 50, GREEN},
+	{8820, 550, 50, 50, GREEN},
+	{8870, 550, 50, 50, GREEN},
+	{8920, 550, 50, 50, GREEN},
+	{8970, 550, 50, 50, GREEN},
 
 	// Segundo escalón (8 bloques)
-	{ 8620, 500, 50, 50, GREEN},
-	{ 8670, 500, 50, 50, GREEN},
-	{ 8720, 500, 50, 50, GREEN},
-	{ 8770, 500, 50, 50, GREEN},
-	{ 8820, 500, 50, 50, GREEN},
-	{ 8870, 500, 50, 50, GREEN},
-	{ 8920, 500, 50, 50, GREEN},
-	{ 8970, 500, 50, 50, GREEN},
+	{8620, 500, 50, 50, GREEN},
+	{8670, 500, 50, 50, GREEN},
+	{8720, 500, 50, 50, GREEN},
+	{8770, 500, 50, 50, GREEN},
+	{8820, 500, 50, 50, GREEN},
+	{8870, 500, 50, 50, GREEN},
+	{8920, 500, 50, 50, GREEN},
+	{8970, 500, 50, 50, GREEN},
 
 	// Tercer escalón (7 bloques)
-	{ 8670, 450, 50, 50, GREEN},
-	{ 8720, 450, 50, 50, GREEN},
-	{ 8770, 450, 50, 50, GREEN},
-	{ 8820, 450, 50, 50, GREEN},
-	{ 8870, 450, 50, 50, GREEN},
-	{ 8920, 450, 50, 50, GREEN},
-	{ 8970, 450, 50, 50, GREEN},
+	{8670, 450, 50, 50, GREEN},
+	{8720, 450, 50, 50, GREEN},
+	{8770, 450, 50, 50, GREEN},
+	{8820, 450, 50, 50, GREEN},
+	{8870, 450, 50, 50, GREEN},
+	{8920, 450, 50, 50, GREEN},
+	{8970, 450, 50, 50, GREEN},
 
 	// Cuarto escalón (6 bloques)
-	{ 8720, 400, 50, 50, GREEN},
-	{ 8770, 400, 50, 50, GREEN},
-	{ 8820, 400, 50, 50, GREEN},
-	{ 8870, 400, 50, 50, GREEN},
-	{ 8920, 400, 50, 50, GREEN},
-	{ 8970, 400, 50, 50, GREEN},
+	{8720, 400, 50, 50, GREEN},
+	{8770, 400, 50, 50, GREEN},
+	{8820, 400, 50, 50, GREEN},
+	{8870, 400, 50, 50, GREEN},
+	{8920, 400, 50, 50, GREEN},
+	{8970, 400, 50, 50, GREEN},
 
 	// Quinto escalón (5 bloques)
-	{ 8770, 350, 50, 50, GREEN},
-	{ 8820, 350, 50, 50, GREEN},
-	{ 8870, 350, 50, 50, GREEN},
-	{ 8920, 350, 50, 50, GREEN},
-	{ 8970, 350, 50, 50, GREEN},
+	{8770, 350, 50, 50, GREEN},
+	{8820, 350, 50, 50, GREEN},
+	{8870, 350, 50, 50, GREEN},
+	{8920, 350, 50, 50, GREEN},
+	{8970, 350, 50, 50, GREEN},
 
 	// Sexto escalón (4 bloques)
-	{ 8820, 300, 50, 50, GREEN},
-	{ 8870, 300, 50, 50, GREEN},
-	{ 8920, 300, 50, 50, GREEN},
-	{ 8970, 300, 50, 50, GREEN},
+	{8820, 300, 50, 50, GREEN},
+	{8870, 300, 50, 50, GREEN},
+	{8920, 300, 50, 50, GREEN},
+	{8970, 300, 50, 50, GREEN},
 
 	// Séptimo escalón (3 bloques)
-	{ 8870, 250, 50, 50, GREEN},
-	{ 8920, 250, 50, 50, GREEN},
-	{ 8970, 250, 50, 50, GREEN},
+	{8870, 250, 50, 50, GREEN},
+	{8920, 250, 50, 50, GREEN},
+	{8970, 250, 50, 50, GREEN},
 
 	// Octavo escalón (2 bloques)
-	{ 8920, 200, 50, 50, GREEN},
-	{ 8970, 200, 50, 50, GREEN},
+	{8920, 200, 50, 50, GREEN},
+	{8970, 200, 50, 50, GREEN},
 
 	//Flag
 	{9375, 550, 50, 50, GREEN}
@@ -1346,7 +1358,7 @@ private:
 
 	void DrawGameplay() {
 		BeginMode2D(camera);
-		ClearBackground(BLUE);
+		ClearBackground(RED);
 
 		//Player
 		int frameWidthP;
@@ -1489,10 +1501,10 @@ private:
 			sourceRec.x = frameWidthP * 6;
 		}
 
-	/*	for (EnvElement block : blocks)
+		for (EnvElement block : blocks)
 		{
 			DrawRectangle(block.rect.x, block.rect.y, block.rect.width, block.rect.height, block.color);
-		}*/
+		}
 
 		//Draw all entities, structures and objetcs
 		//Tuberias 
@@ -1504,11 +1516,11 @@ private:
 		DrawTextureEx(tuberia_s, { (8452), (500) }, 0.0f, 1.2, WHITE);
 
 		//All background
-		DrawTextureEx(fondo, { (-113), (72) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (2190), (72) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (4490), (72) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (6790), (72) }, 0.0f, 3, WHITE);
-		DrawTextureEx(fondo, { (9090), (72) }, 0.0f, 3, WHITE);
+		//DrawTextureEx(fondo, { (-113), (72) }, 0.0f, 3, WHITE);
+		//DrawTextureEx(fondo, { (2190), (72) }, 0.0f, 3, WHITE);
+		//DrawTextureEx(fondo, { (4490), (72) }, 0.0f, 3, WHITE);
+		//DrawTextureEx(fondo, { (6790), (72) }, 0.0f, 3, WHITE);
+		//DrawTextureEx(fondo, { (9090), (72) }, 0.0f, 3, WHITE);
 
 		//Boquete 1
 		DrawTextureEx(azul, { (3150), (600) }, 0.0f, 3.2, WHITE);
@@ -1526,11 +1538,11 @@ private:
 		DrawTextureEx(azul, { (4110), (650) }, 0.0f, 3.2, WHITE);
 
 		//Boquete 3
-		DrawTextureEx(azul, { (7182), (600) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (7220), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7222), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7270), (600) }, 0.0f, 3.2, WHITE);
 
-		DrawTextureEx(azul, { (7182), (650) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (7220), (650) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7222), (650) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7270), (650) }, 0.0f, 3.2, WHITE);
 		//Bloques ? y ladrillos
 		DrawTextureEx(ladrillo, { (850), (400) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(ladrillo, { (950), (400) }, 0.0f, 3.2, WHITE);
@@ -1591,7 +1603,7 @@ private:
 		DrawTextureEx(escalera, { (6740), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
 		DrawTextureEx(escalera, { (6590), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx( , { (6640), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6640), (500) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (6690), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
 		DrawTextureEx(escalera, { (6590), (450) }, 0.0f, 3.2, WHITE);
@@ -1600,34 +1612,42 @@ private:
 		DrawTextureEx(escalera, { (6590), (400) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
-		DrawTextureEx(escalera, { (6980), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (7030), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (7080), (550) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (7130), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (6970), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7020), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7070), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7120), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7170), (550) }, 0.0f, 3.2, WHITE);
+
 		/*----*/
-		DrawTextureEx(escalera, { (7030), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (7080), (500) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (7130), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7020), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7070), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7120), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7170), (500) }, 0.0f, 3.2, WHITE);
+
 		/*---*/
-		DrawTextureEx(escalera, { (7080), (450) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(escalera, { (7130), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7070), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7120), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7170), (450) }, 0.0f, 3.2, WHITE);
+
 		/*--*/
-		DrawTextureEx(escalera, { (7130), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7120), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7170), (400) }, 0.0f, 3.2, WHITE);
+
 		/*-*/
 
-		DrawTextureEx(escalera, { (7270), (550) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (7320), (550) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (7370), (550) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (7420), (550) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7470), (550) }, 0.0f, 3.2, WHITE);
 		/*----*/
-		DrawTextureEx(escalera, { (7270), (500) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (7320), (500) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (7370), (500) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7420), (500) }, 0.0f, 3.2, WHITE);
 		/*---*/
-		DrawTextureEx(escalera, { (7270), (450) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(escalera, { (7320), (450) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7370), (450) }, 0.0f, 3.2, WHITE);
 		/*--*/
-		DrawTextureEx(escalera, { (7270), (400) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(escalera, { (7320), (400) }, 0.0f, 3.2, WHITE);
 		/*-*/
 
 		DrawTextureEx(ladrillo, { (7950), (400) }, 0.0f, 3.2, WHITE);

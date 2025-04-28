@@ -50,7 +50,7 @@ struct Mario {
 	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 	bool fire;
 
-	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false) {}
+	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false), fire(false) {}
 };
 
 struct Enemy {
@@ -574,10 +574,12 @@ private:
 				camera.target.y = 280;
 				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
+				fireFlower.position = { 900, 600 };
 				Timer = 400;
 				Score = 000000;
 				Money = 00;
 				player.alive = 1;
+				player.fire = 0;
 				goomba.death = false;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
@@ -619,8 +621,10 @@ private:
 				camera.target.y = 280;
 				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
+				fireFlower.position = { 900, 600 };
 				Timer = 400;
 				player.alive = 1;
+				player.fire = 0;
 				goomba.death = false;
 				elapsedTime = 0.0f;
 				contmuerte = 0;
@@ -771,8 +775,8 @@ private:
 			player.speed.y += JUMP_HOLD_FORCE - 300;
 		}
 
-		if (player.fire) {
-			if (IsKeyDown(KEY_E)) {
+		if (player.fire && player.big) {
+			if (IsKeyDown(KEY_X)) {
 				fireBall.position = { player.position.x, player.position.y + -40 };
 				fireBall.active = true;
 				if (player.side) fireBall.speed.x = -650 * deltaTime;
@@ -1035,6 +1039,7 @@ private:
 		//--------Colisiones de Power-Ups--------\\
 
 		//Con Mario
+		//Mushroom
 		if (mooshroom.active && player.position.x + player.mario_hitbox.width + 10 >= mooshroom.position.x &&
 			player.position.x <= mooshroom.position.x + mooshroom.powerup_hitbox.width + 20 &&
 			player.position.y >= mooshroom.position.y && player.position.y <= mooshroom.position.y + mooshroom.powerup_hitbox.height)
@@ -1046,14 +1051,23 @@ private:
 			mooshroom.position.y = 1000;
 		}
 
-		if (fireFlower.active && player.position.x + player.mario_hitbox.width + 10 >=
-			fireFlower.position.x && player.position.x <= fireFlower.position.x + fireFlower.powerup_hitbox.width + 20 &&
-			fireFlower.position.y >= fireFlower.position.y && player.position.y <= fireFlower.position.y + fireFlower.powerup_hitbox.height)
+		//Fire Flower
+		if (fireFlower.active && player.position.x + player.mario_hitbox.width + 10 >= fireFlower.position.x &&
+			player.position.x <= fireFlower.position.x + fireFlower.powerup_hitbox.width + 20 &&
+			player.position.y >= fireFlower.position.y && player.position.y <= fireFlower.position.y + fireFlower.powerup_hitbox.height)
 		{
-			if (!player.fire) player.fire = true;
-			fireFlower.active = false;
-			Score += 1000;
-			fireFlower.position.y = 1000;
+			if (!player.fire && player.big) {
+				player.fire = true;
+				fireFlower.active = false;
+				Score += 1000;
+				fireFlower.position.y = 1000;
+			}
+			else {
+				player.big = true;
+				fireFlower.active = false;
+				Score += 1000;
+				fireFlower.position.x = 10000;
+			}
 		}
 
 		//Con el suelo
@@ -1170,6 +1184,7 @@ private:
 			camera.target.y = 280;
 			goomba.position = { 1400, 600 };
 			mooshroom.position = { 900, 350 };
+			fireFlower.position = { 900, 600 };
 			Timer = 400;
 			Money = 00;
 			Score = 000000;
@@ -1177,6 +1192,7 @@ private:
 			player.alive = 1;
 			player.lifes = 3;
 			player.big = 0;
+			player.fire = 0;
 			goomba.side = true;
 			goomba.death = false;
 			elapsedTime = 0.0f;
@@ -1364,18 +1380,26 @@ private:
 		int frameWidthP;
 		int frameHeightP;
 		
-		if (player.big == 0) { //Small Mode
-			frameWidthP = 16; //Each frame mesure 16x16 pixels
-			frameHeightP = 16;
+		if (!player.fire) {
+			if (player.big == 0) { //Small Mode
+				frameWidthP = 16; //Each frame mesure 16x16 pixels
+				frameHeightP = 16;
+			}
+			if (player.big == 1) { //Big Mode
+				frameWidthP = 16;
+				frameHeightP = 32;
+			}
 		}
-		if (player.big == 1) { //Big Mode
+		else if (player.fire && player.big) {
 			frameWidthP = 16;
 			frameHeightP = 32;
 		}
 
-		if (player.side == 0) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
-		else if (player.side == 1) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
-
+		if (!player.side && !player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+		else if (player.side && !player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
+		else if (!player.side && player.fire && player.big) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
+		else if (player.side && player.fire && player.big) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Left.png");
+		
 		Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
 
 		static float frameTime = 0.0f;
@@ -1424,7 +1448,8 @@ private:
 
 		//Animation of Mario
 		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && (player.position.y == 600 || player.position.y == 550)) {
-			mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+			if (!player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+			else if (player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
 			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
@@ -1443,7 +1468,8 @@ private:
 		}
 
 		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
-			mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
+			if (!player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
+			else if (player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Left.png");
 			player.side = 1;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
@@ -1498,6 +1524,7 @@ private:
 
 		if (Timer <= 0 || player.alive == 0) {
 			player.big = 0;
+			player.fire = 0;
 			sourceRec.x = frameWidthP * 6;
 		}
 
@@ -1735,8 +1762,11 @@ private:
 		if (player.big == 0) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		if (player.big == 1) {
+		if (player.big == 1 && !player.fire) {
 			sourceRec.y = 16;
+			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+		}
+		if (player.big == 1 && player.fire) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 

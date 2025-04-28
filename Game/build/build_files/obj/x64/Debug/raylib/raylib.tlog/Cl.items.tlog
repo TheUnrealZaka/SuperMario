@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\raudio.c;C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\raudio.obj
 C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rcore.c;C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rcore.obj
 C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rglfw.c;C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rglfw.obj
@@ -6,3 +7,13 @@ C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\
 C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rtext.c;C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rtext.obj
 C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rtextures.c;C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rtextures.obj
 C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\utils.c;C:\Users\rubenmg9\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\utils.obj
+=======
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\raudio.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\raudio.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rcore.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rcore.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rglfw.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rglfw.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rmodels.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rmodels.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rshapes.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rshapes.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rtext.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rtext.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\rtextures.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\rtextures.obj
+C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\external\raylib-master\src\utils.c;C:\Users\marcjm2\Documents\GitHub\Proyecto-1\Game\build\build_files\obj\x64\Debug\raylib\utils.obj
+>>>>>>> Stashed changes

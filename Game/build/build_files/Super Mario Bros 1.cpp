@@ -43,14 +43,17 @@ struct Mario {
 	bool canJump;
 	bool canJump2;
 	float jumpTime;
+	float invulnerableTimer = 0.0f;
+	const float invulnerableDuration = 2.0f;
 
 	int alive = 1; //If alive = 0 --> Mario is death
 	int lifes = 3;
 	bool big;
 	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 	bool fire;
+	bool invencible;
 
-	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false), fire(false) {}
+	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false), fire(false), invencible(false) {}
 };
 
 struct Enemy {
@@ -957,7 +960,8 @@ private:
 		//Con Mario
 		if (goomba.alive && player.position.x + player.mario_hitbox.width + 10 >= goomba.position.x &&
 			player.position.x <= goomba.position.x + goomba.goomba_hitbox.width + 20 &&
-			player.position.y + player.mario_hitbox.height + 16 >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height)
+			player.position.y + player.mario_hitbox.height + 16 >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height
+			&& !player.invencible)
 		{
 			if (player.position.y + player.mario_hitbox.height <= goomba.position.y && player.alive) {
 				goomba.death = true;
@@ -967,7 +971,30 @@ private:
 				player.canJump2 = true;
 				player.jumpTime = 0.0f;
 			}
-			else player.alive = 0;
+			else if (player.big && player.fire && !player.invencible) {
+				player.invencible = true;
+				player.fire = 0;
+				player.invulnerableTimer = 0.0f;
+				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
+			}
+
+			else if (player.big && !player.fire && !player.invencible) {
+				player.invencible = true;
+				player.big = 0;
+				player.invulnerableTimer = 0.0f;
+				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
+			}
+			else if (!player.big && !player.fire && !player.invencible) {
+				player.alive = 0;
+			}
+		}
+
+		if (player.invencible) {
+			player.invulnerableTimer += GetFrameTime();
+			if (player.invulnerableTimer >= player.invulnerableDuration) {
+				player.invencible = false;
+				player.invulnerableTimer = 0.0f;
+			}
 		}
 
 		//Con bola de fuego
@@ -1764,13 +1791,14 @@ private:
 		if (player.big == 0) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		if (player.big == 1 && !player.fire) {
+		if (player.big == 1 && !player.fire && !player.invencible || (int)(player.invulnerableTimer * 10) % 2 == 0) {
 			sourceRec.y = 16;
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		if (player.big == 1 && player.fire) {
+		if (player.big == 1 && player.fire && !player.invencible || (int)(player.invulnerableTimer * 10) % 2 == 0) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
+		
 
 		if (player.position.x >= 9795) { //Mario arrived to the flag
 			camera.target.x = 9795;

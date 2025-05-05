@@ -1239,6 +1239,7 @@ private:
 		}
 		if (IsKeyPressed(KEY_O)) {
 			Money++;
+			player.invencible = true;
 		}
 
 		if (elapsedTime >= 1.0f && Timer > 0 && player.alive == 1 && !flag.reached) {
@@ -1253,6 +1254,11 @@ private:
 
 		if (IsKeyPressed(KEY_B)) {
 			player.big = 1;
+		}
+		if (IsKeyPressed(KEY_G)) {
+			goomba.death = false;
+			goomba.position.x = player.position.x + 200;
+			goomba.position.y = player.position.y;
 		}
 	}
 
@@ -1414,7 +1420,7 @@ private:
 				frameWidthP = 16; //Each frame mesure 16x16 pixels
 				frameHeightP = 16;
 			}
-			if (player.big == 1) { //Big Mode
+			else if (player.big == 1) { //Big Mode
 				frameWidthP = 16;
 				frameHeightP = 32;
 			}
@@ -1516,7 +1522,9 @@ private:
 			sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
 		}
 
-		if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached && player.big) sourceRec.x = frameWidthP * 6;
+		if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached && player.big) {
+			sourceRec.x = frameWidthP * 6; //Agacharse
+		}
 
 		//Animation of Enemies
 		if (goomba.activated && player.alive != 0) {
@@ -1788,17 +1796,17 @@ private:
 		//META Y CASTILLO//
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
 		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
-		if (player.big == 0) {
+		if (!player.big) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		if (player.big == 1 && !player.fire && !player.invencible || (int)(player.invulnerableTimer * 10) % 2 == 0) {
+		if (player.big && !player.fire && !player.invencible) {
 			sourceRec.y = 16;
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		if (player.big == 1 && player.fire && !player.invencible || (int)(player.invulnerableTimer * 10) % 2 == 0) {
+		if (player.big && player.fire && !player.invencible) {
+			sourceRec.y = 32;
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		
 
 		if (player.position.x >= 9795) { //Mario arrived to the flag
 			camera.target.x = 9795;

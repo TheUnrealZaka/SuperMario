@@ -52,6 +52,7 @@ struct Mario {
 	bool side; //If side = 0 (Right) ; If side = 1 (Left)
 	bool fire;
 	bool invencible;
+	bool visible;
 
 	Mario(float x, float y) : position{ x, y }, speed{ 0, 0 }, canJump(false), big(false), fire(false), invencible(false) {}
 };
@@ -536,8 +537,6 @@ public:
 		UnloadFont(marioFont);
 		UnloadAudioAssets();
 		
-
-
 		CloseWindow();
 	}
 
@@ -958,7 +957,7 @@ private:
 		//--------Colisiones de Enemigos--------\\
 
 		//Con Mario
-		if (goomba.alive && player.position.x + player.mario_hitbox.width + 10 >= goomba.position.x &&
+		if (goomba.alive && !goomba.death && player.position.x + player.mario_hitbox.width + 10 >= goomba.position.x &&
 			player.position.x <= goomba.position.x + goomba.goomba_hitbox.width + 20 &&
 			player.position.y + player.mario_hitbox.height + 16 >= goomba.position.y && player.position.y <= goomba.position.y + goomba.goomba_hitbox.height
 			&& !player.invencible)
@@ -991,6 +990,7 @@ private:
 
 		if (player.invencible) {
 			player.invulnerableTimer += GetFrameTime();
+			player.visible = fmod(player.invulnerableTimer, 0.15f) < 0.1f;
 			if (player.invulnerableTimer >= player.invulnerableDuration) {
 				player.invencible = false;
 				player.invulnerableTimer = 0.0f;
@@ -1796,14 +1796,23 @@ private:
 		//META Y CASTILLO//
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
 		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
-		if (!player.big) {
+		if (!player.big && !player.invencible) {
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
+		else if (!player.big && player.visible && player.invencible) {
+			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+		}
+
 		if (player.big && !player.fire && !player.invencible) {
 			sourceRec.y = 16;
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
-		if (player.big && player.fire && !player.invencible) {
+		else if (player.big && !player.fire && player.visible && player.invencible) {
+			sourceRec.y = 16;
+			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+		}
+
+		if (player.big && player.fire) {
 			sourceRec.y = 32;
 			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}

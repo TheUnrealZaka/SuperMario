@@ -6,6 +6,12 @@
 using namespace std;
 
 /*--------------------------------------------------------------------------*/
+/*                                LIBRARIES                                 */
+/*--------------------------------------------------------------------------*/
+
+#include "Music and Sounds.h"
+
+/*--------------------------------------------------------------------------*/
 /*                               GAMESTATES                                 */
 /*--------------------------------------------------------------------------*/
 
@@ -120,6 +126,7 @@ private:
 	//Game
 	GameScreen currentScreen;
 	int framesCounter;
+	bool hurryMusicPlayed = false;
 
 	Camera2D camera;
 	unsigned int frameCounter;
@@ -128,11 +135,17 @@ private:
 
 	//Player
 	Mario player;
-	Texture2D mario;
+	Texture2D mario_sprite;
+	Texture2D Mario_Right;
+	Texture2D Mario_Left;
+	Texture2D Mario_Fire_Right;
+	Texture2D Mario_Fire_Left;
 
 	//Enemies
 	Enemy goomba;
-	Texture2D Goomba;	
+	Texture2D goomba_sprite;
+	Texture2D Goomba;
+	Texture2D Goomba_chafado;
 
 	Enemy koopa;
 	Texture2D Koopa;
@@ -176,20 +189,6 @@ private:
 	Texture2D Level1;
 	Texture2D icon_lifes;
 	Texture2D icon_money;
-
-	//Musica
-	Music musicOverworld;
-	Music musicOverworld_hurry;
-	Music musicInvencible;
-	Music musicInvencible_hurry;
-
-	Sound sfxJumpSmall;
-	Sound sfxJumpSuper;
-	Sound sfxMushroom;
-	Sound sfxFlagpole;
-	Sound sfxGameOver;
-	Sound sfxDeath;
-	Sound sfxCompleted;
 
 	//Typography
 	Font marioFont;
@@ -455,6 +454,9 @@ public:
 		InitAudioDevice();              // Initialize audio device
 		SetTargetFPS(60);
 
+		LoadGameSounds(); //Call all sounds
+		LoadGameMusic(); //Call all music
+
 		/*--------------------------------------------------------------------------*/
 		/*                        Textures and Typography                           */
 		/*--------------------------------------------------------------------------*/
@@ -463,10 +465,26 @@ public:
 		UI = LoadTexture("Resources/Images/Seleccion Modo/Pantalla_Intro.png");
 		money = LoadTexture("Resources/Sprites/Items/Monedas.png");
 		Level1 = LoadTexture("Resources/Images/Seleccion Modo/World 1-1.png");
-		mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
-		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
 		icon_lifes = LoadTexture("Resources/Images/Player/Icon_Lifes.png");
 		icon_money = LoadTexture("Resources/Images/Player/Icon_Money.png");
+
+		/*--------------------------------------------------------------------------*/
+		/*                           SpriteSheet Mario                              */
+		/*--------------------------------------------------------------------------*/
+
+		Mario_Right = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+		Mario_Left = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
+		Mario_Fire_Right = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
+		Mario_Fire_Left = LoadTexture("Resources/Sprites/MARIO/Fuego_Left.png");
+		mario_sprite = Mario_Right;
+
+		/*--------------------------------------------------------------------------*/
+		/*                          SpriteSheet Enemigos                            */
+		/*--------------------------------------------------------------------------*/
+
+		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
+		Goomba_chafado = LoadTexture("Resources/Sprites/Enemies/Goomba_chafado.png");
+		goomba_sprite = Goomba;
 
 		/*------------------------------------------------------------*/
 		/*                           FONDO                            */
@@ -504,23 +522,6 @@ public:
 		/*                            Music and effects                             */
 		/*--------------------------------------------------------------------------*/
 
-		musicOverworld = LoadMusicStream("Resources/Audio/Music/Cancion.ogg");
-		musicOverworld_hurry = LoadMusicStream("Resources/Audio/Music/CancionHurry.ogg");
-		musicInvencible = LoadMusicStream("Resources/Audio/Music/Invencible.ogg");
-		musicInvencible_hurry = LoadMusicStream("Resources/Audio/Music/InvencibleHurry.ogg");
-
-		sfxJumpSmall = LoadSound("Resources/Audio/FX/smb_jump-small.wav");
-		sfxJumpSuper = LoadSound("Resources/Audio/FX/smb_jump-super.wav");
-		sfxMushroom = LoadSound("Resources/Audio/FX/smb_mushroom.wav");
-		sfxGameOver = LoadSound("Resources/Audio/FX/smb_gameover.wav");
-		sfxFlagpole = LoadSound("Resources/Audio/FX/smb_flagpole.wav");
-		sfxDeath = LoadSound("Resources/Audio/Music/Muerte.ogg");
-		sfxCompleted = LoadSound("Resources/Audio/FX/smb_stage_clear.wav");
-
-		SetMusicVolume(musicOverworld, 0.5f);
-		SetMusicVolume(musicInvencible, 0.5f);
-		SetMusicVolume(musicOverworld_hurry, 0.5f);
-
 		//Camera of the game
 		camera.target = player.position;
 		camera.offset = { screenWidth / 2.0f, screenHeight / 2.0f };
@@ -533,7 +534,7 @@ public:
 		UnloadTexture(logoTexture);
 		UnloadTexture(UI);
 		UnloadTexture(Level1);
-		UnloadTexture(mario);
+		UnloadTexture(mario_sprite);
 		UnloadFont(marioFont);
 		UnloadAudioAssets();
 		
@@ -586,6 +587,7 @@ private:
 				elapsedTime = 0.0f;
 				contmuerte = 0;
 				conttiempo = 0;
+				mario_sprite = Mario_Right;
 
 				PlayMusicStream(musicOverworld);
 			}
@@ -646,6 +648,7 @@ private:
 				if (contmuerte == 0)
 				{
 					StopMusicStream(musicOverworld);
+					StopMusicStream(musicOverworld_hurry);
 					PlaySound(sfxDeath);
 					player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
 					player.canJump = false;
@@ -675,15 +678,23 @@ private:
 			}
 			if (flag.reached) {
 				StopMusicStream(musicOverworld);
+				StopMusicStream(musicOverworld_hurry);
 				if (conttiempo == 0 && player.position.y == 600) {
 					PlaySound(sfxCompleted);
 					conttiempo++;
 				}
 			}
 
+			if (Timer < 100 && !hurryMusicPlayed) {
+				StopMusicStream(musicOverworld);
+				PlayMusicStream(musicOverworld_hurry);
+				hurryMusicPlayed = true;
+			}
+
 			if (Timer <= 0) {
 				if (contmuerte == 0)
 				{
+					StopMusicStream(musicOverworld_hurry);
 					PlaySound(sfxDeath);
 					player.speed.y = -PLAYER_JUMP_SPD * 1.2f;
 					player.canJump = false;
@@ -780,7 +791,7 @@ private:
 		}
 
 		if (player.fire && player.big) {
-			if (IsKeyDown(KEY_X)) {
+			if (IsKeyPressed(KEY_X)) {
 				fireBall.position = { player.position.x, player.position.y + -40 };
 				fireBall.active = true;
 				if (player.side) fireBall.speed.x = -650 * deltaTime;
@@ -820,10 +831,10 @@ private:
 		}
 
 		goomba.speed.x = 1.0f;
-		if (goomba.activated && goomba.death == false && player.alive != 0 && goomba.side) {
+		if (goomba.activated && goomba.death == false && player.alive != 0 && goomba.side && Timer > 0) {
 			goomba.position.x += -120 * deltaTime;
 		}
-		if (goomba.activated && goomba.death == false && player.alive != 0 && !goomba.side) {
+		if (goomba.activated && goomba.death == false && player.alive != 0 && !goomba.side && Timer > 0) {
 			goomba.position.x += 120 * deltaTime;
 		}
 
@@ -976,7 +987,6 @@ private:
 				player.invulnerableTimer = 0.0f;
 				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
 			}
-
 			else if (player.big && !player.fire && !player.invencible) {
 				player.invencible = true;
 				player.big = 0;
@@ -1201,6 +1211,8 @@ private:
 				
 				if (player.position.x >= flag.position.x + 800) {
 					currentScreen = GameScreen::ENDING;
+					Mario_Right = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
+					Mario_Fire_Right = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
 				}
 			}
 		}
@@ -1388,6 +1400,7 @@ private:
 
 	void AudioGameplay() {
 		UpdateMusicStream(musicOverworld);
+		UpdateMusicStream(musicOverworld_hurry);
 	}
 
 	void UnloadAudioAssets() {
@@ -1430,10 +1443,10 @@ private:
 			frameHeightP = 32;
 		}
 
-		if (!player.side && !player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
-		else if (player.side && !player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
-		else if (!player.side && player.fire && player.big) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
-		else if (player.side && player.fire && player.big) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Left.png");
+		if (!player.side && !player.fire) mario_sprite = Mario_Right;
+		else if (player.side && !player.fire) mario_sprite = Mario_Left;
+		else if (!player.side && player.fire && player.big) mario_sprite = Mario_Fire_Right;
+		else if (player.side && player.fire && player.big) mario_sprite = Mario_Fire_Left;
 		
 		Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
 
@@ -1483,8 +1496,8 @@ private:
 
 		//Animation of Mario
 		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && (player.position.y == 600 || player.position.y == 550)) {
-			if (!player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
-			else if (player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
+			if (!player.fire) mario_sprite = Mario_Right;
+			else if (player.fire) mario_sprite = Mario_Fire_Right;
 			player.side = 0;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
@@ -1503,8 +1516,8 @@ private:
 		}
 
 		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
-			if (!player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
-			else if (player.fire) mario = LoadTexture("Resources/Sprites/MARIO/Fuego_Left.png");
+			if (!player.fire) mario_sprite = Mario_Left;
+			else if (player.fire) mario_sprite = Mario_Fire_Left;
 			player.side = 1;
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached) {
 				frameSpeed = 0.05f; //Increases running speed
@@ -1527,15 +1540,15 @@ private:
 		}
 
 		//Animation of Enemies
-		if (goomba.activated && player.alive != 0) {
+		if (goomba.activated && player.alive != 0 && Timer > 0) {
 			if (frameTimeE >= frameSpeedE) {
 				frameTimeE = 0.0f;
 				currentFrameE = (currentFrameE + 1) % 3;
 			}
 			sourceRec2.x = (float)(currentFrameE * frameWidthG);
 		}
-		if (!goomba.death) Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
-		if (goomba.death) Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba_chafado.png");
+		if (!goomba.death) goomba_sprite = Goomba;
+		if (goomba.death) goomba_sprite = Goomba_chafado;
 
 		//Animation of Blocks
 		if (player.alive != 0 && Timer > 0) {
@@ -1788,7 +1801,7 @@ private:
 		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 
 
-		DrawTexturePro(Goomba, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
+		DrawTexturePro(goomba_sprite, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(Mooshroom, sourceRec2, { mooshroom.position.x - 20, mooshroom.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		DrawTexturePro(FireFlower, sourceRec2, { fireFlower.position.x - 20, fireFlower.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		DrawTexturePro(FireBall, sourceRec2, { fireBall.position.x - 20, fireBall.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
@@ -1797,24 +1810,24 @@ private:
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
 		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 		if (!player.big && !player.invencible) {
-			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+			DrawTexturePro(mario_sprite, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 		else if (!player.big && player.visible && player.invencible) {
-			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+			DrawTexturePro(mario_sprite, sourceRec, { player.position.x - 20, player.position.y - 48, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 
 		if (player.big && !player.fire && !player.invencible) {
 			sourceRec.y = 16;
-			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+			DrawTexturePro(mario_sprite, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 		else if (player.big && !player.fire && player.visible && player.invencible) {
 			sourceRec.y = 16;
-			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+			DrawTexturePro(mario_sprite, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 
 		if (player.big && player.fire) {
 			sourceRec.y = 32;
-			DrawTexturePro(mario, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
+			DrawTexturePro(mario_sprite, sourceRec, { player.position.x - 20, player.position.y - 96, sourceRec.width * 3, sourceRec.height * 3 }, { 0, 0 }, 0, WHITE);
 		}
 
 		if (player.position.x >= 9795) { //Mario arrived to the flag
@@ -1822,7 +1835,7 @@ private:
 			DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);
 			player.big = 0;
 			player.fire = 0;
-			UnloadTexture(mario);
+			UnloadTexture(mario_sprite);
 		}
 
 		EndMode2D();

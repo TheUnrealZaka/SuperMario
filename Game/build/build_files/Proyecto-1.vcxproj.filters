@@ -12,11 +12,13 @@
     <ClInclude Include="..\..\include\resource_dir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Music and Sounds.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Super Mario Bros 1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Music and Sounds.cpp" />
   </ItemGroup>
 </Project>

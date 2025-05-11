@@ -162,9 +162,13 @@ private:
 
 	//Blocks
 	Texture2D bloque_int;
+	Texture2D bloque_int_a;
+
 	Texture2D ladrillo;
 	Texture2D escalera;
 
+	Texture2D ladrillo_cueva;
+	Texture2D suelo_cueva;
 
 	//Interactive Structures
 	Flag flag;
@@ -175,11 +179,14 @@ private:
 	Texture2D castle;
 	Texture2D fondo;
 	Texture2D azul;
+	Texture2D negro;
 
 	//Pipes
 	Texture2D tuberia_s;
 	Texture2D tuberia_m;
 	Texture2D tuberia_b;
+	Texture2D tubo;
+	Texture2D tuberia_cueva;
 	//Objects
 	Texture2D money;
 
@@ -288,8 +295,6 @@ private:
 	{6050, 400, 50, 50, GREEN},
 	{6100, 400, 50, 50, GREEN},
 
-
-
 	//Primera escalera
 	//Primer escalon
 	{6310, 550, 50, 50, GREEN},
@@ -320,8 +325,6 @@ private:
 	{6640, 450, 50, 50, GREEN},
 	//Quarto escalón
 	{6590, 400, 50, 50, GREEN},
-
-
 
 	//Segunda escalera
 	//Primer escalon
@@ -366,9 +369,6 @@ private:
 	//Quarto escalón
 	{7320, 400, 50, 50, GREEN},
 
-
-
-
 	//Tuberias finales
 	{7700, 500, 100, 100, GREEN},
 		//Bloques intermedios
@@ -377,7 +377,6 @@ private:
 		{8050, 400, 50, 50, GREEN},
 		{8100, 400, 50, 50, GREEN},
 	{8460, 500, 100, 100, GREEN},
-
 
 	//ESCALERA FINAL
 // Primer escalón (base de 9 bloques)
@@ -441,12 +440,28 @@ private:
 	{8970, 200, 50, 50, GREEN},
 
 	//Flag
-	{9375, 550, 50, 50, GREEN}
+	{9375, 550, 50, 50, GREEN},
+
+	//Cueba escenario
+		//Suelo
+	{ -112, -500, 850, 100, GREEN },
+		//Paredes-
+	{ -112, -1000, 50, 500, GREEN },
+	{ 688, -1000, 50, 500, GREEN },
+
+		//techo
+	{ 88, -1000, 350, 50, GREEN },//1
+
+		//Zona monedas
+	{ 88, -650, 350, 150, GREEN },//1
+		//tuberia
+	{ 578, -600, 100, 100, GREEN },//1
+
 	};
 
 public:
 	//Initialise the game
-	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, 600), frameCounter(0),
+	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, -600), frameCounter(0),
 		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350),
 		fireFlower(450, 600), fireBall(0, 9000) {
 
@@ -491,9 +506,8 @@ public:
 		/*------------------------------------------------------------*/
 		fondo = LoadTexture("Resources/Sprites/Background/Fondo.png");
 		azul = LoadTexture("Resources/Sprites/Background/Azul.png");
+		negro = LoadTexture("Resources/Sprites/Background/negro.png");
 
-
-		marioFont = LoadFont("Resources/Fonts/MarioFont.ttf");
 		/*------------------------------------------------------------*/
 		/*                           Items                            */
 		/*------------------------------------------------------------*/
@@ -506,27 +520,42 @@ public:
 		/*                          Bloques                           */
 		/*------------------------------------------------------------*/
 		bloque_int = LoadTexture("Resources/Sprites/Bloques/Bloque_int.png");
+		bloque_int_a = LoadTexture("Resources/Sprites/Bloques/Bloque_int_a.png");
+
 		ladrillo = LoadTexture("Resources/Sprites/Bloques/Ladrillo.png");
 		escalera = LoadTexture("Resources/Sprites/Bloques/escalera.png");
+		ladrillo_cueva = LoadTexture("Resources/Sprites/Bloques/Ladrillo_cueva.png");
+		suelo_cueva = LoadTexture("Resources/Sprites/Bloques/Suelo_cueva.png");
+
+		/*------------------------------------------------------------*/
+		/*                          Bloques Cueva                     */
+		/*------------------------------------------------------------*/
+
+
 
 		/*------------------------------------------------------------*/
 		/*                          Tileset                           */
 		/*------------------------------------------------------------*/
+	
 		castle = LoadTexture("Resources/Sprites/Tileset/Castle.png");
 		flagTexture = LoadTexture("Resources/Sprites/Tileset/Flag.png");
 		tuberia_s = LoadTexture("Resources/Sprites/Tileset/Tuberia1.png");
 		tuberia_m = LoadTexture("Resources/Sprites/Tileset/Tuberia2.png");
 		tuberia_b = LoadTexture("Resources/Sprites/Tileset/Tuberia3.png");
+		tuberia_cueva = LoadTexture("Resources/Sprites/Tileset/Tuberia_cueva.png");
+		tubo = LoadTexture("Resources/Sprites/Tileset/Tubo.png");
 
-		/*--------------------------------------------------------------------------*/
-		/*                            Music and effects                             */
-		/*--------------------------------------------------------------------------*/
+	/*--------------------------------------------------------------------------*/
+	/*                            Text font										*/
+	/*--------------------------------------------------------------------------*/
+
+		marioFont = LoadFont("Resources/Fonts/MarioFont.ttf");
 
 		//Camera of the game
 		camera.target = player.position;
 		camera.offset = { screenWidth / 2.0f, screenHeight / 2.0f };
 		camera.rotation = 0.0f;
-		camera.zoom = 1.0f;
+		camera.zoom = 1.15f;
 	}
 
 	~Game() {
@@ -572,9 +601,9 @@ private:
 			framesCounter++;
 			if (framesCounter >= 120) {
 				currentScreen = GameScreen::GAMEPLAY;
-				player.position = { 50, 600 };
-				camera.target.x = 400;
-				camera.target.y = 280;
+				player.position = { 50, -600 };
+				camera.target.x = 333;
+				camera.target.y = -750;
 				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
 				fireFlower.position = { 900, 600 };
@@ -620,9 +649,9 @@ private:
 
 			if (elapsedTime >= 3.0f) {
 				currentScreen = GameScreen::GAMEPLAY;
-				player.position = { 50, 600 };
-				camera.target.x = 400;
-				camera.target.y = 280;
+				player.position = { 50, -600 };
+				camera.target.x = 333;
+				camera.target.y = 350;
 				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
 				fireFlower.position = { 900, 600 };
@@ -1221,8 +1250,8 @@ private:
 
 		if (IsKeyPressed(KEY_R)) {
 			player.position = { 50, 600 };
-			camera.target.x = 400;
-			camera.target.y = 280;
+			camera.target.x = 333;
+			camera.target.y = 350;
 			goomba.position = { 1400, 600 };
 			mooshroom.position = { 900, 350 };
 			fireFlower.position = { 900, 600 };
@@ -1427,7 +1456,7 @@ private:
 		//Player
 		int frameWidthP;
 		int frameHeightP;
-		
+
 		if (!player.fire) {
 			if (player.big == 0) { //Small Mode
 				frameWidthP = 16; //Each frame mesure 16x16 pixels
@@ -1577,11 +1606,11 @@ private:
 			player.fire = 0;
 			sourceRec.x = frameWidthP * 6;
 		}
-
-		/*for (EnvElement block : blocks)
+		// COLORES DE BLOQUES
+		for (EnvElement block : blocks)
 		{
 			DrawRectangle(block.rect.x, block.rect.y, block.rect.width, block.rect.height, block.color);
-		}*/
+		}
 
 		//Draw all entities, structures and objetcs
 		//Tuberias 
@@ -1600,23 +1629,35 @@ private:
 		DrawTextureEx(fondo, { (9090), (72) }, 0.0f, 3, WHITE);
 
 		//Boquete 1
-		DrawTextureEx(azul, { (3150), (600) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (3200), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (3150), (590) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (3200), (590) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(azul, { (3150), (640) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (3200), (640) }, 0.0f, 3.2, WHITE);
+
 		DrawTextureEx(azul, { (3150), (650) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (3200), (650) }, 0.0f, 3.2, WHITE);
 
+
 		//Boquete 2
-		DrawTextureEx(azul, { (4010), (600) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (4060), (600) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (4110), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4010), (590) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4060), (590) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4110), (590) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(azul, { (4010), (640) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4060), (640) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (4110), (640) }, 0.0f, 3.2, WHITE);
 
 		DrawTextureEx(azul, { (4010), (650) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (4060), (650) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (4110), (650) }, 0.0f, 3.2, WHITE);
 
 		//Boquete 3
-		DrawTextureEx(azul, { (7222), (600) }, 0.0f, 3.2, WHITE);
-		DrawTextureEx(azul, { (7270), (600) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7222), (590) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7270), (590) }, 0.0f, 3.2, WHITE);
+
+		DrawTextureEx(azul, { (7222), (640) }, 0.0f, 3.2, WHITE);
+		DrawTextureEx(azul, { (7270), (640) }, 0.0f, 3.2, WHITE);
 
 		DrawTextureEx(azul, { (7222), (650) }, 0.0f, 3.2, WHITE);
 		DrawTextureEx(azul, { (7270), (650) }, 0.0f, 3.2, WHITE);
@@ -1799,7 +1840,101 @@ private:
 		DrawTexturePro(bloque_int, sourceRec4, { 6050, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 6100, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
+			// Fondo negro
+		DrawTextureEx(negro, { -200, -1500 }, 0.0f, 1500.0f, WHITE);
+		//Cueba
+	// Suelo
+		DrawTextureEx(suelo_cueva, { -112, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { -112, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { -62, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { -62, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { -12, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { -12, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 38, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 38, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 88, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 88, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 138, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 138, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 188, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 188, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 238, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 238, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 288, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 288, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 338, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 338, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 388, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 388, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 438, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 438, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 488, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 488, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 538, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 538, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 588, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 588, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 638, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 638, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 688, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 688, -450 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 738, -500 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(suelo_cueva, { 738, -450 }, 0.0f, 3.2f, WHITE);
 
+		// Paredes (Izquierda)
+		DrawTextureEx(ladrillo_cueva, { -112, -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -700 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -750 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -800 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -850 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -900 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -950 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { -112, -1000 }, 0.0f, 3.2f, WHITE);
+
+		// Paredes (Derecha)
+		DrawTextureEx(tuberia_cueva, { 579, -700 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(tubo, { 688, -750 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(tubo, { 688, -800 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(tubo, { 688, -850 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(tubo, { 688, -900 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(tubo, { 688, -950 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(tubo, { 688, -1000 }, 0.0f, 3.2f, WHITE);
+
+		// Techo
+		DrawTextureEx(ladrillo_cueva, { 88,  -1000 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 138, -1000 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 188, -1000 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 238, -1000 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 288, -1000 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 338, -1000 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 388, -1000 }, 0.0f, 3.2f, WHITE);
+
+		// Zona de Monedas
+		DrawTextureEx(ladrillo_cueva, { 88,  -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 138, -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 188, -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 238, -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 288, -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 338, -550 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 388, -550 }, 0.0f, 3.2f, WHITE);
+
+		DrawTextureEx(ladrillo_cueva, { 88,  -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 138, -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 188, -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 238, -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 288, -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 338, -600 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 388, -600 }, 0.0f, 3.2f, WHITE);
+
+		DrawTextureEx(ladrillo_cueva, { 88,  -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 138, -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 188, -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 238, -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 288, -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 338, -650 }, 0.0f, 3.2f, WHITE);
+		DrawTextureEx(ladrillo_cueva, { 388, -650 }, 0.0f, 3.2f, WHITE);
 
 		DrawTexturePro(goomba_sprite, sourceRec2, { goomba.position.x - 20, goomba.position.y - 48, sourceRec2.width * 3, sourceRec2.height * 3 }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(Mooshroom, sourceRec2, { mooshroom.position.x - 20, mooshroom.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);

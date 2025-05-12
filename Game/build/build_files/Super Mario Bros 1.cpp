@@ -28,6 +28,7 @@ constexpr float PLAYER_RUN_SPD = 250.0f;
 
 const float suelo = 600;
 int GRAVITY = 500;
+int fireContador = 0;
 
 int Timer;
 int Score = 000000;
@@ -149,6 +150,8 @@ private:
 
 	Enemy koopa;
 	Texture2D Koopa;
+	Enemy shell;
+	Texture2D Shell;
 
 	//PowerUp
 	PowerUp mooshroom;
@@ -463,7 +466,7 @@ public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, -600), frameCounter(0),
 		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350),
-		fireFlower(450, 600), fireBall(0, 9000) {
+		fireFlower(450, 600), fireBall(0, 9000), shell(0, 9000) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
 		InitAudioDevice();              // Initialize audio device
@@ -500,6 +503,9 @@ public:
 		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
 		Goomba_chafado = LoadTexture("Resources/Sprites/Enemies/Goomba_chafado.png");
 		goomba_sprite = Goomba;
+		Koopa = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
+		Shell = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
+		
 
 		/*------------------------------------------------------------*/
 		/*                           FONDO                            */
@@ -761,10 +767,14 @@ private:
 		mooshroom.powerup_hitbox = { mooshroom.position.x, mooshroom.position.y, 16,16 };
 		fireFlower.powerup_hitbox = { fireFlower.position.x, fireFlower.position.y, 16, 16 };
 		fireBall.projectile_hitbox = { fireBall.position.x, fireBall.position.y, 4, 4 };
+		koopa.goomba_hitbox = { koopa.position.x, koopa.position.y, 16, 24 };
+		shell.goomba_hitbox = { shell.position.x,shell.position.y,16,16 };
 
 		bool hitObstacleFloor = false;
 		bool hitObstacleWall = false;
 		bool onGroundEnemy = false;
+		bool onGroundKoopa = false;
+		bool onGroundShell = false;
 		bool onGroundPowerUp = false;
 		bool projectileHitObstacleFloor = false;
 
@@ -854,6 +864,24 @@ private:
 			fireFlower.active = true;
 		}
 
+		//SHELL
+		if (player.position.x >= shell.position.x && player.alive != 0) {
+			shell.activated = true;
+		}
+
+		if (shell.activated && shell.death == false && player.alive != 0 && shell.side && Timer > 0) {
+			shell.position.x += shell.speed.x * -deltaTime;
+		}
+		if (shell.activated && shell.death == false && player.alive != 0 && !shell.side && Timer > 0) {
+			shell.position.x += shell.speed.x * deltaTime;
+		}
+
+		if (shell.death == true) {
+			if (player.position.y >= shell.position.y) {
+				shell.position.y = 1000;
+			}
+		}
+
 		//GOOMBA
 		if (player.position.x - goomba.position.x <= -200 && goomba.death == false && player.alive != 0 && Timer > 0) {
 			goomba.activated = true;
@@ -871,6 +899,26 @@ private:
 			if (player.position.y >= goomba.position.y) {
 				goomba.position.y = 1000;
 			}
+		}
+
+		//Koopa
+		if (player.position.x - koopa.position.x <= -200 && koopa.death == false && player.alive != 0 && Timer > 0) {
+			koopa.activated = true;
+		}
+		koopa.speed.x = 1.0f;
+		if (koopa.activated && koopa.death == false && player.alive != 0 && koopa.side && Timer > 0) {
+			koopa.position.x += -120 * deltaTime;
+		}
+		if (koopa.activated && koopa.death == false && player.alive != 0 && !koopa.side && Timer > 0) {
+			koopa.position.x += 120 * deltaTime;
+		}
+
+		if (koopa.death == true) {
+			if (player.position.y >= koopa.position.y) {
+				shell.position = koopa.position;
+				koopa.position.y = 1000;
+			}
+			
 		}
 
 		//--------Colisiones de Mario--------\\
@@ -1027,6 +1075,92 @@ private:
 			}
 		}
 
+		if (koopa.alive && !koopa.death && player.position.x + player.mario_hitbox.width + 10 >= koopa.position.x &&
+			player.position.x <= koopa.position.x + koopa.goomba_hitbox.width + 20 &&
+			player.position.y + player.mario_hitbox.height + 16 >= koopa.position.y && player.position.y <= koopa.position.y + koopa.goomba_hitbox.height
+			&& !player.invencible)
+		{
+			if (player.position.y + player.mario_hitbox.height <= koopa.position.y && player.alive) {
+				shell.position = koopa.position;
+				shell.side = koopa.side;
+				koopa.death = true;
+				Score += 100;
+				player.speed.y = -PLAYER_JUMP_SPD + 100;
+				player.canJump = false;
+				player.canJump2 = true;
+				player.jumpTime = 0.0f;
+			}
+			else if (player.big && player.fire && !player.invencible) {
+				player.invencible = true;
+				player.fire = 0;
+				player.invulnerableTimer = 0.0f;
+				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
+			}
+			else if (player.big && !player.fire && !player.invencible) {
+				player.invencible = true;
+				player.big = 0;
+				player.invulnerableTimer = 0.0f;
+				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
+			}
+			else if (!player.big && !player.fire && !player.invencible) {
+				player.alive = 0;
+			}
+		}
+
+		if (shell.alive && !shell.death && player.position.x + player.mario_hitbox.width + 10 >= shell.position.x &&
+			player.position.x <= shell.position.x + shell.goomba_hitbox.width + 20 &&
+			player.position.y + player.mario_hitbox.height + 16 >= shell.position.y && player.position.y <= shell.position.y + shell.goomba_hitbox.height
+			&& !player.invencible)
+		{
+			if (player.position.y + player.mario_hitbox.height <= shell.position.y && player.alive) {
+				shell.speed.x = 0;
+				player.speed.y = -PLAYER_JUMP_SPD + 100;
+				player.canJump = false;
+				player.canJump2 = true;
+				player.jumpTime = 0.0f;
+			}
+			else if (player.big && player.fire && !player.invencible && shell.speed.x <= 0 && player.side) {
+				shell.speed.x = 300;
+				shell.side = true;
+			}
+			else if (player.big && !player.fire && !player.invencible && shell.speed.x <= 0 && player.side) {
+				shell.speed.x = 300;
+				shell.side = true;
+			}
+			else if (!player.big && !player.fire && !player.invencible && shell.speed.x <= 0 && player.side) {
+				shell.speed.x = 300;
+				shell.side = true;
+			}
+			else if (player.big && player.fire && !player.invencible && shell.speed.x <= 0 && !player.side) {
+				shell.speed.x = 300;
+				shell.side = false;
+			}
+			else if (player.big && !player.fire && !player.invencible && shell.speed.x <= 0 && !player.side) {
+				shell.speed.x = 300;
+				shell.side = false;
+			}
+			else if (!player.big && !player.fire && !player.invencible && shell.speed.x <= 0 && !player.side) {
+				shell.speed.x = 300;
+				shell.side = false;
+			}
+			else if (player.big && player.fire && !player.invencible && shell.speed.x > 0) {
+				player.invencible = true;
+				player.fire = 0;
+				player.invulnerableTimer = 0.0f;
+				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
+			}
+			else if (player.big && !player.fire && !player.invencible && shell.speed.x > 0) {
+				player.invencible = true;
+				player.big = 0;
+				player.invulnerableTimer = 0.0f;
+				player.speed.y = -PLAYER_JUMP_SPD * 0.5f;
+			}
+			else if (!player.big && !player.fire && !player.invencible && shell.speed.x > 0) {
+				player.alive = 0;
+			}
+		}
+		
+
 		if (player.invencible) {
 			player.invulnerableTimer += GetFrameTime();
 			player.visible = fmod(player.invulnerableTimer, 0.15f) < 0.1f;
@@ -1046,6 +1180,17 @@ private:
 			fireBall.active = false;
 			fireBall.position.y = 9000;
 		}
+
+		if (koopa.alive && fireBall.position.x + fireBall.projectile_hitbox.width + 10 >= koopa.position.x &&
+			fireBall.position.x <= koopa.position.x + koopa.goomba_hitbox.width + 20 &&
+			fireBall.position.y + fireBall.projectile_hitbox.height + 16 >= koopa.position.y && fireBall.position.y <= koopa.position.y + koopa.goomba_hitbox.height)
+		{
+			Score += 100;
+			koopa.death = true;
+			fireBall.active = false;
+			fireBall.position.y = 9000;
+		}
+		
 
 		//Con el suelo
 		for (EnvElement block : blocks) {
@@ -1072,6 +1217,57 @@ private:
 				goomba.position.y += (GRAVITY - 300) * deltaTime; //Normal upward gravity
 			}
 		}
+
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 && koopa.activated
+				&& block.rect.x <= koopa.position.x + koopa.goomba_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= koopa.position.x
+				&& block.rect.y + block.rect.height >= koopa.position.y
+				&& block.rect.y <= koopa.position.y
+				&& ColorToInt(block.color) != ColorToInt(BLUE)) {
+				onGroundKoopa = true;
+				koopa.speed.y = 0.0f;
+				koopa.position.y = block.rect.y;
+			}
+		}
+
+		if (!onGroundKoopa && player.alive && Timer > 0) {
+			koopa.position.y += (GRAVITY - 300) * deltaTime;
+			if (koopa.position.y > 0)
+			{
+				koopa.position.y += (GRAVITY - 300) * 2.0f * deltaTime; //Increase gravity in fall
+			}
+			else
+			{
+				koopa.position.y += (GRAVITY - 300) * deltaTime; //Normal upward gravity
+			}
+		}
+
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 && shell.activated
+				&& block.rect.x <= shell.position.x + shell.goomba_hitbox.width - 5
+				&& block.rect.x + block.rect.width + 10 >= shell.position.x
+				&& block.rect.y + block.rect.height >= shell.position.y
+				&& block.rect.y <= shell.position.y
+				&& ColorToInt(block.color) != ColorToInt(BLUE)) {
+				onGroundShell = true;
+				shell.speed.y = 0.0f;
+				shell.position.y = block.rect.y;
+			}
+		}
+
+		if (!onGroundShell && player.alive && Timer > 0) {
+			shell.position.y += (GRAVITY - 300) * deltaTime;
+			if (shell.position.y > 0)
+			{
+				shell.position.y += (GRAVITY - 300) * 2.0f * deltaTime; //Increase gravity in fall
+			}
+			else
+			{
+				shell.position.y += (GRAVITY - 300) * deltaTime; //Normal upward gravity
+			}
+		}
+		
 
 		//Los lados
 		float nextXE = goomba.position.x + goomba.speed.x * deltaTime; //Calcula la posición futura en X
@@ -1104,6 +1300,66 @@ private:
 			}
 		}
 
+		//Los lados
+		float next = koopa.position.x + koopa.speed.x * deltaTime; //Calcula la posición futura en X
+
+		//Derecha
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 && koopa.alive &&
+				koopa.activated && !koopa.side &&
+				koopa.position.y > block.rect.y &&
+				koopa.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				koopa.position.x - 10 <= block.rect.x &&
+				(next + koopa.goomba_hitbox.width) >= block.rect.x - 15
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				koopa.side = true;
+			}
+		}
+
+		//Izquierda
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				koopa.activated && koopa.side &&
+				koopa.position.y > block.rect.y &&
+				koopa.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				koopa.position.x + 10 >= (block.rect.x + block.rect.width) &&
+				(next) <= (block.rect.x + block.rect.width + 20)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				koopa.side = false;
+			}
+		}
+		//Los lados
+		float nextshell = shell.position.x + shell.speed.x * deltaTime; //Calcula la posición futura en X
+
+		//Derecha
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 && shell.alive &&
+				shell.activated && !shell.side &&
+				shell.position.y > block.rect.y &&
+				shell.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				shell.position.x - 10 <= block.rect.x &&
+				(nextshell + shell.goomba_hitbox.width) >= block.rect.x - 15
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				shell.side = true;
+			}
+		}
+
+		//Izquierda
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				shell.activated && shell.side &&
+				shell.position.y > block.rect.y &&
+				shell.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				shell.position.x + 10 >= (block.rect.x + block.rect.width) &&
+				(nextshell) <= (block.rect.x + block.rect.width + 20)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				shell.side = false;
+			}
+		}
 		//--------Colisiones de Power-Ups--------\\
 
 		//Con Mario
@@ -1161,6 +1417,9 @@ private:
 				projectileHitObstacleFloor = true;
 				fireBall.speed.y = 500.0f * deltaTime;
 				projectileHitObstacleFloor = false;
+				
+				fireBall.position.y = block.rect.y;
+				
 			}
 		}
 		if (!projectileHitObstacleFloor && player.alive && Timer > 0) {
@@ -1253,8 +1512,10 @@ private:
 			camera.target.x = 333;
 			camera.target.y = 350;
 			goomba.position = { 1400, 600 };
+			koopa.position = { 1600, 600 };
 			mooshroom.position = { 900, 350 };
 			fireFlower.position = { 900, 600 };
+			shell.position = { 0, 10000 };
 			Timer = 400;
 			Money = 00;
 			Score = 000000;
@@ -1265,6 +1526,8 @@ private:
 			player.fire = 0;
 			goomba.side = true;
 			goomba.death = false;
+			koopa.side = true;
+			koopa.death = false;
 			elapsedTime = 0.0f;
 			contmuerte = 0;
 		}
@@ -1940,6 +2203,8 @@ private:
 		DrawTexturePro(Mooshroom, sourceRec2, { mooshroom.position.x - 20, mooshroom.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		DrawTexturePro(FireFlower, sourceRec2, { fireFlower.position.x - 20, fireFlower.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		DrawTexturePro(FireBall, sourceRec2, { fireBall.position.x - 20, fireBall.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
+		DrawTexturePro(Koopa, sourceRec2, { koopa.position.x - 20, koopa.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
+		DrawTexturePro(Shell, sourceRec2, { shell.position.x - 20, shell.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		
 		//META Y CASTILLO//
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);

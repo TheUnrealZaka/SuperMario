@@ -115,6 +115,13 @@ struct Flag {
 	Flag(float x, float y) : position{ x, y }, reached(false) {}
 };
 
+//PIPE
+struct Pipe {
+	Rectangle pipe1 = { 2600, 350, 100, 200, };
+	Rectangle pipe2 = { 565, -585, 20, 90 };
+	bool enteringPipe = false; //No entra 
+};
+
 /*--------------------------------------------------------------------------*/
 /*                             MAIN CLASS GAME                              */
 /*--------------------------------------------------------------------------*/
@@ -177,6 +184,7 @@ private:
 	Flag flag;
 	Texture2D flagTexture;
 	Texture2D tuberia;
+	Pipe pipe;
 
 	//Map
 	Texture2D castle;
@@ -220,168 +228,168 @@ private:
 	{950, 400, 50, 50, GREEN},
 	{1000, 400, 50, 50, GREEN}, // MONEDAS
 	{1050, 400, 50, 50, GREEN},
-		//Bloque superior
-	{950, 200, 50, 50, GREEN}, //MONEDAS
+	//Bloque superior
+{950, 200, 50, 50, GREEN}, //MONEDAS
 
-	//Tuberias
-	{1250, 500, 100, 100, GREEN},
-	{1675, 450, 100, 150, GREEN},
-	{2075, 400, 100, 200, GREEN},
-	{2600, 400, 100, 200, GREEN},
+//Tuberias
+{1250, 500, 100, 100, GREEN},
+{1675, 450, 100, 150, GREEN},
+{2075, 400, 100, 200, GREEN},
+{2600, 400, 100, 200, GREEN},
 
-	//Bloque oculto (ya se hará) -Vida extra-
-	//Boquete 1
-	{3150, 600, 50, 50, BLUE},
-	{3200, 600, 50, 50, BLUE},
-	{3150, 650, 50, 50, BLUE},
-	{3200, 650, 50, 50, BLUE},
-	//Segundo conjuto de bloques
-		//Zona inferior
-	{3550, 400, 50, 50, GREEN},
-	{3600, 400, 50, 50, GREEN}, //Champiñon
-	{3650, 400, 50, 50, GREEN},
-		//Zona superior
-	{3700, 200, 50, 50, GREEN},
-	{3750, 200, 50, 50, GREEN},
-	{3800, 200, 50, 50, GREEN},
-	{3850, 200, 50, 50, GREEN},
-	{3900, 200, 50, 50, GREEN},
-	{3950, 200, 50, 50, GREEN},
-	{4000, 200, 50, 50, GREEN},
-	{4050, 200, 50, 50, GREEN},
-	//Boquete 2
-	{4010, 600, 50, 50, BLUE},
-	{4060, 600, 50, 50, BLUE},
-	{4110, 600, 50, 50, BLUE},
+//Bloque oculto (ya se hará) -Vida extra-
+//Boquete 1
+{3150, 600, 50, 50, BLUE},
+{3200, 600, 50, 50, BLUE},
+{3150, 650, 50, 50, BLUE},
+{3200, 650, 50, 50, BLUE},
+//Segundo conjuto de bloques
+	//Zona inferior
+{3550, 400, 50, 50, GREEN},
+{3600, 400, 50, 50, GREEN}, //Champiñon
+{3650, 400, 50, 50, GREEN},
+//Zona superior
+{3700, 200, 50, 50, GREEN},
+{3750, 200, 50, 50, GREEN},
+{3800, 200, 50, 50, GREEN},
+{3850, 200, 50, 50, GREEN},
+{3900, 200, 50, 50, GREEN},
+{3950, 200, 50, 50, GREEN},
+{4000, 200, 50, 50, GREEN},
+{4050, 200, 50, 50, GREEN},
+//Boquete 2
+{4010, 600, 50, 50, BLUE},
+{4060, 600, 50, 50, BLUE},
+{4110, 600, 50, 50, BLUE},
 
-	{4010, 650, 50, 50, BLUE},
-	{4060, 650, 50, 50, BLUE},
-	{4110, 650, 50, 50, BLUE},
+{4010, 650, 50, 50, BLUE},
+{4060, 650, 50, 50, BLUE},
+{4110, 650, 50, 50, BLUE},
 
-	{4010, 700, 50, 50, BLUE},
-	{4060, 700, 50, 50, BLUE},
-	{4110, 700, 50, 50, BLUE},
+{4010, 700, 50, 50, BLUE},
+{4060, 700, 50, 50, BLUE},
+{4110, 700, 50, 50, BLUE},
 
 
-		//Zona superior 2
-	{4250, 200, 50, 50, GREEN},
-	{4300, 200, 50, 50, GREEN},
-	{4350, 200, 50, 50, GREEN},
-	{4400, 200, 50, 50, GREEN},//Monedas
-		//Bloque inferior
-	{4400, 400, 50, 50, GREEN}, //Moneda
+//Zona superior 2
+{4250, 200, 50, 50, GREEN},
+{4300, 200, 50, 50, GREEN},
+{4350, 200, 50, 50, GREEN},
+{4400, 200, 50, 50, GREEN},//Monedas
+//Bloque inferior
+{4400, 400, 50, 50, GREEN}, //Moneda
 
-	//Bloques extrella
-	{4700, 400, 50, 50, GREEN},
-	{4750, 400, 50, 50, GREEN}, //Estrella
+//Bloques extrella
+{4700, 400, 50, 50, GREEN},
+{4750, 400, 50, 50, GREEN}, //Estrella
 
-	//Bloques ?
-		//Inferior
-	{5000, 400, 50, 50, GREEN}, //Monedas
-	{5125, 400, 50, 50, GREEN}, //Monedas
-	{5250, 400, 50, 50, GREEN}, //Monedas
-		//Superior
-	{5125, 200, 50, 50, GREEN}, //Champiñon
+//Bloques ?
+	//Inferior
+{5000, 400, 50, 50, GREEN}, //Monedas
+{5125, 400, 50, 50, GREEN}, //Monedas
+{5250, 400, 50, 50, GREEN}, //Monedas
+//Superior
+{5125, 200, 50, 50, GREEN}, //Champiñon
 
-	//Secuencia de bloques
-	{5550, 400, 50, 50, GREEN},
+//Secuencia de bloques
+{5550, 400, 50, 50, GREEN},
 
-	{5700, 200, 50, 50, GREEN},
-	{5750, 200, 50, 50, GREEN},
-	{5800, 200, 50, 50, GREEN},
+{5700, 200, 50, 50, GREEN},
+{5750, 200, 50, 50, GREEN},
+{5800, 200, 50, 50, GREEN},
 
-	{6000, 200, 50, 50, GREEN},
-	{6050, 200, 50, 50, GREEN},
-	{6100, 200, 50, 50, GREEN},
-	{6150, 200, 50, 50, GREEN},
+{6000, 200, 50, 50, GREEN},
+{6050, 200, 50, 50, GREEN},
+{6100, 200, 50, 50, GREEN},
+{6150, 200, 50, 50, GREEN},
 
-	{6050, 400, 50, 50, GREEN},
-	{6100, 400, 50, 50, GREEN},
+{6050, 400, 50, 50, GREEN},
+{6100, 400, 50, 50, GREEN},
 
-	//Primera escalera
-	//Primer escalon
-	{6310, 550, 50, 50, GREEN},
-	{6360, 550, 50, 50, GREEN},
-	{6410, 550, 50, 50, GREEN},
-	{6460, 550, 50, 50, GREEN},
-	//Segundo escalon
-	{6360, 500, 50, 50, GREEN},
-	{6410, 500, 50, 50, GREEN},
-	{6460, 500, 50, 50, GREEN},
-	//Tercer escalon
-	{6410, 450, 50, 50, GREEN},
-	{6460, 450, 50, 50, GREEN},
-	//Quarto escalon
-	{6460, 400, 50, 50, GREEN},
-	//-Invertida-//
-	//Primer escalón
-	{6590, 550, 50, 50, GREEN},
-	{6640, 550, 50, 50, GREEN},
-	{6690, 550, 50, 50, GREEN},
-	{6740, 550, 50, 50, GREEN},
-	//Segundo escalón
-	{6590, 500, 50, 50, GREEN},
-	{6640, 500, 50, 50, GREEN},
-	{6690, 500, 50, 50, GREEN},
-	//Tercer escalón
-	{6590, 450, 50, 50, GREEN},
-	{6640, 450, 50, 50, GREEN},
-	//Quarto escalón
-	{6590, 400, 50, 50, GREEN},
+//Primera escalera
+//Primer escalon
+{6310, 550, 50, 50, GREEN},
+{6360, 550, 50, 50, GREEN},
+{6410, 550, 50, 50, GREEN},
+{6460, 550, 50, 50, GREEN},
+//Segundo escalon
+{6360, 500, 50, 50, GREEN},
+{6410, 500, 50, 50, GREEN},
+{6460, 500, 50, 50, GREEN},
+//Tercer escalon
+{6410, 450, 50, 50, GREEN},
+{6460, 450, 50, 50, GREEN},
+//Quarto escalon
+{6460, 400, 50, 50, GREEN},
+//-Invertida-//
+//Primer escalón
+{6590, 550, 50, 50, GREEN},
+{6640, 550, 50, 50, GREEN},
+{6690, 550, 50, 50, GREEN},
+{6740, 550, 50, 50, GREEN},
+//Segundo escalón
+{6590, 500, 50, 50, GREEN},
+{6640, 500, 50, 50, GREEN},
+{6690, 500, 50, 50, GREEN},
+//Tercer escalón
+{6590, 450, 50, 50, GREEN},
+{6640, 450, 50, 50, GREEN},
+//Quarto escalón
+{6590, 400, 50, 50, GREEN},
 
-	//Segunda escalera
-	//Primer escalon
-	{6970, 550, 50, 50, GREEN},
-	{7020, 550, 50, 50, GREEN},
-	{7070, 550, 50, 50, GREEN},
-	{7120, 550, 50, 50, GREEN},
-	{7170, 550, 50, 50, GREEN},
+//Segunda escalera
+//Primer escalon
+{6970, 550, 50, 50, GREEN},
+{7020, 550, 50, 50, GREEN},
+{7070, 550, 50, 50, GREEN},
+{7120, 550, 50, 50, GREEN},
+{7170, 550, 50, 50, GREEN},
 
-	//Segundo escalon
-	{7020, 500, 50, 50, GREEN},
-	{7070, 500, 50, 50, GREEN},
-	{7120, 500, 50, 50, GREEN},
-	{7170, 500, 50, 50, GREEN},
+//Segundo escalon
+{7020, 500, 50, 50, GREEN},
+{7070, 500, 50, 50, GREEN},
+{7120, 500, 50, 50, GREEN},
+{7170, 500, 50, 50, GREEN},
 
-	//Tercer escalon
-	{7070, 450, 50, 50, GREEN},
-	{7120, 450, 50, 50, GREEN},
-	{7170, 450, 50, 50, GREEN},
+//Tercer escalon
+{7070, 450, 50, 50, GREEN},
+{7120, 450, 50, 50, GREEN},
+{7170, 450, 50, 50, GREEN},
 
-	//Quarto escalon
-	{7120, 400, 50, 50, GREEN},
-	{7170, 400, 50, 50, GREEN},
+//Quarto escalon
+{7120, 400, 50, 50, GREEN},
+{7170, 400, 50, 50, GREEN},
 
-		//BOQUETE 3
-	
-	//-Invertida-//
-	//Primer escalón
-	{7320, 550, 50, 50, GREEN},
-	{7370, 550, 50, 50, GREEN},
-	{7420, 550, 50, 50, GREEN},
+//BOQUETE 3
 
-	//Segundo escalón
-	{7320, 500, 50, 50, GREEN},
-	{7370, 500, 50, 50, GREEN},
-	{7420, 500, 50, 50, GREEN},
+//-Invertida-//
+//Primer escalón
+{7320, 550, 50, 50, GREEN},
+{7370, 550, 50, 50, GREEN},
+{7420, 550, 50, 50, GREEN},
 
-	//Tercer escalón
-	{7320, 450, 50, 50, GREEN},
-	{7370, 450, 50, 50, GREEN},
+//Segundo escalón
+{7320, 500, 50, 50, GREEN},
+{7370, 500, 50, 50, GREEN},
+{7420, 500, 50, 50, GREEN},
 
-	//Quarto escalón
-	{7320, 400, 50, 50, GREEN},
+//Tercer escalón
+{7320, 450, 50, 50, GREEN},
+{7370, 450, 50, 50, GREEN},
 
-	//Tuberias finales
-	{7700, 500, 100, 100, GREEN},
-		//Bloques intermedios
-		{7950, 400, 50, 50, GREEN},
-		{8000, 400, 50, 50, GREEN},
-		{8050, 400, 50, 50, GREEN},
-		{8100, 400, 50, 50, GREEN},
-	{8460, 500, 100, 100, GREEN},
+//Quarto escalón
+{7320, 400, 50, 50, GREEN},
 
-	//ESCALERA FINAL
+//Tuberias finales
+{7700, 500, 100, 100, GREEN},
+//Bloques intermedios
+{7950, 400, 50, 50, GREEN},
+{8000, 400, 50, 50, GREEN},
+{8050, 400, 50, 50, GREEN},
+{8100, 400, 50, 50, GREEN},
+{8460, 500, 100, 100, GREEN},
+
+//ESCALERA FINAL
 // Primer escalón (base de 9 bloques)
 	{8570, 550, 50, 50, GREEN},
 	{8620, 550, 50, 50, GREEN},
@@ -448,24 +456,24 @@ private:
 	//Cueba escenario
 		//Suelo
 	{ -112, -500, 850, 100, GREEN },
-		//Paredes-
-	{ -112, -1000, 50, 500, GREEN },
-	{ 688, -1000, 50, 500, GREEN },
+	//Paredes-
+{ -112, -1000, 50, 500, GREEN },
+{ 688, -1000, 50, 500, GREEN },
 
-		//techo
-	{ 88, -1000, 350, 50, GREEN },//1
+//techo
+{ 88, -1000, 350, 50, GREEN },//1
 
-		//Zona monedas
-	{ 88, -650, 350, 150, GREEN },//1
-		//tuberia
-	{ 578, -600, 100, 100, GREEN },//1
+//Zona monedas
+{ 88, -650, 350, 150, GREEN },//1
+//tuberia
+{ 578, -600, 100, 100, GREEN },//1
 
 	};
 
 public:
 	//Initialise the game
 	Game() : currentScreen(GameScreen::LOGO), framesCounter(0), player(50, -600), frameCounter(0),
-		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(700, 330), flag(9375, 264), mooshroom(900, 350),
+		playFrameCounter(0), currentPlayFrame(0), goomba(1400, 600), koopa(1600, 600), flag(9375, 264), mooshroom(900, 350),
 		fireFlower(450, 600), fireBall(0, 9000), shell(0, 9000) {
 
 		InitWindow(screenWidth, screenHeight, "Super Mario + Screen Manager");
@@ -505,7 +513,7 @@ public:
 		goomba_sprite = Goomba;
 		Koopa = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
 		Shell = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
-		
+
 
 		/*------------------------------------------------------------*/
 		/*                           FONDO                            */
@@ -542,7 +550,7 @@ public:
 		/*------------------------------------------------------------*/
 		/*                          Tileset                           */
 		/*------------------------------------------------------------*/
-	
+
 		castle = LoadTexture("Resources/Sprites/Tileset/Castle.png");
 		flagTexture = LoadTexture("Resources/Sprites/Tileset/Flag.png");
 		tuberia_s = LoadTexture("Resources/Sprites/Tileset/Tuberia1.png");
@@ -551,9 +559,9 @@ public:
 		tuberia_cueva = LoadTexture("Resources/Sprites/Tileset/Tuberia_cueva.png");
 		tubo = LoadTexture("Resources/Sprites/Tileset/Tubo.png");
 
-	/*--------------------------------------------------------------------------*/
-	/*                            Text font										*/
-	/*--------------------------------------------------------------------------*/
+		/*--------------------------------------------------------------------------*/
+		/*                            Text font										*/
+		/*--------------------------------------------------------------------------*/
 
 		marioFont = LoadFont("Resources/Fonts/MarioFont.ttf");
 
@@ -572,7 +580,7 @@ public:
 		UnloadTexture(mario_sprite);
 		UnloadFont(marioFont);
 		UnloadAudioAssets();
-		
+
 		CloseWindow();
 	}
 
@@ -607,9 +615,9 @@ private:
 			framesCounter++;
 			if (framesCounter >= 120) {
 				currentScreen = GameScreen::GAMEPLAY;
-				player.position = { 50, -600 };
+				player.position = { 50, 600 };
 				camera.target.x = 333;
-				camera.target.y = -750;
+				camera.target.y = 350;
 				goomba.position = { 1400, 600 };
 				mooshroom.position = { 900, 350 };
 				fireFlower.position = { 900, 600 };
@@ -747,7 +755,7 @@ private:
 			break;
 
 		case GameScreen::ENDING:
-			
+
 			if (IsKeyPressed(KEY_ENTER)) {
 				player.lifes = 3;
 				flag.reached = false;
@@ -918,7 +926,7 @@ private:
 				shell.position = koopa.position;
 				koopa.position.y = 1000;
 			}
-			
+
 		}
 
 		//--------Colisiones de Mario--------\\
@@ -1159,7 +1167,7 @@ private:
 				player.alive = 0;
 			}
 		}
-		
+
 
 		if (player.invencible) {
 			player.invulnerableTimer += GetFrameTime();
@@ -1190,7 +1198,7 @@ private:
 			fireBall.active = false;
 			fireBall.position.y = 9000;
 		}
-		
+
 
 		//Con el suelo
 		for (EnvElement block : blocks) {
@@ -1267,7 +1275,7 @@ private:
 				shell.position.y += (GRAVITY - 300) * deltaTime; //Normal upward gravity
 			}
 		}
-		
+
 
 		//Los lados
 		float nextXE = goomba.position.x + goomba.speed.x * deltaTime; //Calcula la posición futura en X
@@ -1417,9 +1425,9 @@ private:
 				projectileHitObstacleFloor = true;
 				fireBall.speed.y = 500.0f * deltaTime;
 				projectileHitObstacleFloor = false;
-				
+
 				fireBall.position.y = block.rect.y;
-				
+
 			}
 		}
 		if (!projectileHitObstacleFloor && player.alive && Timer > 0) {
@@ -1476,6 +1484,41 @@ private:
 				mooshroom.side = false;
 			}
 		}
+		//--------Colision Tuberia--------\\
+			// PIPES 
+		if (CheckCollisionRecs(player.mario_hitbox, pipe.pipe1) && IsKeyDown(KEY_DOWN)) {
+			pipe.enteringPipe = true;
+		}
+		if (pipe.enteringPipe) {
+			player.position.x += 0.5;
+
+			if (player.position.y >= 350) {
+				// Por ejemplo, cambia de zona
+				player.position.x = -10;
+				player.position.y = -950;
+
+				camera.target.x = 333;
+				camera.target.y = -750;
+				pipe.enteringPipe = false;
+			}
+		}
+
+		else if (CheckCollisionRecs(player.mario_hitbox, pipe.pipe2) && IsKeyDown(KEY_RIGHT)) {
+			pipe.enteringPipe = true;
+		}
+		if (pipe.enteringPipe) {
+			player.position.x += 0.5;
+
+			if (player.position.x >= 600) {
+				// Por ejemplo, cambia de zona
+				player.position.x = 7750;
+				player.position.y = 500;
+
+				camera.target.x = 8000;
+				camera.target.y = 350;
+				pipe.enteringPipe = false;
+			}
+		}
 
 		//--------Colision Bandera--------\\
 		
@@ -1496,7 +1539,7 @@ private:
 					float playerMovementSpeed = 120.0f * GetFrameTime();
 					player.position.x += playerMovementSpeed;
 				}
-				
+
 				if (player.position.x >= flag.position.x + 800) {
 					currentScreen = GameScreen::ENDING;
 					Mario_Right = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
@@ -1607,7 +1650,7 @@ private:
 
 			DrawGameplay();
 			AudioGameplay();
-			
+
 
 			break;
 
@@ -1700,7 +1743,7 @@ private:
 		UnloadMusicStream(musicOverworld_hurry);
 		UnloadMusicStream(musicInvencible);
 		UnloadMusicStream(musicInvencible_hurry);
-		
+
 		UnloadSound(sfxJumpSmall);
 		UnloadSound(sfxJumpSuper);
 		UnloadSound(sfxMushroom);
@@ -1739,7 +1782,7 @@ private:
 		else if (player.side && !player.fire) mario_sprite = Mario_Left;
 		else if (!player.side && player.fire && player.big) mario_sprite = Mario_Fire_Right;
 		else if (player.side && player.fire && player.big) mario_sprite = Mario_Fire_Left;
-		
+
 		Rectangle sourceRec = { 0, 0, (float)frameWidthP, (float)frameHeightP };
 
 		static float frameTime = 0.0f;
@@ -2103,7 +2146,7 @@ private:
 		DrawTexturePro(bloque_int, sourceRec4, { 6050, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 6100, 200, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
 		DrawTexturePro(bloque_int, sourceRec4, { 8050, 400, sourceRec4.width * 3.2f, sourceRec4.height * 3.2f }, { 0, 0 }, 0, WHITE);
-			// Fondo negro
+		// Fondo negro
 		DrawTextureEx(negro, { -200, -1500 }, 0.0f, 1500.0f, WHITE);
 		//Cueba
 	// Suelo
@@ -2205,7 +2248,7 @@ private:
 		DrawTexturePro(FireBall, sourceRec2, { fireBall.position.x - 20, fireBall.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		DrawTexturePro(Koopa, sourceRec2, { koopa.position.x - 20, koopa.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
 		DrawTexturePro(Shell, sourceRec2, { shell.position.x - 20, shell.position.y - 48, sourceRec.width * 3, sourceRec2.height * 3 }, { 0,0 }, 0, WHITE);
-		
+
 		//META Y CASTILLO//
 		DrawTextureEx(flagTexture, { 9375, flag.position.y - flagTexture.height }, 0, 3, WHITE);
 		DrawTextureEx(castle, { (9675), (360) }, 0.0f, 3, WHITE);

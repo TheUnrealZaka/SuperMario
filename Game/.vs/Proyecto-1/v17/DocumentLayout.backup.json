@@ -38,8 +38,7 @@
               "RelativeToolTip": "build\\build_files\\Music and Sounds.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-09T00:30:25.111Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-09T00:30:25.111Z"
             },
             {
               "$type": "Document",
@@ -51,8 +50,7 @@
               "RelativeToolTip": "build\\build_files\\Music and Sounds.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-05-09T00:24:48.476Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-09T00:24:48.476Z"
             },
             {
               "$type": "Document",
@@ -62,10 +60,9 @@
               "RelativeDocumentMoniker": "build\\build_files\\main.cpp",
               "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp",
               "RelativeToolTip": "build\\build_files\\main.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-28T07:33:56.301Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-28T07:33:56.301Z"
             },
             {
               "$type": "Document",
@@ -73,9 +70,9 @@
               "Title": "Super Mario Bros 1.cpp",
               "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
               "RelativeDocumentMoniker": "build\\build_files\\Super Mario Bros 1.cpp",
-              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
-              "RelativeToolTip": "build\\build_files\\Super Mario Bros 1.cpp",
-              "ViewState": "AgIAAEEHAAAAAAAAAAAAAFgHAAAnAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp*",
+              "RelativeToolTip": "build\\build_files\\Super Mario Bros 1.cpp*",
+              "ViewState": "AgIAAMsFAAAAAAAAAAAAAPEFAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-04-28T07:33:56.368Z",
               "EditorCaption": ""

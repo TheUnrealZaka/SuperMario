@@ -119,7 +119,8 @@ struct Flag {
 struct Pipe {
 	Rectangle pipe1 = { 2600, 350, 100, 200, };
 	Rectangle pipe2 = { 565, -585, 20, 90 };
-	bool enteringPipe = false; //No entra 
+	bool enteringPipe1 = false; //No entra
+	bool enteringPipe2 = false; //No entra 
 };
 
 /*--------------------------------------------------------------------------*/
@@ -790,7 +791,7 @@ private:
 		elapsedTime += deltaTime * 2.5;
 
 		//In-game controls and conditions
-		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && !flag.reached && Timer > 0 && player.alive != 0)
+		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && !flag.reached && Timer > 0 && player.alive != 0 && !pipe.enteringPipe1 && !pipe.enteringPipe2)
 		{
 			if (IsKeyDown(KEY_LEFT_SHIFT) && !flag.reached && Timer > 0 && !hitObstacleWall)
 			{
@@ -801,7 +802,7 @@ private:
 			player.speed.x = 2.0f;
 		}
 
-		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_DOWN) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && player.alive != 0)
+		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_DOWN) && player.position.x > camera.target.x - screenWidth / 2.3f && !flag.reached && Timer > 0 && player.alive != 0 && !pipe.enteringPipe1 && !pipe.enteringPipe2)
 		{
 			if (IsKeyDown(KEY_LEFT_SHIFT) && player.position.x > camera.target.x - screenWidth / 2.0f && !flag.reached && Timer > 0 && !hitObstacleWall)
 			{
@@ -811,7 +812,7 @@ private:
 			player.position.x -= PLAYER_HOR_SPD * deltaTime;
 			player.speed.x = -2.0f;
 		}
-		if (player.position.x > camera.target.x && camera.target.x < 9795)
+		if (player.position.x > camera.target.x && camera.target.x < 9795 && player.position.y >= 0)
 		{
 			camera.target.x = player.position.x;
 		}
@@ -819,7 +820,7 @@ private:
 		static constexpr float MAX_JUMP_TIME = 0.3f;
 		static constexpr float JUMP_HOLD_FORCE = 500.0f;
 
-		if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0 && player.alive != 0) {
+		if (IsKeyPressed(KEY_SPACE) && player.canJump && !flag.reached && Timer > 0 && player.alive != 0 && !pipe.enteringPipe1 && !pipe.enteringPipe2) {
 			player.speed.y = -PLAYER_JUMP_SPD;
 			player.canJump = false;
 			player.canJump2 = true;
@@ -827,18 +828,18 @@ private:
 			PlaySound(sfxJumpSmall);
 		}
 
-		if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0 && player.alive != 0) {
+		if (IsKeyDown(KEY_SPACE) && player.canJump2 && player.jumpTime < MAX_JUMP_TIME && !flag.reached && Timer > 0 && player.alive != 0 && !pipe.enteringPipe1 && !pipe.enteringPipe2) {
 			player.speed.y -= JUMP_HOLD_FORCE * deltaTime;
 			player.jumpTime += deltaTime;
 		}
 
-		if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0 && player.alive != 0) {
+		if (IsKeyReleased(KEY_SPACE) && !flag.reached && Timer > 0 && player.alive != 0 && !pipe.enteringPipe1 && !pipe.enteringPipe2) {
 			player.canJump2 = false;  //Cut the jump when releasing the key
 			player.speed.y += JUMP_HOLD_FORCE - 300;
 		}
 
 		if (player.fire && player.big) {
-			if (IsKeyPressed(KEY_X)) {
+			if (IsKeyPressed(KEY_X) && !pipe.enteringPipe1 && !pipe.enteringPipe2 && !flag.reached && player.alive && Timer > 0) {
 				fireBall.position = { player.position.x, player.position.y + -40 };
 				fireBall.active = true;
 				if (player.side) fireBall.speed.x = -650 * deltaTime;
@@ -1486,10 +1487,12 @@ private:
 		}
 		//--------Colision Tuberia--------\\
 			// PIPES 
-		if (CheckCollisionRecs(player.mario_hitbox, pipe.pipe1) && IsKeyDown(KEY_DOWN)) {
-			pipe.enteringPipe = true;
+		if (!pipe.enteringPipe1 && player.position.x + player.mario_hitbox.width - 5 >= pipe.pipe1.x && player.position.x <= pipe.pipe1.x + pipe.pipe1.width + 10
+			&& player.position.y == 400 && IsKeyDown(KEY_DOWN)) {
+			pipe.enteringPipe1 = true;
 		}
-		if (pipe.enteringPipe) {
+
+		if (pipe.enteringPipe1) {
 			player.position.x += 0.5;
 
 			if (player.position.y >= 350) {
@@ -1499,14 +1502,15 @@ private:
 
 				camera.target.x = 333;
 				camera.target.y = -750;
-				pipe.enteringPipe = false;
+				pipe.enteringPipe1 = false;
 			}
 		}
 
-		else if (CheckCollisionRecs(player.mario_hitbox, pipe.pipe2) && IsKeyDown(KEY_RIGHT)) {
-			pipe.enteringPipe = true;
+		if (!pipe.enteringPipe2 && player.position.x >= pipe.pipe2.x - 20 && player.position.y >= pipe.pipe2.y
+			&& player.position.y < 0 && IsKeyDown(KEY_RIGHT)) {
+			pipe.enteringPipe2 = true;
 		}
-		if (pipe.enteringPipe) {
+		if (pipe.enteringPipe2) {
 			player.position.x += 0.5;
 
 			if (player.position.x >= 600) {
@@ -1516,7 +1520,7 @@ private:
 
 				camera.target.x = 8000;
 				camera.target.y = 350;
-				pipe.enteringPipe = false;
+				pipe.enteringPipe2 = false;
 			}
 		}
 
@@ -1830,7 +1834,7 @@ private:
 
 
 		//Animation of Mario
-		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached || flag.reached && camera.target.x < 9795 && (player.position.y == 600 || player.position.y == 550)) {
+		if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached && !pipe.enteringPipe1 && !pipe.enteringPipe2 || flag.reached && camera.target.x < 9795 && (player.position.y == 600 || player.position.y == 550)) {
 			if (!player.fire) mario_sprite = Mario_Right;
 			else if (player.fire) mario_sprite = Mario_Fire_Right;
 			player.side = 0;
@@ -1850,7 +1854,7 @@ private:
 			sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
 		}
 
-		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached) {
+		if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && Timer > 0 && player.alive != 0 && !flag.reached && !pipe.enteringPipe1 && !pipe.enteringPipe2) {
 			if (!player.fire) mario_sprite = Mario_Left;
 			else if (player.fire) mario_sprite = Mario_Fire_Left;
 			player.side = 1;
@@ -1870,7 +1874,7 @@ private:
 			sourceRec.x = (float)(currentFrame * frameWidthP); //Change frame
 		}
 
-		if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached && player.big) {
+		if (IsKeyDown(KEY_DOWN) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT) && Timer > 0 && player.alive != 0 && !flag.reached && player.big && !pipe.enteringPipe1 && !pipe.enteringPipe2) {
 			sourceRec.x = frameWidthP * 6; //Agacharse
 		}
 

@@ -1426,8 +1426,9 @@ private:
 				projectileHitObstacleFloor = true;
 				fireBall.speed.y = 500.0f * deltaTime;
 				projectileHitObstacleFloor = false;
-
-				fireBall.position.y = block.rect.y;
+				
+				fireBall.position.y = block.rect.y + 5;
+				fireBall.position.y = block.rect.y - 50;
 
 			}
 		}
@@ -1485,6 +1486,36 @@ private:
 				mooshroom.side = false;
 			}
 		}
+
+		//Los lados
+		float nextF = fireBall.position.x + fireBall.speed.x * deltaTime; //Calcula la posición futura en X
+
+		//Derecha
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				fireBall.active && fireBall.position.y > block.rect.y + 7 &&
+				fireBall.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				fireBall.position.x - 10 <= block.rect.x &&
+				(nextF + fireBall.projectile_hitbox.width) >= block.rect.x - 15
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				fireBall.speed.x = -500.0f * deltaTime;
+			}
+		}
+
+		//Izquierda
+		for (EnvElement block : blocks) {
+			if (Timer > 0 && player.alive != 0 &&
+				fireBall.active && fireBall.position.y > block.rect.y + 7 &&
+				fireBall.position.y < (block.rect.y + block.rect.height + block.rect.height) &&
+				fireBall.position.x >= (block.rect.x + block.rect.width) &&
+				(nextF) <= (block.rect.x + block.rect.width + 12)
+				&& ColorToInt(block.color) != ColorToInt(BLUE))
+			{
+				fireBall.speed.x = 500.0f * deltaTime;
+			}
+		}
+
 		//--------Colision Tuberia--------\\
 			// PIPES 
 		if (!pipe.enteringPipe1 && player.position.x + player.mario_hitbox.width - 5 >= pipe.pipe1.x && player.position.x <= pipe.pipe1.x + pipe.pipe1.width + 10

@@ -513,7 +513,7 @@ public:
 		Goomba_chafado = LoadTexture("Resources/Sprites/Enemies/Goomba_chafado.png");
 		goomba_sprite = Goomba;
 		Koopa = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
-		Shell = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
+		Shell = LoadTexture("Resources/Sprites/Enemies/Shell.png");
 
 
 		/*------------------------------------------------------------*/

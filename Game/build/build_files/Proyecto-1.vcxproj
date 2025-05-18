@@ -529,7 +529,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource_dir.h" />
+    <ClInclude Include="MapDatra.h" />
     <ClInclude Include="Music and Sounds.h" />
+    <ClInclude Include="Textures and Fonts.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">
@@ -540,6 +542,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Music and Sounds.cpp" />
     <ClCompile Include="Super Mario Bros 1.cpp" />
+    <ClCompile Include="Textures and fonts .cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

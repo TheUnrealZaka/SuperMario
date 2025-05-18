@@ -13,6 +13,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Music and Sounds.h" />
+    <ClInclude Include="Textures and Fonts.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapDatra.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Super Mario Bros 1.cpp">
@@ -20,5 +26,8 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Music and Sounds.cpp" />
+    <ClCompile Include="Textures and fonts .cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

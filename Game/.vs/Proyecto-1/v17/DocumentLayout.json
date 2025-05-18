@@ -7,16 +7,24 @@
       "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\Super Mario Bros 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\Music and Sounds.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Textures and fonts.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\Textures and fonts.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\Music and Sounds.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Textures and fonts .cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\Textures and fonts .cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\MapDatra.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{588C111E-4444-536B-AD4B-2CC79922EE5B}|build\\build_files\\Proyecto-1.vcxproj|solutionrelative:build\\build_files\\MapDatra.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,8 +34,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MapDatra.h",
+              "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\MapDatra.h",
+              "RelativeDocumentMoniker": "build\\build_files\\MapDatra.h",
+              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\MapDatra.h",
+              "RelativeToolTip": "build\\build_files\\MapDatra.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-18T17:05:40.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Textures and fonts .cpp",
+              "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Textures and fonts .cpp",
+              "RelativeDocumentMoniker": "build\\build_files\\Textures and fonts .cpp",
+              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Textures and fonts .cpp",
+              "RelativeToolTip": "build\\build_files\\Textures and fonts .cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-18T16:29:26.025Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
@@ -36,7 +70,7 @@
               "RelativeDocumentMoniker": "build\\build_files\\Music and Sounds.cpp",
               "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.cpp",
               "RelativeToolTip": "build\\build_files\\Music and Sounds.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAABDAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-09T00:30:25.111Z",
               "EditorCaption": ""
@@ -44,27 +78,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Music and Sounds.h",
-              "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.h",
-              "RelativeDocumentMoniker": "build\\build_files\\Music and Sounds.h",
-              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.h",
-              "RelativeToolTip": "build\\build_files\\Music and Sounds.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAASAAAAAAAAAA==",
+              "Title": "Textures and Fonts.h",
+              "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Textures and Fonts.h",
+              "RelativeDocumentMoniker": "build\\build_files\\Textures and Fonts.h",
+              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Textures and Fonts.h",
+              "RelativeToolTip": "build\\build_files\\Textures and Fonts.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-05-09T00:24:48.476Z",
+              "WhenOpened": "2025-05-18T16:25:54.355Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp",
-              "RelativeDocumentMoniker": "build\\build_files\\main.cpp",
-              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\main.cpp",
-              "RelativeToolTip": "build\\build_files\\main.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-28T07:33:56.301Z",
+              "Title": "Music and Sounds.h",
+              "DocumentMoniker": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.h",
+              "RelativeDocumentMoniker": "build\\build_files\\Music and Sounds.h",
+              "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Music and Sounds.h",
+              "RelativeToolTip": "build\\build_files\\Music and Sounds.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-09T00:24:48.476Z",
               "EditorCaption": ""
             },
             {
@@ -75,7 +109,7 @@
               "RelativeDocumentMoniker": "build\\build_files\\Super Mario Bros 1.cpp",
               "ToolTip": "C:\\Users\\ruben\\Documents\\GitHub\\Proyecto-1\\Game\\build\\build_files\\Super Mario Bros 1.cpp",
               "RelativeToolTip": "build\\build_files\\Super Mario Bros 1.cpp",
-              "ViewState": "AgIAANUBAAAAAAAAAAAAAOIBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-04-28T07:33:56.368Z",
               "EditorCaption": ""

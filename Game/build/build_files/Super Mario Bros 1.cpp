@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm> 
 #include <iostream>
+
 using namespace std;
 
 /*--------------------------------------------------------------------------*/
@@ -10,6 +11,7 @@ using namespace std;
 /*--------------------------------------------------------------------------*/
 
 #include "Music and Sounds.h"
+#include "Textures and Fonts.h"
 
 /*--------------------------------------------------------------------------*/
 /*                               GAMESTATES                                 */
@@ -38,7 +40,7 @@ int contmuerte = 0;
 int conttiempo = 0;
 
 /*--------------------------------------------------------------------------*/
-/*                            STRUCTS DEFINITION                            */
+/*                            STRUCTS DEFINITIONS                            */
 /*--------------------------------------------------------------------------*/
 
 struct Mario {
@@ -76,6 +78,7 @@ struct Enemy {
 
 	Enemy(float x, float y) : position{ x, y }, activated(false), alive(true), death(false), side(true) {}
 };
+
 struct PowerUp {
 	Vector2 position;
 	Rectangle powerup_hitbox;
@@ -97,8 +100,6 @@ struct Projectile {
 	Projectile(float x, float y) : position{ x,y }, active(false), speed{ 0,0 } {}
 };
 
-
-//Structure for objects in the environment
 struct EnvElement {
 	Rectangle rect;
 	Color color;
@@ -115,7 +116,6 @@ struct Flag {
 	Flag(float x, float y) : position{ x, y }, reached(false) {}
 };
 
-//PIPE
 struct Pipe {
 	Rectangle pipe1 = { 2600, 350, 100, 200, };
 	Rectangle pipe2 = { 565, -585, 20, 90 };
@@ -142,75 +142,16 @@ private:
 	unsigned int playFrameCounter;
 	unsigned int currentPlayFrame;
 
-	//Player
+	//Structs definitions
 	Mario player;
-	Texture2D mario_sprite;
-	Texture2D Mario_Right;
-	Texture2D Mario_Left;
-	Texture2D Mario_Fire_Right;
-	Texture2D Mario_Fire_Left;
-
-	//Enemies
 	Enemy goomba;
-	Texture2D goomba_sprite;
-	Texture2D Goomba;
-	Texture2D Goomba_chafado;
-
 	Enemy koopa;
-	Texture2D Koopa;
 	Enemy shell;
-	Texture2D Shell;
-
-	//PowerUp
 	PowerUp mooshroom;
-	Texture2D Mooshroom;
 	PowerUp fireFlower;
-	Texture2D FireFlower;
-
-	//Projectiles
 	Projectile fireBall;
-	Texture2D FireBall;
-
-	//Blocks
-	Texture2D bloque_int;
-	Texture2D bloque_int_a;
-
-	Texture2D ladrillo;
-	Texture2D escalera;
-
-	Texture2D ladrillo_cueva;
-	Texture2D suelo_cueva;
-
-	//Interactive Structures
 	Flag flag;
-	Texture2D flagTexture;
-	Texture2D tuberia;
 	Pipe pipe;
-
-	//Map
-	Texture2D castle;
-	Texture2D fondo;
-	Texture2D azul;
-	Texture2D negro;
-
-	//Pipes
-	Texture2D tuberia_s;
-	Texture2D tuberia_m;
-	Texture2D tuberia_b;
-	Texture2D tubo;
-	Texture2D tuberia_cueva;
-	//Objects
-	Texture2D money;
-
-	//Other Textures
-	Texture2D logoTexture;
-	Texture2D UI;
-	Texture2D Level1;
-	Texture2D icon_lifes;
-	Texture2D icon_money;
-
-	//Typography
-	Font marioFont;
 
 	//Blocks
 	vector<EnvElement> blocks = {
@@ -219,7 +160,6 @@ private:
 	{3250, 600, 760, 200, GREEN}, // SUELO
 	{4160, 600, 3063, 200, GREEN}, // SUELO
 	{7320, 600, 3000, 200, GREEN}, // SUELO
-
 
 	{650, 400, 50, 50, GREEN},	//PRIMER ? /MONEDAS
 
@@ -230,168 +170,167 @@ private:
 	{1000, 400, 50, 50, GREEN}, // MONEDAS
 	{1050, 400, 50, 50, GREEN},
 	//Bloque superior
-{950, 200, 50, 50, GREEN}, //MONEDAS
+	{950, 200, 50, 50, GREEN}, //MONEDAS
 
-//Tuberias
-{1250, 500, 100, 100, GREEN},
-{1675, 450, 100, 150, GREEN},
-{2075, 400, 100, 200, GREEN},
-{2600, 400, 100, 200, GREEN},
+	//Tuberias
+	{1250, 500, 100, 100, GREEN},
+	{1675, 450, 100, 150, GREEN},
+	{2075, 400, 100, 200, GREEN},
+	{2600, 400, 100, 200, GREEN},
 
-//Bloque oculto (ya se hará) -Vida extra-
-//Boquete 1
-{3150, 600, 50, 50, BLUE},
-{3200, 600, 50, 50, BLUE},
-{3150, 650, 50, 50, BLUE},
-{3200, 650, 50, 50, BLUE},
-//Segundo conjuto de bloques
-	//Zona inferior
-{3550, 400, 50, 50, GREEN},
-{3600, 400, 50, 50, GREEN}, //Champiñon
-{3650, 400, 50, 50, GREEN},
-//Zona superior
-{3700, 200, 50, 50, GREEN},
-{3750, 200, 50, 50, GREEN},
-{3800, 200, 50, 50, GREEN},
-{3850, 200, 50, 50, GREEN},
-{3900, 200, 50, 50, GREEN},
-{3950, 200, 50, 50, GREEN},
-{4000, 200, 50, 50, GREEN},
-{4050, 200, 50, 50, GREEN},
-//Boquete 2
-{4010, 600, 50, 50, BLUE},
-{4060, 600, 50, 50, BLUE},
-{4110, 600, 50, 50, BLUE},
+	//Bloque oculto (ya se hará) -Vida extra-
+	//Boquete 1
+	{3150, 600, 50, 50, BLUE},
+	{3200, 600, 50, 50, BLUE},
+	{3150, 650, 50, 50, BLUE},
+	{3200, 650, 50, 50, BLUE},
+	//Segundo conjuto de bloques
+		//Zona inferior
+	{3550, 400, 50, 50, GREEN},
+	{3600, 400, 50, 50, GREEN}, //Champiñon
+	{3650, 400, 50, 50, GREEN},
+		//Zona superior
+	{3700, 200, 50, 50, GREEN},
+	{3750, 200, 50, 50, GREEN},
+	{3800, 200, 50, 50, GREEN},
+	{3850, 200, 50, 50, GREEN},
+	{3900, 200, 50, 50, GREEN},
+	{3950, 200, 50, 50, GREEN},
+	{4000, 200, 50, 50, GREEN},
+	{4050, 200, 50, 50, GREEN},
+	//Boquete 2
+	{4010, 600, 50, 50, BLUE},
+	{4060, 600, 50, 50, BLUE},
+	{4110, 600, 50, 50, BLUE},
 
-{4010, 650, 50, 50, BLUE},
-{4060, 650, 50, 50, BLUE},
-{4110, 650, 50, 50, BLUE},
+	{4010, 650, 50, 50, BLUE},
+	{4060, 650, 50, 50, BLUE},
+	{4110, 650, 50, 50, BLUE},
 
-{4010, 700, 50, 50, BLUE},
-{4060, 700, 50, 50, BLUE},
-{4110, 700, 50, 50, BLUE},
+	{4010, 700, 50, 50, BLUE},
+	{4060, 700, 50, 50, BLUE},
+	{4110, 700, 50, 50, BLUE},
 
+	//Zona superior 2
+	{4250, 200, 50, 50, GREEN},
+	{4300, 200, 50, 50, GREEN},
+	{4350, 200, 50, 50, GREEN},
+	{4400, 200, 50, 50, GREEN},//Monedas
+	//Bloque inferior
+	{4400, 400, 50, 50, GREEN}, //Moneda
 
-//Zona superior 2
-{4250, 200, 50, 50, GREEN},
-{4300, 200, 50, 50, GREEN},
-{4350, 200, 50, 50, GREEN},
-{4400, 200, 50, 50, GREEN},//Monedas
-//Bloque inferior
-{4400, 400, 50, 50, GREEN}, //Moneda
+	//Bloques extrella
+	{4700, 400, 50, 50, GREEN},
+	{4750, 400, 50, 50, GREEN}, //Estrella
 
-//Bloques extrella
-{4700, 400, 50, 50, GREEN},
-{4750, 400, 50, 50, GREEN}, //Estrella
+	//Bloques ?
+		//Inferior
+	{5000, 400, 50, 50, GREEN}, //Monedas
+	{5125, 400, 50, 50, GREEN}, //Monedas
+	{5250, 400, 50, 50, GREEN}, //Monedas
+	//Superior
+	{5125, 200, 50, 50, GREEN}, //Champiñon
 
-//Bloques ?
-	//Inferior
-{5000, 400, 50, 50, GREEN}, //Monedas
-{5125, 400, 50, 50, GREEN}, //Monedas
-{5250, 400, 50, 50, GREEN}, //Monedas
-//Superior
-{5125, 200, 50, 50, GREEN}, //Champiñon
+	//Secuencia de bloques
+	{5550, 400, 50, 50, GREEN},
 
-//Secuencia de bloques
-{5550, 400, 50, 50, GREEN},
+	{5700, 200, 50, 50, GREEN},
+	{5750, 200, 50, 50, GREEN},
+	{5800, 200, 50, 50, GREEN},
 
-{5700, 200, 50, 50, GREEN},
-{5750, 200, 50, 50, GREEN},
-{5800, 200, 50, 50, GREEN},
+	{6000, 200, 50, 50, GREEN},
+	{6050, 200, 50, 50, GREEN},
+	{6100, 200, 50, 50, GREEN},
+	{6150, 200, 50, 50, GREEN},
 
-{6000, 200, 50, 50, GREEN},
-{6050, 200, 50, 50, GREEN},
-{6100, 200, 50, 50, GREEN},
-{6150, 200, 50, 50, GREEN},
+	{6050, 400, 50, 50, GREEN},
+	{6100, 400, 50, 50, GREEN},
 
-{6050, 400, 50, 50, GREEN},
-{6100, 400, 50, 50, GREEN},
+	//Primera escalera
+	//Primer escalon
+	{6310, 550, 50, 50, GREEN},
+	{6360, 550, 50, 50, GREEN},
+	{6410, 550, 50, 50, GREEN},
+	{6460, 550, 50, 50, GREEN},
+	//Segundo escalon
+	{6360, 500, 50, 50, GREEN},
+	{6410, 500, 50, 50, GREEN},
+	{6460, 500, 50, 50, GREEN},
+	//Tercer escalon
+	{6410, 450, 50, 50, GREEN},
+	{6460, 450, 50, 50, GREEN},
+	//Quarto escalon
+	{6460, 400, 50, 50, GREEN},
+	//-Invertida-//
+	//Primer escalón
+	{6590, 550, 50, 50, GREEN},
+	{6640, 550, 50, 50, GREEN},
+	{6690, 550, 50, 50, GREEN},
+	{6740, 550, 50, 50, GREEN},
+	//Segundo escalón
+	{6590, 500, 50, 50, GREEN},
+	{6640, 500, 50, 50, GREEN},
+	{6690, 500, 50, 50, GREEN},
+	//Tercer escalón
+	{6590, 450, 50, 50, GREEN},
+	{6640, 450, 50, 50, GREEN},
+	//Quarto escalón
+	{6590, 400, 50, 50, GREEN},
 
-//Primera escalera
-//Primer escalon
-{6310, 550, 50, 50, GREEN},
-{6360, 550, 50, 50, GREEN},
-{6410, 550, 50, 50, GREEN},
-{6460, 550, 50, 50, GREEN},
-//Segundo escalon
-{6360, 500, 50, 50, GREEN},
-{6410, 500, 50, 50, GREEN},
-{6460, 500, 50, 50, GREEN},
-//Tercer escalon
-{6410, 450, 50, 50, GREEN},
-{6460, 450, 50, 50, GREEN},
-//Quarto escalon
-{6460, 400, 50, 50, GREEN},
-//-Invertida-//
-//Primer escalón
-{6590, 550, 50, 50, GREEN},
-{6640, 550, 50, 50, GREEN},
-{6690, 550, 50, 50, GREEN},
-{6740, 550, 50, 50, GREEN},
-//Segundo escalón
-{6590, 500, 50, 50, GREEN},
-{6640, 500, 50, 50, GREEN},
-{6690, 500, 50, 50, GREEN},
-//Tercer escalón
-{6590, 450, 50, 50, GREEN},
-{6640, 450, 50, 50, GREEN},
-//Quarto escalón
-{6590, 400, 50, 50, GREEN},
+	//Segunda escalera
+	//Primer escalon
+	{6970, 550, 50, 50, GREEN},
+	{7020, 550, 50, 50, GREEN},
+	{7070, 550, 50, 50, GREEN},
+	{7120, 550, 50, 50, GREEN},
+	{7170, 550, 50, 50, GREEN},
 
-//Segunda escalera
-//Primer escalon
-{6970, 550, 50, 50, GREEN},
-{7020, 550, 50, 50, GREEN},
-{7070, 550, 50, 50, GREEN},
-{7120, 550, 50, 50, GREEN},
-{7170, 550, 50, 50, GREEN},
+	//Segundo escalon
+	{7020, 500, 50, 50, GREEN},
+	{7070, 500, 50, 50, GREEN},
+	{7120, 500, 50, 50, GREEN},
+	{7170, 500, 50, 50, GREEN},
 
-//Segundo escalon
-{7020, 500, 50, 50, GREEN},
-{7070, 500, 50, 50, GREEN},
-{7120, 500, 50, 50, GREEN},
-{7170, 500, 50, 50, GREEN},
+	//Tercer escalon
+	{7070, 450, 50, 50, GREEN},
+	{7120, 450, 50, 50, GREEN},
+	{7170, 450, 50, 50, GREEN},
 
-//Tercer escalon
-{7070, 450, 50, 50, GREEN},
-{7120, 450, 50, 50, GREEN},
-{7170, 450, 50, 50, GREEN},
+	//Quarto escalon
+	{7120, 400, 50, 50, GREEN},
+	{7170, 400, 50, 50, GREEN},
 
-//Quarto escalon
-{7120, 400, 50, 50, GREEN},
-{7170, 400, 50, 50, GREEN},
+	//BOQUETE 3
 
-//BOQUETE 3
+	//-Invertida-//
+	//Primer escalón
+	{7320, 550, 50, 50, GREEN},
+	{7370, 550, 50, 50, GREEN},
+	{7420, 550, 50, 50, GREEN},
 
-//-Invertida-//
-//Primer escalón
-{7320, 550, 50, 50, GREEN},
-{7370, 550, 50, 50, GREEN},
-{7420, 550, 50, 50, GREEN},
+	//Segundo escalón
+	{7320, 500, 50, 50, GREEN},
+	{7370, 500, 50, 50, GREEN},
+	{7420, 500, 50, 50, GREEN},
 
-//Segundo escalón
-{7320, 500, 50, 50, GREEN},
-{7370, 500, 50, 50, GREEN},
-{7420, 500, 50, 50, GREEN},
+	//Tercer escalón
+	{7320, 450, 50, 50, GREEN},
+	{7370, 450, 50, 50, GREEN},
 
-//Tercer escalón
-{7320, 450, 50, 50, GREEN},
-{7370, 450, 50, 50, GREEN},
+	//Quarto escalón
+	{7320, 400, 50, 50, GREEN},
 
-//Quarto escalón
-{7320, 400, 50, 50, GREEN},
+	//Tuberias finales
+	{7700, 500, 100, 100, GREEN},
+	//Bloques intermedios
+	{7950, 400, 50, 50, GREEN},
+	{8000, 400, 50, 50, GREEN},
+	{8050, 400, 50, 50, GREEN},
+	{8100, 400, 50, 50, GREEN},
+	{8460, 500, 100, 100, GREEN},
 
-//Tuberias finales
-{7700, 500, 100, 100, GREEN},
-//Bloques intermedios
-{7950, 400, 50, 50, GREEN},
-{8000, 400, 50, 50, GREEN},
-{8050, 400, 50, 50, GREEN},
-{8100, 400, 50, 50, GREEN},
-{8460, 500, 100, 100, GREEN},
-
-//ESCALERA FINAL
-// Primer escalón (base de 9 bloques)
+	//ESCALERA FINAL
+	// Primer escalón (base de 9 bloques)
 	{8570, 550, 50, 50, GREEN},
 	{8620, 550, 50, 50, GREEN},
 	{8670, 550, 50, 50, GREEN},
@@ -458,17 +397,16 @@ private:
 		//Suelo
 	{ -112, -500, 850, 100, GREEN },
 	//Paredes-
-{ -112, -1000, 50, 500, GREEN },
-{ 688, -1000, 50, 500, GREEN },
+	{ -112, -1000, 50, 500, GREEN },
+	{ 688, -1000, 50, 500, GREEN },
 
-//techo
-{ 88, -1000, 350, 50, GREEN },//1
+	//techo
+	{ 88, -1000, 350, 50, GREEN },//1
 
-//Zona monedas
-{ 88, -650, 350, 150, GREEN },//1
-//tuberia
-{ 578, -600, 100, 100, GREEN },//1
-
+	//Zona monedas
+	{ 88, -650, 350, 150, GREEN },//1
+	//tuberia
+	{ 578, -600, 100, 100, GREEN },//1
 	};
 
 public:
@@ -483,88 +421,13 @@ public:
 
 		LoadGameSounds(); //Call all sounds
 		LoadGameMusic(); //Call all music
-
-		/*--------------------------------------------------------------------------*/
-		/*                        Textures and Typography                           */
-		/*--------------------------------------------------------------------------*/
-
-		logoTexture = LoadTexture("Resources/Images/HOME/LogoProyecto1.png");
-		UI = LoadTexture("Resources/Images/Seleccion Modo/Pantalla_Intro.png");
-		money = LoadTexture("Resources/Sprites/Items/Monedas.png");
-		Level1 = LoadTexture("Resources/Images/Seleccion Modo/World 1-1.png");
-		icon_lifes = LoadTexture("Resources/Images/Player/Icon_Lifes.png");
-		icon_money = LoadTexture("Resources/Images/Player/Icon_Money.png");
-
-		/*--------------------------------------------------------------------------*/
-		/*                           SpriteSheet Mario                              */
-		/*--------------------------------------------------------------------------*/
-
-		Mario_Right = LoadTexture("Resources/Sprites/MARIO/Mario_Right.png");
-		Mario_Left = LoadTexture("Resources/Sprites/MARIO/Mario_Left.png");
-		Mario_Fire_Right = LoadTexture("Resources/Sprites/MARIO/Fuego_Right.png");
-		Mario_Fire_Left = LoadTexture("Resources/Sprites/MARIO/Fuego_Left.png");
-		mario_sprite = Mario_Right;
-
-		/*--------------------------------------------------------------------------*/
-		/*                          SpriteSheet Enemigos                            */
-		/*--------------------------------------------------------------------------*/
-
-		Goomba = LoadTexture("Resources/Sprites/Enemies/Goomba.png");
-		Goomba_chafado = LoadTexture("Resources/Sprites/Enemies/Goomba_chafado.png");
-		goomba_sprite = Goomba;
-		Koopa = LoadTexture("Resources/Sprites/Enemies/Koopa.png");
-		Shell = LoadTexture("Resources/Sprites/Enemies/Shell.png");
-
-
-		/*------------------------------------------------------------*/
-		/*                           FONDO                            */
-		/*------------------------------------------------------------*/
-		fondo = LoadTexture("Resources/Sprites/Background/Fondo.png");
-		azul = LoadTexture("Resources/Sprites/Background/Azul.png");
-		negro = LoadTexture("Resources/Sprites/Background/negro.png");
-
-		/*------------------------------------------------------------*/
-		/*                           Items                            */
-		/*------------------------------------------------------------*/
-		Mooshroom = LoadTexture("Resources/Sprites/Items/Mushroom.png");
-		FireFlower = LoadTexture("Resources/Sprites/Items/Power-ups.png");
-
-		FireBall = LoadTexture("Resources/Sprites/Items/Bolas_Fuego.png");
-
-		/*------------------------------------------------------------*/
-		/*                          Bloques                           */
-		/*------------------------------------------------------------*/
-		bloque_int = LoadTexture("Resources/Sprites/Bloques/Bloque_int.png");
-		bloque_int_a = LoadTexture("Resources/Sprites/Bloques/Bloque_int_a.png");
-
-		ladrillo = LoadTexture("Resources/Sprites/Bloques/Ladrillo.png");
-		escalera = LoadTexture("Resources/Sprites/Bloques/escalera.png");
-		ladrillo_cueva = LoadTexture("Resources/Sprites/Bloques/Ladrillo_cueva.png");
-		suelo_cueva = LoadTexture("Resources/Sprites/Bloques/Suelo_cueva.png");
-
-		/*------------------------------------------------------------*/
-		/*                          Bloques Cueva                     */
-		/*------------------------------------------------------------*/
-
-
-
-		/*------------------------------------------------------------*/
-		/*                          Tileset                           */
-		/*------------------------------------------------------------*/
-
-		castle = LoadTexture("Resources/Sprites/Tileset/Castle.png");
-		flagTexture = LoadTexture("Resources/Sprites/Tileset/Flag.png");
-		tuberia_s = LoadTexture("Resources/Sprites/Tileset/Tuberia1.png");
-		tuberia_m = LoadTexture("Resources/Sprites/Tileset/Tuberia2.png");
-		tuberia_b = LoadTexture("Resources/Sprites/Tileset/Tuberia3.png");
-		tuberia_cueva = LoadTexture("Resources/Sprites/Tileset/Tuberia_cueva.png");
-		tubo = LoadTexture("Resources/Sprites/Tileset/Tubo.png");
+		LoadGameTextures();
+		LoadGameTypography();
 
 		/*--------------------------------------------------------------------------*/
 		/*                            Text font										*/
 		/*--------------------------------------------------------------------------*/
 
-		marioFont = LoadFont("Resources/Fonts/MarioFont.ttf");
 
 		//Camera of the game
 		camera.target = player.position;

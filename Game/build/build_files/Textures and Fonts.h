@@ -60,6 +60,7 @@ extern Texture2D FireFlower;
 extern Texture2D FireBall;
 
 extern Font marioFont;
+
 // Carga
 void LoadGameTextures();
 void LoadGameTypography();

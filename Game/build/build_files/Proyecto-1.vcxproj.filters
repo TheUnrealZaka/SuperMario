@@ -16,7 +16,10 @@
     <ClInclude Include="Textures and Fonts.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapDatra.h">
+    <ClInclude Include="MapData.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -24,9 +27,12 @@
     <ClCompile Include="Super Mario Bros 1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Music and Sounds.cpp" />
     <ClCompile Include="Textures and fonts .cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapData.cpp" />
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

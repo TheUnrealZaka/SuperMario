@@ -1,4 +1,3 @@
-// Music and Sounds.h
 #ifndef MUSIC_AND_SOUNDS_H
 #define MUSIC_AND_SOUNDS_H
 
